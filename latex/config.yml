@@ -1,5 +1,5 @@
 default:
-  title: Learn writing opensource book
+  title: The Design and Implementation of Operating System -- based on ucore OS
   font: Liberation Serif
   bold: "{* Bold}"
   mono: Liberation Mono
@@ -13,9 +13,10 @@ default:
   fig: "Figure "
   tab: "Table "
   indent: "\\qquad"
-  thanks: "This is the PDF file for the how to write opensource book contents. It is licensed under the Creative Commons Attribution-Non Commercial-Share Alike 3.0 license. I hope you enjoy it, I hope it helps you learn the software development, and I hope you'll continuously watch this : \\url{http://github.com/larrycai/kaiyuanbook}, will be happy if you follow my weibo \\url{http://weibo.com/larrycaiyu}, and if you want to donate, please visit: \\url{https://me.alipay.com/larrycai}"
+  thanks: "希望本书有于您理解OS的设计与实现，希望持续关注： \\url{https://github.com/chyyuu/ucore_step_by_step_code}, and \\url{https://github.com/chyyuu/ucore_step_by_step_guild}"
 zh:
-  title: 跟我学开源技术书
+  title: 操作系统设计与实现
+             \-\- 基于ucore OS  
   langrule: "\\XeTeXlinebreakskip=0em plus 0.1em minus 0.01em\n\\XeTeXlinebreakpenalty=0"
   font: AR PL SungtiL GB
   bold: WenQuanYi Micro Hei

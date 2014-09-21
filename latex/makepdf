@@ -184,8 +184,8 @@ figures do
 		end
 
 		unless abort
-			print "\tMoving output to kaiyuanbook.#{lang}.pdf... "
-                        mv("#{dir}/main.pdf", "#$root/kaiyuanbook.#{lang}.pdf")
+			print "\tMoving output to ucoreos.#{lang}.pdf... "
+                        mv("#{dir}/main.pdf", "#$root/ucoreos.#{lang}.pdf")
 			puts "done"
         else
             print "\tConvent error, exit !"

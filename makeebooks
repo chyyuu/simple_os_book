@@ -50,7 +50,7 @@ ARGV.each do |lang|
 
   system('ebook-convert', "sdcamp.#{lang}.html", "sdcamp.#{lang}.#{format}",
          '--cover', 'ebooks/cover.png',
-         '--authors', 'Larry Cai',
+         '--authors', 'Yu Chen',
          '--comments', "licensed under the Creative Commons Attribution-Non Commercial-Share Alike 3.0 license",
          '--level1-toc', '//h:h1', 
          '--level2-toc', '//h:h2', 
