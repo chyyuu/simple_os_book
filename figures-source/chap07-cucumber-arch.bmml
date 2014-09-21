@@ -1,0 +1,44 @@
+<mockup version="1.0" skin="sketch" measuredW="584" measuredH="253" mockupW="509" mockupH="147">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="206" y="106" w="138" h="70" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Canvas" x="205" y="175" w="139" h="78" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::VCurly" x="75" y="109" w="121" h="140" measuredW="180" measuredH="140" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>right</direction>
+        <text>Cucumber</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Arrow" x="347" y="215" w="63" h="10" measuredW="150" measuredH="100" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <direction>bottom</direction>
+        <leftArrow>true</leftArrow>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Canvas" x="422" y="192" w="97" h="56" measuredW="100" measuredH="70" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>10066329</borderColor>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="424" y="210" w="160" h="24" measuredW="74" measuredH="25" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <size>16</size>
+        <state>disabled</state>
+        <text>%u88AB%u6D4B%u7CFB%u7EDF</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Paragraph" x="222" y="194" w="84" h="43" measuredW="200" measuredH="140" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>%u9A71%u52A8%u5C42%0A%28_ruby%2C%20java_%29</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Paragraph" x="228" y="123" w="84" h="43" measuredW="200" measuredH="140" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <align>center</align>
+        <text>%u4E1A%u52A1%u5C42%0A%28_gherkin_%29</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
