@@ -1,20 +1,24 @@
-# Software Development Book Contents#
+相关资料
+======================
 
-[![Build Status](https://secure.travis-ci.org/larrycai/kaiyuanbook.png)](http://travis-ci.org/larrycai/kaiyuanbook)
+希望了解OS基本概念和原理的同学
+------------------
 
-This is the book for how to write opensource books, it covers markdown,pandoc,latex
+ * OS课程资料     http://pan.baidu.com/s/1bncWxyv
+ * OS MOOC公开课(原理部分)  http://www.topu.com/mooc/4100
 
-Hope you enjoy it, I hope it helps you learn better software development. 
+希望了解OS设计与实现细节的同学
+----------------
 
-Please check BUILD.md for how to making ebooks by yourself, 
+ * OS实验资料     http://pan.baidu.com/s/1i3vbdXV
+ * OS实验代码     https://github.com/chyyuu/mooc_os_lab
+ * OS MOOC公开课(实验部分)  http://www.topu.com/mooc/4100
 
-credit to [Pro Git](http://github.com/progit/progit) 
+希望自己动手实践OS的同学
+---------------
 
-#Errata#
-
-If you see anything that is technically wrong or otherwise in need of
-correction, please email me at larry dot caiyu at gmail dot com to inform me.
-
-### License
-  The license is under ![](http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png), see [CC BY NC ND 3.0](http://creativecommons.org/licenses/by-nc-nd/3.0/) for more
+ * ucore step by step code  https://github.com/chyyuu/ucore_step_by_step_code
+ * ucore step by step guide https://github.com/chyyuu/ucore_step_by_step_guild
+ * ucore step by step pdf book http://pan.baidu.com/s/1hqIdKOW
+ * ucore plus    https://github.com/chyyuu/ucore_plus
 
