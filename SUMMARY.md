@@ -1,6 +1,6 @@
 # Summary
 
-* [Introduction](README.md)
+* [前言](README.md)
 * [操作系统简介](zh/preface/preface.md)
    * [应具备的背景知识和学习环境](zh/preface/preknowledge.md)
    * [“麻雀”操作系统--ucore](zh/preface/smallos_ucore.md)
