@@ -15,32 +15,32 @@
 
 而陈渝老师鼓励和引导后续的学生继续着操作系统教学和科研的快乐之旅。目前发现ucore中有不少的bug（不过少于Linux的bug），陈渝老师准备带着学生再研究一些算法、方法和工具，能够在ucore运行前通过静态分析的方法发现其潜在的bug，而且希望能够在ucore漰溃后，找到引起bug的内核代码在哪里，并能分析出为何这个内核代码会导致ucore漰溃的因果链。希望这样能够减轻大家学习OS实验的负担。
 
-## 相关资料
+## 附录A：相关资料
 
-### 望了解OS基本概念和原理的同学
+### OS基本概念和原理
 
  * OS课程资料     http://pan.baidu.com/s/1bncWxyv
  * OS MOOC公开课(原理部分)  http://www.topu.com/mooc/4100
 
-### 希望了解OS设计与实现细节的同学
+### OS设计与实现细节
 
  * OS实验资料     http://pan.baidu.com/s/1i3vbdXV
  * OS实验代码     https://github.com/chyyuu/mooc_os_lab
  * OS MOOC公开课(实验部分)  http://www.topu.com/mooc/4100
 
-### 希望自己动手实践OS的同学
- * ucore step by step code  https://github.com/chyyuu/ucorebook
+### 动手实践OS
+ * ucore step by step book  https://github.com/chyyuu/ucorebook
  * ucore step by step code  https://github.com/chyyuu/ucorebook_code
  * ucore plus    https://github.com/chyyuu/ucore_plus
 
-## 开发维护人员
+### 开发维护人员
 
- * 陈渝 http://soft.cs.tsinghua.edu.cn/~chen
- * 茅俊杰 eternal.n08 AT gmail.com
+ * 陈渝 http://soft.cs.tsinghua.edu.cn/~chen  yuchen@tsinghua.edu.cn
+ * 茅俊杰 eternal.n08@gmail.com
 
-## 实验列表
+##　附录Ｂ：实验列表
 
-### 1. lab1 ：启动操作系统的bootloader，以及中断、系统调用机制
+### 1. lab1 ：bootloader启动操作系统
 ----------
 
 ####    启动/保护模式
@@ -97,13 +97,13 @@
 ###3 实现COW机制，为高效创建子进程做好准备
  * proj9.2     (<--proj9.1)   : 实现支持高效进程复制的虚存核心功能Copy On Write（简称COW）
 
-### 4. lab4 ：内核线程管理
+### 4. lab4 ：内核线程
 -------------------------------
 
 #### 创建内核线程，此时需要引入调度，进程上下文切换等机制
  * proj10      (<--proj9.2)   : 实现线程和进程管理的关键数据结构进程控制块（Process Control Block, 简称PCB），完成对内核线程的创建所需功能，并建立基本的调度机制，主要是体现能够切换两个内核线程。
 
-### 5. lab5 ：用户进程管理
+### 5. lab5 ：用户进程
 ------------------------
 
 #### 进程管理框架

@@ -1,9 +1,10 @@
 # Summary
-
+* [封面](zh/cover/cover.md)
 * [前言](README.md)
 * [操作系统简介](zh/preface/preface.md)
    * [应具备的背景知识和学习环境](zh/preface/preknowledge.md)
    * [“麻雀”操作系统--ucore](zh/preface/smallos_ucore.md)
+       * [ucore简介](zh/preface/ucore.md)
    * [操作系统的概念](zh/preface/osconcept.md)
    * [操作系统的抽象](zh/preface/osabstract.md)
    * [操作系统管理的计算机](zh/preface/hardware.md)
