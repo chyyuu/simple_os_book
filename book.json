@@ -4,8 +4,8 @@
     ],
     "pluginsConfig": {
         "autocover": {
-            "title": "操作系统设计实现与基本原理--基于ucore",
-            "author": "陈  渝",
+            "title": "Operating System Simple Implementation and Basic Principle--Based on ucore",
+            "author": "Chen, Yu",
             "font": {
                 "size": null,
                 "family": "Impact",
