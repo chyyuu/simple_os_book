@@ -29,9 +29,10 @@
  * OS MOOC公开课(实验部分)  http://www.topu.com/mooc/4100
 
 ### 动手实践OS
- * ucore step by step book  https://github.com/chyyuu/ucorebook
- * ucore step by step code  https://github.com/chyyuu/ucorebook_code
- * ucore plus    https://github.com/chyyuu/ucore_plus
+
+ * "操作系统简单实现与基本原理 — 基于ucore" (持续更新,变动较大) http://chyyuu.gitbooks.io/ucorebook/
+ * "操作系统简单实现与基本原理 — 基于ucore" 配套代码 https://github.com/chyyuu/ucorebook_code
+ * ucore plus 跨硬件平台的ucore OS   https://github.com/chyyuu/ucore_plus
 
 ### 开发维护人员
  * 当前维护者
@@ -46,8 +47,17 @@ S郭晓林、薛天凡、胡刚、刘超、粟裕、袁昕颢...
 
 ##　附录Ｂ：实验列表
 
+ 1. lab1 ：bootloader启动操作系统
+ 2. lab2 ：物理内存管理
+ 3. lab3 ：虚拟内存管理
+ 4. lab4 ：内核线程
+ 5. lab5 ：用户进程
+ 6. lab6 ：处理器调度
+ 7. lab7 : 同步互斥和进程间通信（IPC）
+ 8. lab8 : 文件系统
+---
+
 ### 1. lab1 ：bootloader启动操作系统
-----------
 
 ####    启动/保护模式
    * proj1     : bootloader 能切换到x86-32保护模式且能够通过串口、并口、显示器来显示字符串
@@ -69,7 +79,6 @@ S郭晓林、薛天凡、胡刚、刘超、粟裕、袁昕颢...
    * proj4.3     (<--proj4.2)   : ucore支持硬件breakpoint和watchpoint，从而具有内部debugger功能
 
 ### 2. lab2 ：物理内存管理
-----------
 
 #### 物理内存管理
  * proj5    (<--proj4.3)   : ucore支持保护模式下的分页机制，并能够管理物理内存
@@ -86,7 +95,6 @@ S郭晓林、薛天凡、胡刚、刘超、粟裕、袁昕颢...
  * proj6       (<--proj5.2)   : SLAB内存分配算法
 
 ### 3. lab3 ：虚拟内存管理
------------------------
 
 #### 支持页访问错误异常的处理
  * proj7       (<--proj6)     : 能够有页访问错误异常的处理机制，提供了虚存管理（VMM）的框架
@@ -104,13 +112,11 @@ S郭晓林、薛天凡、胡刚、刘超、粟裕、袁昕颢...
  * proj9.2     (<--proj9.1)   : 实现支持高效进程复制的虚存核心功能Copy On Write（简称COW）
 
 ### 4. lab4 ：内核线程
--------------------------------
 
 #### 创建内核线程，此时需要引入调度，进程上下文切换等机制
  * proj10      (<--proj9.2)   : 实现线程和进程管理的关键数据结构进程控制块（Process Control Block, 简称PCB），完成对内核线程的创建所需功能，并建立基本的调度机制，主要是体现能够切换两个内核线程。
 
 ### 5. lab5 ：用户进程
-------------------------
 
 #### 进程管理框架
  * proj10.1    (<--proj10)    : 实现用户进程管理框架，并完成与创建用户进程相关的内核函数（读ELF格式的文件、fork、execve），以及与调度进程相关的调度器
@@ -131,7 +137,6 @@ S郭晓林、薛天凡、胡刚、刘超、粟裕、袁昕颢...
  * proj12      (<--proj11)    : 实现系统调用map、unmap和共享内存share memory，实现用户态线程机制;
 
 ### 6. lab6 ：处理器调度
------------------------
 
 #### OS教材上的调度算法
  * proj13      (<--proj12)    : 实现通用调度框架和简单的想来先服务（First Come First Serve，简称FCFS）调度算法
@@ -139,7 +144,6 @@ S郭晓林、薛天凡、胡刚、刘超、粟裕、袁昕颢...
  * proj13.2    (<--proj13.1)  : 实现多级反馈队列（MultiLevel Feedback Queue，简称MLFQ）调度算法
 
 ### 7. lab7 : 同步互斥和进程间通信（IPC）
------------------------
 
 #### OS教材上的信号量机制
  * proj14      (<--proj13.2)  : 实现内核中的信号量（semaphore）机制
@@ -156,7 +160,6 @@ S郭晓林、薛天凡、胡刚、刘超、粟裕、袁昕颢...
  * proj16.1      (<--proj16)    : 实现管程和条件变量
 
 ### 8. lab8 : 文件系统
---------------------
 
 #### 建立虚拟文件系统，把设备按文件來管理
  * proj17      (<--proj16)    : 实现vfs框架, file数据结构和相关操作，文件化各种输入输出外设(stdin, stdout, null)
