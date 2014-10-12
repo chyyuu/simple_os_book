@@ -45,4 +45,5 @@
        * [实现：用户态切换到内核态](zh/chapter-2/user_to_kernel.md)
    * [操作系统基本原理：管理计算机硬件](zh/chapter-2/osprinciple_control_computer.md)
    * [小结](zh/chapter-2/summary.md)
+* [物理内存管理](zh/chapter-3/ucore_phymem_management.md)
 
