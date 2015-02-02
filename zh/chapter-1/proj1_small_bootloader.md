@@ -61,7 +61,9 @@ lab1中包含的第一个工程小例子是proj1：一个可以切换到保护�
 
   make   			//生成bootloader和对应的主引导扇区  
   make qemu  		//通过qemu硬件模拟器来运行bootloader  
-  ![qemu_img]()  
+  
+  ![qemu_img](figures/qemu_cha1.jpg)
+  
   make clean		//清除生成的临时文件,bootloader和对应的主引导扇区
 
 我们除了需要了解bootloader的功能外，还需要进一步了解bootloader的编译链接和最终执行码的生成过程，从而能够清楚生成的代码是否是我们所期望的。proj1中的Makefile是一个配置脚本，make软件工具能够通过Makefile完成管理bootloader的C/ASM代码生成执行码的整个过程。Makefile的内容比较复杂，不过读者在前期只需会执行make [参数]来生成代码和清除代码即可。对于本实验的make的执行过程如下所示：
