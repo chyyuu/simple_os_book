@@ -70,7 +70,7 @@
    * [实验1: 创建并执行内核线程](zh/chapter-4/create_kern_thread.md)
 	  * [原理: 进程的属性与特征解析](zh/chapter-4/what_is_process.md)
 	  * [实现: 设计进程控制块](zh/chapter-4/design_PCB.md)
-	  * [实现: 创建并执行内核线程](zh/chapter-4/create_kern_thread.md)	 
+	  * [实现: 创建并执行内核线程](zh/chapter-4/create_kern_thread_.md)	 
    * [实验2: 创建并执行用户进程](zh/chapter-4/create_exec_user_process.md)
 	  * [原理: 用户进程的特征](zh/chapter-4/what_is_user_process.md)
 	  * [创建用户进程](zh/chapter-4/create_user_process.md)

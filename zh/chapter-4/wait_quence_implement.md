@@ -1,0 +1,73 @@
+# 等待队列设计与实现
+
+为了支持用户进程完成特定事件的等待和唤醒操作，ucore设计了等待队列，从而使得用户进程可以方便地实现由于某事件没有完成而睡眠，并且在事件完成后被唤醒的整个操作过程。
+
+其基本设计思想是：当一个进程由于某个事件没有产生而需要在某个睡眠等待时，设置自身运行状态为PROC_SLEEPING，等待原因为某事件，然后将自己的进程控制块指针和等待标记组装到一个数据结构为wait_t的等待项数据中，并把这个等待项的挂载到等待队列wait_queue的链表中，再执行schedule函数完成调度切换；当某些事件发生后，另一个任务（进程）会唤醒等待队列wait_queue上的某个或者所有进程，唤醒操作就是将等待队列wait_queue中的等待项中的进程运行状态设置为可调度的状态，并且把等待项从等待队列中删除。下面是等待队列的设计与实现分析。
+
+## 数据结构描述
+
+等待项的定义：
+
+    typedef struct {
+        struct proc_struct *proc;
+        uint32_t wakeup_flags;
+        wait_queue_t *wait_queue;
+        list_entry_t wait_link;
+    } wait_t;
+
+这里等待项的成员变量proc表明了等待某事件的进程控制块指针，wakeup_flags是唤醒进程的事件标志（多个标志可以有逻辑或的关系，形成复合事件标志），wait_queue是此等待项所属的等待队列，wait_link用于链接到等待队列wait_queue中。
+
+等待队列的定义：
+
+    typedef struct {
+        list_entry_t wait_head;
+    } wait_queue_t;
+
+等待队列就是一个双向链表的头指针。
+
+## 等待队列相关操作函数
+
+### 初始化
+
+如果要使用等待队列，首先需要声明并初始化等待队列。以proj11为例，在kern/mm/swap.c中有一个等待队列的变量声明和在swap_init函数中执行的对应初始化：
+
+    static wait_queue_t kswapd_done;
+    …
+    wait_queue_init(&kswapd_done);
+  
+### 执行等待
+
+如果某进程需要等待某事件，则需要设置自己的运行状态为PROC_SLEEPING，构建并初始化一个等待项，再挂入到某个等待队列中。以proj11为例，某进程申请内存资源无法满足，需要等待kswapd内核线程给系统更多的内核资源，于是在try_free_pages函数中执行了如下操作：
+
+    wait_t __wait, *wait = &__wait;
+    wait_init(wait, current);
+           current->state = PROC_SLEEPING;
+           current->wait_state = WT_KSWAPD;
+           wait_queue_add(&kswapd_done, wait);
+
+这里可以看到，首先声明了一个等待项\__wait，然后调用wait_init函数对此等待项进行了初始化；并进一步把当前进程的运行状态设置为PROC_SLEEPING，睡眠原因设置为WT_KSWAPD，即等待kswapd释放出更多的空闲内存；最后把此等待项加入到等待队列kwapd_done中。
+
+### 执行唤醒
+
+当某个事件产生后，需要唤醒等待在等待队列中的睡眠进程。以proj11为例，当kswapd内核线程释放出更多的空闲内存后，就需要唤醒等待更多内存的进程，在kswapd内核线程的主体执行函数kswapd_main中调用了
+
+    kswapd_wakup_all函数：
+    wakeup_queue(&kswapd_done, WT_KSWAPD, 1);
+  
+这个函数就完成了唤醒功能，它会遍历kswapd_done等待队列上的所有等待项，找到一个就执行wakeup_wait函数，来进一步调用wakup_proc函数来唤醒挂在等待项上的睡眠进程。
+
+上面是使用等待队列的基本流程。为了能够更好地完善整个基于等待队列的等待唤醒机制，在wait.[ch]中提供了一系列函数：
+
+* void wait_init：初始化等待项
+* void wait_queue_init：初始化等待队列
+* void wait_queue_add：把一个等待项加入到一个等待队列中
+* void wait_queue_del：从一个等待队列中删除一个等待项
+* wait_t *wait_queue_next：查找挂在某等待队列中的等待项指向的下一个等待项
+* wait_t *wait_queue_prev：查找挂在某等待队列中的等待项指向的前一个等待项
+* wait_t *wait_queue_first：查找挂在某等待队列中的第一个等待项
+* wait_t *wait_queue_last：查找挂在某等待队列中的最后一个等待项
+* bool wait_queue_empty：判断等待队列是否为空
+* bool wait_in_queue：单品某等待项是否在等待队列中
+* void wakeup_wait：唤醒等待项中的睡眠进程，删除等待队列中的等待项（参数del确定是否删除）
+* void wakeup_first：唤醒等待队列中第一个等待项中的睡眠进程，删除等待队列中的这个等待项（参数del确定是否删除）
+* void wakeup_queue：唤醒等待队列中所有等待项中的睡眠进程，删除等待队列中的对应等待项（参数del确定是否删除）
