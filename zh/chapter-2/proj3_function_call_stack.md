@@ -1,1 +1,76 @@
+# 能显示函数调用关系的ucore
 
+操作系统中存在很多函数，通过函数间的调用来完成各种功能。在操作系统运行过程中，维持函数之间的调用关系，以及函数内部的局部变量是栈（stack）的基本功能。我们需要能够理解在操作系统中栈的实现细节和功能，这样能够更好地理解操作系统中函数如何相互调用，发现可能存在的问题。
+
+## 实验目标
+
+为了理解操作系统中的函数调用关系、传递参数和函数局部变量，我们设计了proj3.1，在ucore中增加了一个monitor子功能模块，能够分析出ucore在执行过程中的函数调用关系和函数传递的参数。通过分析proj3.1的实现，读者可了解基本栈结构，栈处理流程，GCC编译器的参数传递约定和构建函数调用关系的具体实现。
+
+## proj3.1概述
+
+1. 实现描述  
+proj3.1建立在proj3的基础上，通过增加了一个monitor功能子模块，实现了一个能显示函数调用关系的ucore。简单地说proj3.1根据GCC生成的栈构建代码、函数参数压栈约定和实际函数调用过程中的栈结构内存空间，分析并显示函数调用关系。具体完成此工作的是print_stackframe函数。
+
+2. 项目组成  
+proj3.1整体目录结构中新增加的主要内容如下所示：
+        proj3.1
+        |-- kern
+        |   |-- debug
+        |   |   |-- assert.h
+        |   |   |-- kdebug.c
+        |   |   |-- kdebug.h
+        |   |   |-- monitor.c
+        |   |   |-- monitor.h
+        |   |   |-- panic.c
+        |   |   `-- stab.h
+        |   |-- driver
+        |   |   `-- kbdreg.h
+        |   |-- init
+        |   |   `-- init.c
+        |   |-- libs
+        |   |   |-- readline.c
+        |   |   `-- stdio.c
+        |   `-- trap
+        |       `-- trap.h
+        |-- Makefile
+        `-- tools
+            |-- kernel.ld
+        …… 
+proj3.1是基于proj3进一步扩展完成的。相对于proj3，一共增加了10个文件，主要集中在debug目录下，这一个比较大的跨越。不过仔细看来主要增加和修改的文件不多，具体新增内容如下所示：
+	* kern/debug/monitor.[ch]：监视系统运行的monitor交互子模块
+	* kern/debug/debug.[ch]：实现内存地址到函数名的映射和分析显示函数调用关系；
+	* kern/libs/readline.c：实现monitor的接收字符输入的功能；
+	* kern/driver/kbdreg.h：定义了键盘的键值；
+	* kern/trap/trap.h：为了向后兼容中断的处理，先在此处写了一个空的trapframe结构；
+	* tools/kernel.ld：指导ld工具软件链接各个.o目标文件形成ucore的kernel的链接脚本；
+
+3. 编译运行
+编译并运行proj3.1的命令如下：
+        cd proj3.1
+        make
+        make qemu
+      
+	当“K>”提示符出现后，可以敲入“help”字符串，可以看到当前的monitor有三个命令可以输入：help、kerninfo、backtrace。我们敲入“backtrace”字符串，则可以得到如下显示界面：
+
+		(THU.CST) os is loading ...
+
+        Welcome to the kernel debug monitor!!
+        Type 'help' for a list of commands.
+        K> help
+        help - Display this list of commands.
+        kerninfo - Display information about the kernel.
+        backtrace - Print backtrace of stack frame.
+        K> backtrace
+        ebp:0x00007b08 eip:0x0010073a args:0x00010094 0x00000000 0x00007b88 0x00100985 
+            kern/debug/kdebug.c:216: print_stackframe+25
+        ebp:0x00007b18 eip:0x00100a76 args:0x00000000 0x00007b3c 0x00000000 0x0000000a 
+            kern/debug/monitor.c:94: mon_backtrace+11
+        ebp:0x00007b88 eip:0x00100985 args:0x00108560 0x00000000 0x00007bb8 0x0010124c 
+            kern/debug/monitor.c:55: runcmd+135
+        ebp:0x00007bb8 eip:0x001009f8 args:0x00000000 0x00101ef0 0x0000065c 0x00000000 
+            kern/debug/monitor.c:70: monitor+75
+        ebp:0x00007be8 eip:0x00100059 args:0x00000000 0x00000000 0x00000000 0x00007c4f 
+            kern/init/init.c:22: kern_init+89
+        ebp:0x00007bf8 eip:0x00007d5b args:0xc031fcfa 0xc08ed88e 0x64e4d08e 0xfa7502a8
+
+	通过上图可以看到monitor能够把当前的函数调用关系给显示出来，而且不仅仅给出函数调用返回处的eip地址，还显示出了在实际源代码处的文件名和行号。如果ucore在执行过程中由于某种异常错误激发monitor执行（以后有这样的实验），我们就可以很容易找到问题出现在什么地方了。下面我们将从栈的基本概念、栈结构和栈处理过程等方面来分析上图中背后的东西。
