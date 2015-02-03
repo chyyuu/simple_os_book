@@ -1,0 +1,86 @@
+# 【实现】bootloader加载并运行ucore
+
+了解完proj2/3的组成与编译，并大致理解上述两个背景知识后，我们就可以分析bootloader加载并运行ucore操作系统的工作流程。
+
+硬盘数据是储存到硬盘扇区中，一个扇区大小为512字节。读一个扇区的流程可参看bootmain.c中的readsect函数实现。大致如下：
+
+1. 读I/O地址0x1f7，等待磁盘准备好；
+2. 写I/O地址0x1f2~0x1f5,0x1f7，发出读取第offseet个扇区处的磁盘数据的命令；
+3. 读I/O地址0x1f7，等待磁盘准备好;
+4. 连续读I/O地址0x1f0，把磁盘扇区数据读到指定内存。
+
+这个函数是被bootloader用于读取硬盘上的ucore操作系统。bootloader为了读取硬盘上的ucore操作系统，将调用bootmain函数首先读取了位于主引导扇区的后的连续8个扇区（可参见bootmain函数中的第一条语句），并把数据放到0x10000处（可回顾一下2.7.1中描述链接bin/kernel的过程），并按照数据结构elfhdr来解析这块4KB大小的数据；如果其e_magic数据域不等于ELF_MAGIC（即0x464C457F），则表示这个不是标准的ELF格式的文件；如果等于ELF_MAGIC，则继续解析，并根据其e_phnum数据域的值来读取多个program header，并根据program header的信息，了解到ucore中各个segment的起始位置和大小，然后把放在硬盘上的相关segment读入到内存中。
+
+**【实验】分析kernel并在bootloader中显示kernel的segment信息**
+
+1. 在proj3目录下执行命令make，则会在bin目录下生成kernel，即ELF执行格式文件的操作系统ucore；
+2. 在proj3目录下执行命令 readelf -h bin/kernel，可得到有关elf header的如下信息
+
+        ELF Header:
+          Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+          Class:                             ELF32
+          Data:                              2's complement, little endian
+          Version:                           1 (current)
+          OS/ABI:                            UNIX - System V
+          ABI Version:                       0
+          Type:                              EXEC (Executable file)
+          Machine:                           Intel 80386
+          Version:                           0x1
+          Entry point address:               0x100000
+          Start of program headers:          52 (bytes into file)
+          Start of section headers:          19872 (bytes into file)
+          Flags:                             0x0
+          Size of this header:               52 (bytes)
+          Size of program headers:           32 (bytes)
+          Number of program headers:         3
+          Size of section headers:           40 (bytes)
+          Number of section headers:         17
+          Section header string table index: 14
+从中，我们可以看到kernel的入口点在0x100000，program header相对文件的偏移位置在52，elf header的大小为52字节，program header的大小为32字节。
+
+3. 在proj3目录下执行命令 readelf -l bin/kernel，可得到有关program header的如下信息
+        Elf file type is EXEC (Executable file)
+        Entry point 0x100000
+        There are 3 program headers, starting at offset 52
+
+        Program Headers:
+          Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+          LOAD           0x001000 0x00100000 0x00100000 0x01038 0x01038 R E 0x1000
+          LOAD           0x002038 0x00102038 0x00102038 0x00004 0x00004 RW  0x1000
+          GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x4
+
+         Section to Segment mapping:
+          Segment Sections...
+           00     .text .rodata 
+           01     .data 
+           02     
+
+从中，我们可以看到kernel的入口点在0x100000，代码段位于0x100000，大小为0x1038；数据段位于0x102038，大小为0x04。
+
+
+**【实验】用gdb调试bootloader，并在gdb中显示kernel的segment信息**
+
+我们还可通过用gdb调试bootloader进行验证，具体步骤如下：
+5. 开两个窗口；在一个窗口中，在proj3目录下执行命令make；
+6. 在proj3目录下执行 “qemu -hda bin/ucore.img -S –s”,这时会启动一个qemu窗口界面，处于暂停状态，等待gdb链接；
+7. 在另外一个窗口中，在proj3目录下执行命令 gdb obj/bootblock.o；
+8. 在gdb的提示符下执行如下命令，会有一定的输出：
+        (gdb) target remote :1234   #与qemu建立远程链接
+        (gdb) break bootmain.c:100  #在bootmain.c的第100行设置一个断点
+        (gdb) continue              #让qemu继续执行  
+这时qemu会继续执行，但执行到bootmain.c的第100行时会暂停，等待gdb的控制。这时可以在gdb中继续输入如下命令来参考kernel的信息：
+        (gdb) p /x *(struct elfhdr *)0x10000  #按struct elfhdr结构显示0x10000处内容
+        $7 = {e_magic = 0x464c457f, e_elf = {0x1, 0x1, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, e_type = 0x2, e_machine = 0x3, e_version = 0x1, e_entry = 0x100000, e_phoff = 0x34, e_shoff = 0x4550, e_flags = 0x0, e_ehsize = 0x34, e_phentsize = 0x20,   e_phnum = 0x3, e_shentsize = 0x28, e_shnum = 0x11, e_shstrndx = 0xe}
+查看bootmain函数，可以知道，此时在0x10000处已经读入了kernel的ELF头信息，有三个program header 表(e_phnum值),继续在gdb中敲入命令，可以得到更多信息：
+        (gdb) next                #执行下一条指令
+        (gdb) p /x *ph            #获得text段的program header表信息
+        $5 = {p_type = 0x1, p_offset = 0x1000, p_va = 0x100000, p_pa = 0x100000, p_filesz = 0x1038,  p_memsz = 0x1038, p_flags = 0x5, p_align = 0x1000}
+        (gdb) next                #执行下一条指令
+        (gdb) next                #执行下一条指令
+        (gdb) p /x *ph            #获得data段的program header表信息
+        $6 = {p_type = 0x1, p_offset = 0x2038, p_va = 0x102038, p_pa = 0x102038, p_filesz = 0x4, p_memsz = 0x4, p_flags = 0x6, p_align = 0x1000}
+
+	对照readelf命令输出的信息，可以发现bootloader正确读出了text段和data段的program header表信息，并根据这些信息调用如下函数
+        -->readseg(ph->p_va, ph->p_memsz, ph->p_offset);
+            -->readsect((uint8_t *)va, offset);
+把这两个段的内容读入到正确的线性内存地址中。然后再根据e_entry = 0x100000，跳转到0x100000处去执行，这其实就是把处理器控制权转移给了ucore了。
