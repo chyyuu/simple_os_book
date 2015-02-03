@@ -48,7 +48,7 @@
 * [物理内存管理](zh/chapter-3/ucore_phymem_management.md)
    * [实验1: 建立分页管理机制](zh/chapter-3/pages_managment.md)
       * [背景: 计算机物理内存分布和大小](zh/chapter-3/phymen_size.md)
-	  * [实现: 物理内存探测](zh/chapter-3/phymem_analysis)
+	  * [实现: 物理内存探测](zh/chapter-3/phymem_analysis.md)
 	  * [原理: 分页内存管理](zh/chapter-3/pages_mem_managment.md)
 	  * [背景: X86的分页硬件支持](zh/chapter-3/x86_pages_hardware.md)
 	  * [实现: 实现分页内存管理](zh/chapter-3/implement_pages_mem_managment.md)

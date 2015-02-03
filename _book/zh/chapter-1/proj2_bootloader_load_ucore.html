@@ -1,0 +1,1051 @@
+<!DOCTYPE HTML>
+<html lang="en-US" >
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=11; IE=10; IE=9; IE=8; IE=7; IE=EDGE" />
+        <title>实验二：可读ELF格式文件的bootloader和可完成I/O操作的ucore | 操作系统简单实现与基本原理 — 基于ucore</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 1.5.0">
+        <meta name="HandheldFriendly" content="true"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../../gitbook/images/apple-touch-icon-precomposed-152.png">
+        <link rel="shortcut icon" href="../../gitbook/images/favicon.ico" type="image/x-icon">
+        
+        
+    
+    
+    <link rel="next" href="../../zh/chapter-1/access_harddisk.html" />
+    
+    
+    <link rel="prev" href="../../zh/chapter-1/show_string.html" />
+    
+
+        
+    </head>
+    <body>
+        
+        
+<link rel="stylesheet" href="../../gitbook/style.css">
+
+
+        
+    <div class="book" data-level="4.2" data-basepath="../.." data-revision="1422957025763">
+    
+
+<div class="book-summary">
+    <div class="book-search">
+        <input type="text" placeholder="Type to search" class="form-control" />
+    </div>
+    <ul class="summary">
+        
+    	
+    	
+    	
+
+        
+
+        
+    
+        
+        <li class="chapter " data-level="0" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                        <i class="fa fa-check"></i>
+                        
+                         Introduction
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="1" data-path="zh/cover/cover.html">
+            
+                
+                    <a href="../../zh/cover/cover.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>1.</b>
+                        
+                         封面
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="2" data-path="index.html">
+            
+                
+                    <a href="../../index.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>2.</b>
+                        
+                         前言
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="3" data-path="zh/preface/preface.html">
+            
+                
+                    <a href="../../zh/preface/preface.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.</b>
+                        
+                         操作系统简介
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="3.1" data-path="zh/preface/preknowledge.html">
+            
+                
+                    <a href="../../zh/preface/preknowledge.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.1.</b>
+                        
+                         应具备的背景知识和学习环境
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="3.2" data-path="zh/preface/smallos_ucore.html">
+            
+                
+                    <a href="../../zh/preface/smallos_ucore.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.2.</b>
+                        
+                         “麻雀”操作系统--ucore
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="3.2.1" data-path="zh/preface/ucore.html">
+            
+                
+                    <a href="../../zh/preface/ucore.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.2.1.</b>
+                        
+                         ucore简介
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="3.3" data-path="zh/preface/hardware.html">
+            
+                
+                    <a href="../../zh/preface/hardware.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.3.</b>
+                        
+                         了解硬件
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="3.3.1" data-path="zh/preface/pc.html">
+            
+                
+                    <a href="../../zh/preface/pc.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.3.1.</b>
+                        
+                         PC计算机
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="3.3.2" data-path="zh/preface/cpu.html">
+            
+                
+                    <a href="../../zh/preface/cpu.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.3.2.</b>
+                        
+                         CPU运行模式
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="3.3.3" data-path="zh/preface/memory.html">
+            
+                
+                    <a href="../../zh/preface/memory.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.3.3.</b>
+                        
+                         内存架构
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="3.4" data-path="zh/preface/osconcept.html">
+            
+                
+                    <a href="../../zh/preface/osconcept.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.4.</b>
+                        
+                         操作系统的概念
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="3.5" data-path="zh/preface/osabstract.html">
+            
+                
+                    <a href="../../zh/preface/osabstract.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>3.5.</b>
+                        
+                         操作系统的抽象
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4" data-path="zh/chapter-1/bootloader_up_os.html">
+            
+                
+                    <a href="../../zh/chapter-1/bootloader_up_os.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.</b>
+                        
+                         Bootloader启动操作系统
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="4.1" data-path="zh/chapter-1/proj1_small_bootloader.html">
+            
+                
+                    <a href="../../zh/chapter-1/proj1_small_bootloader.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.</b>
+                        
+                         实验一：小bootloader
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="4.1.1" data-path="zh/chapter-1/poweron.html">
+            
+                
+                    <a href="../../zh/chapter-1/poweron.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.1.</b>
+                        
+                         背景：Intel 80386加电后启动过程
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.1.2" data-path="zh/chapter-1/io_access.html">
+            
+                
+                    <a href="../../zh/chapter-1/io_access.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.2.</b>
+                        
+                         背景：设备管理：理解设备访问机制
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.1.3" data-path="zh/chapter-1/protect_mode.html">
+            
+                
+                    <a href="../../zh/chapter-1/protect_mode.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.3.</b>
+                        
+                         背景：内存管理：理解保护模式和分段机制
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.1.4" data-path="zh/chapter-1/real_mode_switch_protect_mode.html">
+            
+                
+                    <a href="../../zh/chapter-1/real_mode_switch_protect_mode.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.4.</b>
+                        
+                         实现：实模式到保护模式的切换
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.1.5" data-path="zh/chapter-1/setup_stack.html">
+            
+                
+                    <a href="../../zh/chapter-1/setup_stack.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.5.</b>
+                        
+                         实现：设置栈
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.1.6" data-path="zh/chapter-1/show_string.html">
+            
+                
+                    <a href="../../zh/chapter-1/show_string.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.1.6.</b>
+                        
+                         实现：显示字符串
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter active" data-level="4.2" data-path="zh/chapter-1/proj2_bootloader_load_ucore.html">
+            
+                
+                    <a href="../../zh/chapter-1/proj2_bootloader_load_ucore.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.</b>
+                        
+                         实验二：可读ELF格式文件的bootloader和可完成I/O操作的ucore
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="4.2.1" data-path="zh/chapter-1/access_harddisk.html">
+            
+                
+                    <a href="../../zh/chapter-1/access_harddisk.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.1.</b>
+                        
+                         背景：访问硬盘数据控制
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.2.2" data-path="zh/chapter-1/elf_format.html">
+            
+                
+                    <a href="../../zh/chapter-1/elf_format.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.2.</b>
+                        
+                         背景：理解ELF文件格式
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.2.3" data-path="zh/chapter-1/ucore_code.html">
+            
+                
+                    <a href="../../zh/chapter-1/ucore_code.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.3.</b>
+                        
+                         背景：操作系统执行代码的组成
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.2.4" data-path="zh/chapter-1/load_run_ucore.html">
+            
+                
+                    <a href="../../zh/chapter-1/load_run_ucore.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.4.</b>
+                        
+                         实现：bootloader加载并运行ucore
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.2.5" data-path="zh/chapter-1/show_string_in_ucore.html">
+            
+                
+                    <a href="../../zh/chapter-1/show_string_in_ucore.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.2.5.</b>
+                        
+                         实现：可输出字符串的ucore
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="4.3" data-path="zh/chapter-1/summary.html">
+            
+                
+                    <a href="../../zh/chapter-1/summary.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>4.3.</b>
+                        
+                         小结
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5" data-path="zh/chapter-2/ucore_control_computer.html">
+            
+                
+                    <a href="../../zh/chapter-2/ucore_control_computer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.</b>
+                        
+                         ucore操作系统开始控制计算机
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1" data-path="zh/chapter-2/proj3_function_call_stack.html">
+            
+                
+                    <a href="../../zh/chapter-2/proj3_function_call_stack.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.</b>
+                        
+                         实验三：能显示函数调用关系的ucore
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.1.1" data-path="zh/chapter-2/stack_process.html">
+            
+                
+                    <a href="../../zh/chapter-2/stack_process.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.1.</b>
+                        
+                         背景：栈结构和处理过程
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.1.2" data-path="zh/chapter-2/kernel_function_call_stack.html">
+            
+                
+                    <a href="../../zh/chapter-2/kernel_function_call_stack.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.1.2.</b>
+                        
+                         实现：分析内核函数调用关系
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.2" data-path="zh/chapter-2/proj4_intr_in_ucore.html">
+            
+                
+                    <a href="../../zh/chapter-2/proj4_intr_in_ucore.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.2.</b>
+                        
+                         实验四：可管理中断并处理中断方式I/O的ucore
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.2.1" data-path="zh/chapter-2/hardware_intr.html">
+            
+                
+                    <a href="../../zh/chapter-2/hardware_intr.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.2.1.</b>
+                        
+                         背景：理解CPU对外设中断的硬件支持
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.2.2" data-path="zh/chapter-2/init_intr_controller.html">
+            
+                
+                    <a href="../../zh/chapter-2/init_intr_controller.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.2.2.</b>
+                        
+                         实现：初始化中断控制器
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.2.3" data-path="zh/chapter-2/init_IDT.html">
+            
+                
+                    <a href="../../zh/chapter-2/init_IDT.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.2.3.</b>
+                        
+                         实现：初始化中断门描述符表
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.2.4" data-path="zh/chapter-2/init_intr_in_device.html">
+            
+                
+                    <a href="../../zh/chapter-2/init_intr_in_device.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.2.4.</b>
+                        
+                         实现：外设的相关中断初始化
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.2.5" data-path="zh/chapter-2/ISR_in_ucore.html">
+            
+                
+                    <a href="../../zh/chapter-2/ISR_in_ucore.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.2.5.</b>
+                        
+                         实现：中断处理过程
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.3" data-path="zh/chapter-2/proj4_1_1_kernel_switch_to_user.html">
+            
+                
+                    <a href="../../zh/chapter-2/proj4_1_1_kernel_switch_to_user.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.3.</b>
+                        
+                         实验五：可在内核态和用户态之间进行切换的ucore
+                    </a>
+                
+            
+            
+            <ul class="articles">
+                
+    
+        
+        <li class="chapter " data-level="5.3.1" data-path="zh/chapter-2/privilege_level.html">
+            
+                
+                    <a href="../../zh/chapter-2/privilege_level.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.3.1.</b>
+                        
+                         背景：分段机制的特权限制
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.3.2" data-path="zh/chapter-2/task_switch.html">
+            
+                
+                    <a href="../../zh/chapter-2/task_switch.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.3.2.</b>
+                        
+                         背景：80386的任务切换
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.3.3" data-path="zh/chapter-2/kernel_to_user.html">
+            
+                
+                    <a href="../../zh/chapter-2/kernel_to_user.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.3.3.</b>
+                        
+                         实现：内核态切换到用户态
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.3.4" data-path="zh/chapter-2/user_to_kernel.html">
+            
+                
+                    <a href="../../zh/chapter-2/user_to_kernel.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.3.4.</b>
+                        
+                         实现：用户态切换到内核态
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.4" data-path="zh/chapter-2/osprinciple_control_computer.html">
+            
+                
+                    <a href="../../zh/chapter-2/osprinciple_control_computer.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.4.</b>
+                        
+                         操作系统基本原理：管理计算机硬件
+                    </a>
+                
+            
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="5.5" data-path="zh/chapter-2/summary.html">
+            
+                
+                    <a href="../../zh/chapter-2/summary.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>5.5.</b>
+                        
+                         小结
+                    </a>
+                
+            
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        
+        <li class="chapter " data-level="6" data-path="zh/chapter-3/ucore_phymem_management.html">
+            
+                
+                    <a href="../../zh/chapter-3/ucore_phymem_management.html">
+                        <i class="fa fa-check"></i>
+                        
+                            <b>6.</b>
+                        
+                         物理内存管理
+                    </a>
+                
+            
+            
+        </li>
+    
+
+
+        
+        <li class="divider"></li>
+        <li>
+            <a href="http://www.gitbook.io/" target="blank" class="gitbook-link">Published using GitBook</a>
+        </li>
+        
+    </ul>
+</div>
+
+    <div class="book-body">
+        <div class="body-inner">
+            <div class="book-header">
+    <!-- Actions Left -->
+    <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
+    <a href="#" class="btn pull-left toggle-search" aria-label="Toggle search"><i class="fa fa-search"></i></a>
+    
+    <div id="font-settings-wrapper" class="dropdown pull-left">
+        <a href="#" class="btn toggle-dropdown" aria-label="Toggle font settings"><i class="fa fa-font"></i>
+        </a>
+        <div class="dropdown-menu font-settings">
+    <div class="dropdown-caret">
+        <span class="caret-outer"></span>
+        <span class="caret-inner"></span>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="reduce-font-size" class="button size-2">A</button>
+        <button type="button" id="enlarge-font-size" class="button size-2">A</button>
+    </div>
+
+    <div class="buttons font-family-list">
+        <button type="button" data-font="0" class="button">Serif</button>
+        <button type="button" data-font="1" class="button">Sans</button>
+    </div>
+
+    <div class="buttons color-theme-list">
+        <button type="button" id="color-theme-preview-0" class="button size-3" data-theme="0">White</button>
+        <button type="button" id="color-theme-preview-1" class="button size-3" data-theme="1">Sepia</button>
+        <button type="button" id="color-theme-preview-2" class="button size-3" data-theme="2">Night</button>
+    </div>
+</div>
+
+    </div>
+
+    <!-- Actions Right -->
+    
+    <div class="dropdown pull-right">
+        <a href="#" class="btn toggle-dropdown" aria-label="Toggle share dropdown"><i class="fa fa-share-alt"></i>
+        </a>
+        <div class="dropdown-menu font-settings dropdown-left">
+            <div class="dropdown-caret">
+                <span class="caret-outer"></span>
+                <span class="caret-inner"></span>
+            </div>
+            <div class="buttons">
+                <button type="button" data-sharing="twitter" class="button">Twitter</button>
+                <button type="button" data-sharing="google-plus" class="button">Google</button>
+                <button type="button" data-sharing="facebook" class="button">Facebook</button>
+                <button type="button" data-sharing="weibo" class="button">Weibo</button>
+                <button type="button" data-sharing="instapaper" class="button">Instapaper</button>
+            </div>
+        </div>
+    </div>
+    
+
+    
+    <a href="#" target="_blank" class="btn pull-right google-plus-sharing-link sharing-link" data-sharing="google-plus" aria-label="Share on Google Plus"><i class="fa fa-google-plus"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right facebook-sharing-link sharing-link" data-sharing="facebook" aria-label="Share on Facebook"><i class="fa fa-facebook"></i></a>
+    
+    
+    <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>
+    
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href="../../" >操作系统简单实现与基本原理 — 基于ucore</a>
+    </h1>
+</div>
+
+            <div class="page-wrapper" tabindex="-1">
+                <div class="page-inner">
+                
+                
+                    <section class="normal" id="section-gitbook_52">
+                    
+                        <h1 id="elfbootloaderioucore">可读ELF格式文件的bootloader和可完成I/O操作的ucore</h1>
+<h2 id="">实验目标</h2>
+<p>接下来，我们需要完成一个能够读取位于硬盘中OS的代码内容并加载运行OS的bootloader，这需要bootloader能够读取硬盘扇区中的数据。由于OS采用ELF执行文件格式，所以bootloader能够解析ELF格式文件，把其中的代码和数据放到内存中正确的位置。Bootloader虽然增加了这么多功能，但整个bootloader的大小还是必须小于512个字节，这样才能放到只有512字节大小的硬盘主引导扇区中。通过分析和实现这个bootloader，读者可以了解到如何在保护模式下通过PIO方式访问块设备硬盘；理解如何在保护模式下解析并加载一个简单的ELF执行文件。</p>
+<h2 id="proj23">proj2/3概述</h2>
+<ol>
+<li><p>实现描述<br> proj2基于proj1的主要实现一个可读硬盘并可分析ELF执行文件格式的bootloader，由于bootloader要放在512字节大小的主引导扇区中，所以不得不去掉部分显示输出的功能，确保整个bootloader的大小小于510个字节（最后两个字节用于硬盘主引导扇区标识，即“55AA”）。proj3在proj2的基础上增加了一个只能显示字符的第一代幼稚型操作系统ucore，用来验证proj2实现的bootloader能够正确从硬盘读出ucore并加载到正确的内存位置，并能把CPU控制权交给ucore。ucore在获得CPU控制权后，能够在保护模式下显示一个字符串，表明自己能够正常工作了</p>
+</li>
+<li><p>项目组成<br> 这里我们分了两个project来完成此事。proj2是一个可分析ELF执行文件格式的例子，proj2整体目录结构如下所示：</p>
+<pre><code> proj2/
+ |-- boot
+ |   |-- asm.h
+ |   |-- bootasm.S
+ |   `-- bootmain.c
+ |-- libs
+ |   |-- elf.h
+ |   |-- types.h
+ |   `-- x86.h
+ |-- Makefile
+ ……
+</code></pre><p> proj2与proj1类似，只是增加了libs/elf.h文件，并且bootmain.c中增加了对ELF执行文件的简单解析功能和读磁盘功能。</p>
+<p> proj3建立在proj2基础之上，增加了一个只能显示字符的ucore操作系统，让bootloader能够把这个操作系统从硬盘上读到内存中，并跳转到ucore的起始处执行ucore的功能。proj3整体目录结构如下所示：</p>
+<pre><code> proj3
+ |-- boot
+ |   |-- asm.h
+ |   |-- bootasm.S
+ |   `-- bootmain.c
+ |-- kern
+ |   |-- driver
+ |   |   |-- console.c
+ |   |   `-- console.h
+ |   |-- init
+ |   |   `-- init.c
+ |   `-- libs
+ |       `-- stdio.c
+ |-- libs
+ |   |-- elf.h
+ |   |-- error.h
+ |   |-- printfmt.c
+ |   |-- stdarg.h
+ |   |-- stdio.h
+ |   |-- string.c
+ |   |-- string.h
+ |   |-- types.h
+ |   `-- x86.h
+ |-- Makefile
+ ……
+</code></pre><p> proj3相对于proj2增加了ucore相关的文件，下面简要说明一下：</p>
+<ul>
+<li>libs目录下的printfmt.c：完成类似C语言的printf中的格式化处理；</li>
+<li>libs目录下的string.c：完成类似C语言的str***相关的字符串处理函数；</li>
+<li>libs目录下的st*.h：是支持上述两个库函数（可被内核和用户应用共享）的.h文件；</li>
+<li>kern/init目录下的init.c：完成ucore的初始化工作；</li>
+<li>kern/driver目录下的console.c：提供并口/串口/CGA方式的字符输出的console驱动；</li>
+<li>kern/libs/stdio.c：提供内核方式下的的cprintf函数功能；</li>
+</ul>
+</li>
+<li><p>编译运行
+ 那接下来是如何生成一个包含了bootloader和ucore操作系统的硬盘镜像呢？我们先修改proj3目录下的Makefile，在其第五行</p>
+<pre><code> V       := @
+</code></pre><p> 的最前面增加一个“#”（目的是让make工具程序详细显示整个project的编译过程），这样就把这行给注释了。然后在proj3目录下执行make，可以看到：</p>
+<pre><code> ……
+ ld -m    elf_i386 -Ttext 0x100000 -e kern_init -o bin/kernel obj/kern/init/init.o obj/kern/libs/printf.o obj/kern/driver/console.o obj/libs/printfmt.o obj/libs/string.o
+ ……
+ dd if=bin/kernel of=bin/ucore.img seek=1 conv=notrunc
+</code></pre><p>这两步是生成ucore的关键。第一步把ucore涉及的各个.o目标文件链接起来，并在bin目录下形成ELF文件格式的文件kernel，这就是我们第一个ucore操作系统，而且设定ucore的执行入口地址在0x10000，即kern_init函数的起始位置。这也就意味着bootloader需要把读出的kernel文件的代码段+数据段放置在0x10000起始的内存空间。第二步是把bin目录下的kernel文件直接覆盖到ucore.img（虚拟硬盘的文件）的bootloader所处扇区（即第一个扇区，主引导扇区）之后的扇区（第二个扇区）。如果一个扇区大小为512字节，这kernel覆盖的扇区数为上取整（kernel的大小/512字节）。</p>
+<p> 编译后运行proj3的示意图如下所示：</p>
+<p> <img src="figures/3.22.1.png" alt="3.22.1"></p>
+</li>
+</ol>
+
+                    
+                    </section>
+                
+                
+                </div>
+            </div>
+        </div>
+
+        
+        <a href="../../zh/chapter-1/show_string.html" class="navigation navigation-prev " aria-label="Previous page: 实现：显示字符串"><i class="fa fa-angle-left"></i></a>
+        
+        
+        <a href="../../zh/chapter-1/access_harddisk.html" class="navigation navigation-next " aria-label="Next page: 背景：访问硬盘数据控制"><i class="fa fa-angle-right"></i></a>
+        
+    </div>
+</div>
+
+        
+<script src="../../gitbook/app.js"></script>
+
+    
+    <script src="https://cdn.mathjax.org/mathjax/2.4-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+    
+    <script src="../../gitbook/plugins/gitbook-plugin-mathjax/plugin.js"></script>
+    
+
+    
+    <script src="../../gitbook/plugins/gitbook-plugin-livereload/plugin.js"></script>
+    
+
+<script>
+require(["gitbook"], function(gitbook) {
+    var config = {"fontSettings":{"theme":null,"family":"sans","size":2},"autocover":{"title":"Operating System Simple Implementation and Basic Principle--Based on ucore","author":"Chen, Yu","font":{"size":null,"family":"Impact","color":"#FFF"},"size":{"w":1800,"h":2360},"background":{"color":"#09F"}}};
+    gitbook.start(config);
+});
+</script>
+
+        
+    </body>
+    
+</html>

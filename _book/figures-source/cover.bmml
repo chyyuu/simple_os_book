@@ -1,0 +1,45 @@
+<mockup version="1.0" skin="sketch" measuredW="1052" measuredH="1382" mockupW="1052" mockupH="1382">
+  <controls>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Title" x="78" y="512" w="-1" h="-1" measuredW="664" measuredH="87" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>16777215</color>
+        <size>72</size>
+        <text>Software%20Development</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Canvas" x="3" y="498" w="807" h="334" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.75</backgroundAlpha>
+        <borderColor>0</borderColor>
+        <color>545684</color>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Canvas" x="187" y="0" w="651" h="50" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <backgroundAlpha>0.75</backgroundAlpha>
+        <borderColor>0</borderColor>
+        <color>545684</color>
+      </controlProperties>
+    </control>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::TextArea" x="0" y="0" w="1052" h="1382" measuredW="200" measuredH="140" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Label" x="512" y="716" w="413" h="61" measuredW="218" measuredH="39" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <italic>true</italic>
+        <size>28</size>
+        <text>Learning%20in%204%20days</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Label" x="708" y="1272" w="-1" h="-1" measuredW="132" measuredH="43" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>6710886</color>
+        <italic>true</italic>
+        <size>32</size>
+        <text>Larry%20Cai</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
