@@ -1,5 +1,6 @@
 kaiyuanbook.*
 _book
+_book/*
 *.pdf
 *.swp
 *.aux
