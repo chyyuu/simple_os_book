@@ -13,6 +13,7 @@
        * [内存架构](zh/preface/memory.md)
    * [操作系统的概念](zh/preface/osconcept.md)
    * [操作系统的抽象](zh/preface/osabstract.md)
+   * [操作系统的特征](zh/preface/osfeature.md)
 * [Bootloader启动操作系统](zh/chapter-1/bootloader_up_os.md)
    * [实验一：小bootloader](zh/chapter-1/proj1_small_bootloader.md)
        * [背景：Intel 80386加电后启动过程](zh/chapter-1/poweron.md)
