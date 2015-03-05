@@ -1,8 +1,7 @@
-### **操作系统简单实现与基本原理--基于ucore**
+# **操作系统简单实现与基本原理--基于ucore OS**
 
 
-陈  渝
+ - **陈渝**  yuchen AT tsinghua.edu.cn
+ -  **向勇**  xyong AT tsinghua.edu.cn
 
-yuchen@tsinghua.edu.cn
-
-2014年9月
+ 2015年3月
