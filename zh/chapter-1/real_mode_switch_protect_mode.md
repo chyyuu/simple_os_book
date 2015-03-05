@@ -3,7 +3,7 @@
 BIOS把bootloader从硬盘（即是我们刚才生成的ucore.img）的第一个扇区（即是我们刚才生成的bootblock）读出来并拷贝到内存一个特定的地址0x7c00处，然后BIOS会跳转到那个地址（（即CS=0，EIP=0x7c00））继续执行。至此BIOS的初始化工作做完了，进一步的工作交给了ucore的bootloader。
 
 bootloader从哪里开始执行呢？我们【实验2-2 编译运行bootloader】中描述make工作过程的第五步就是生成了一个bootblock.asm，它的前面几行是：
-
+```
     obj/bootblock.o:     file format elf32-i386
     Disassembly of section .text:
     00007c00 <start>:
@@ -12,16 +12,16 @@ bootloader从哪里开始执行呢？我们【实验2-2 编译运行bootloader�
     start:
       .code16                     # Assemble for 16-bit mode
       cli                         # Disable interrupts
-      7c00:	fa                    cli    
-    
+      7c00:	fa                    cli
+```
 上述代码片段指出了bootblock（即bootloader）在0x7c00虚拟地址（在这里虚拟地址=线性地址=物理地址）处的指令为“cli”，如果读者再回头看看bootasm.S中的12~15行：
-
+```
 	.globl start
     start:
       .code16                     # Assemble for 16-bit mode
       cli                         # Disable interrupts
       cld                         # String operations increment
-    
+```
 就可以发现二者是完全一致的。而这个虚拟地址的设定是通过链接器ld完成的，我们【实验2-2 编译运行bootloader】中描述make工作过程的第四步：
     i386-elf-ld  -N -e start -Ttext 0x7C00 -o obj/bootblock.o obj/bootasm.o obj/bootmain.o
  
