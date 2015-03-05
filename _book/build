@@ -1,3 +1,0 @@
-rm -rf ./latex/zh
-rm -f ucoreos.zh.pdf
-./mkbok && okular ucoreos.zh.pdf
