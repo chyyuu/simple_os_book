@@ -28,6 +28,8 @@
 # 上述工具的使用方法在线信息
 - apt-get
   - http://wiki.ubuntu.org.cn/Apt-get%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97
+- git
+  - http://www.cnblogs.com/cspku/articles/Git_cmds.html
 - gcc
   - http://wiki.ubuntu.org.cn/Gcchowto
   - http://wiki.ubuntu.org.cn/Compiling_Cpp
