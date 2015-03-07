@@ -94,7 +94,7 @@
    * [小结](zh/chapter-4/process_summary.md)
 * [附录](zh/supplement/supplement.md)
    * [附录A--ucore历史](zh/supplement/ucore-history.md)
-   * [附录B--ucore实验项目列表](zh/supplement/ucore-projlists.md)
+   * [附录B--构成ucore lab的小项目列表](zh/supplement/ucore-projlists.md)
    * [附录C--ucore开发者列表](zh/supplement/ucore-contributors.md)
    * [附录D--ucore实验中的工具](zh/supplement/ucore-tools.md) 
    * [附录E--MOOC OS相关信息](zh/supplement/mooc-os.md)
