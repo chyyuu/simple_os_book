@@ -14,3 +14,4 @@ epub/temp
 *~
 .#*
 *.epub
+node_modules/

@@ -1,23 +1,19 @@
 {
-    "plugins": [
-        "autocover"
+   "introduction": {
+        "path": "README.md",
+        "title": "介绍" },
+ "plugins": [
+     "mathjax","duoshuo", "quizzes", "-lunr", "-search", "search-pro"
     ],
+
     "pluginsConfig": {
-        "autocover": {
-            "title": "Operating System Simple Implementation and Basic Principle--Based on ucore",
-            "author": "Chen, Yu",
-            "font": {
-                "size": null,
-                "family": "Impact",
-                "color": "#FFF"
-            },
-            "size": {
-                "w": 1800,
-                "h": 2360
-            },
-            "background": {
-                "color": "#09F"
-            }
-        }
-    }
+        "mathjax": {
+            "forceSVG": true
+        },
+        "duoshuo": {
+            "short_name": "mytest",
+            "theme": "default"
+        },
+       "quizees":{}
+   }
 }
