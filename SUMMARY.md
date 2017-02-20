@@ -5,7 +5,7 @@
 * [前言](README.md)
 * [操作系统简介](zh/preface/preface.md)
   * [应具备的背景知识和学习环境](zh/preface/preknowledge.md)
-  * [了解硬件](zh/preface/hardware.md)
+  * [了解计算机硬件架构](zh/preface/hardware.md)
     * [计算机硬件架构](zh/preface/pc.md)
     * [CPU运行模式](zh/preface/cpu.md)
     * [内存架构](zh/preface/memory.md)
