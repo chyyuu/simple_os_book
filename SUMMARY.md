@@ -18,7 +18,7 @@
     * [操作系统的抽象](zh/preface/osabstract.md)
     * [操作系统的特征](zh/preface/osfeature.md)
   * [“麻雀”操作系统--ucore](zh/preface/smallos_ucore.md)
-    * [ucor简介](zh/preface/ucore.md)
+    * [ucore简介](zh/preface/ucore.md)
   * [小结](zh/preface/summary_preface.md)
 
 * [启动操作系统](zh/chapter-1/bootloader_up_os.md)
@@ -41,6 +41,7 @@
   * [实现：可输出字符串的ucore](zh/chapter-1/show_string_in_ucore.md)
 
 * [小结](zh/chapter-1/summary.md)
+
 * [参考资料](zh/chapter-1/reference.md)
 
 * [ucore操作系统开始控制计算机](zh/chapter-2/ucore_control_computer.md)
@@ -86,6 +87,7 @@
     * [proj9.2：实现写时复制](zh/chapter-3/implement_copy_on_write.md)
 
 * [进程管理与调度](zh/chapter-4/process_managment.md)
+
   * [实验1: 创建并执行内核线程](zh/chapter-4/create_kern_thread.md)
     * [原理: 进程的属性与特征解析](zh/chapter-4/what_is_process.md)
     * [实现: 设计进程控制块](zh/chapter-4/design_PCB.md)
@@ -107,6 +109,7 @@
     * [原理: 进程调度](zh/chapter-4/process_schedule_principal.md)
     * [实现: 进程调度](zh/chapter-4/process_schedule_implement.md)
   * [小结](zh/chapter-4/process_summary.md)
+
 * [附录](zh/supplement/supplement.md)
   * [附录A--ucore历史](zh/supplement/ucore-history.md)
   * [附录B--构成ucore lab的小项目列表](zh/supplement/ucore-projlists.md)
