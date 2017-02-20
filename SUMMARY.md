@@ -12,7 +12,7 @@
     * [外设](zh/preface/io.md)
   * [了解操作系统](zh/preface/understandos.md)
     * [操作系统的历史](zh/preface/oshistory.md)
-    * [操作系统的定义](zh/preface/osconcept.md)
+    * [操作系统的定义与目标](zh/preface/osconcept.md)
     * [操作系统的接口](zh/preface/osinterface.md)
     * [操作系统的抽象](zh/preface/osabstract.md)
     * [操作系统的特征](zh/preface/osfeature.md)
@@ -21,12 +21,14 @@
 * [启动操作系统](zh/chapter-1/bootloader_up_os.md)
 
 * [实验一：显示字符的toy bootloader](zh/chapter-1/proj1_small_bootloader.md)
+
   * [背景：Intel 80386加电后启动过程](zh/chapter-1/poweron.md)
   * [背景：设备管理：理解设备访问机制](zh/chapter-1/io_access.md)
   * [背景：内存管理：理解保护模式和分段机制](zh/chapter-1/protect_mode.md)
   * [实现：实模式到保护模式的切换](zh/chapter-1/real_mode_switch_protect_mode.md)
   * [实现：设置栈内存空间](zh/chapter-1/setup_stack.md)
   * [实现：显示字符串](zh/chapter-1/show_string.md)
+
 * [实验二：读ELF格式文件的baby bootloader](zh/chapter-1/proj2_bootloader_load_ucore.md)
   * [背景：访问硬盘数据控制](zh/chapter-1/access_harddisk.md)
   * [背景：理解ELF文件格式](zh/chapter-1/elf_format.md)
@@ -37,6 +39,7 @@
 * [参考资料](zh/chapter-1/reference.md)
 
 * [ucore操作系统开始控制计算机](zh/chapter-2/ucore_control_computer.md)
+
   * [实验三：能显示函数调用关系的ucore](zh/chapter-2/proj3_function_call_stack.md)
     * [背景：栈结构和处理过程](zh/chapter-2/stack_process.md)
     * [实现：分析内核函数调用关系](zh/chapter-2/kernel_function_call_stack.md)
@@ -53,6 +56,7 @@
     * [实现：用户态切换到内核态](zh/chapter-2/user_to_kernel.md)
   * [操作系统基本原理：管理计算机硬件](zh/chapter-2/osprinciple_control_computer.md)
   * [小结](zh/chapter-2/summary.md)
+
 * [物理内存管理](zh/chapter-3/ucore_phymem_management.md)
   * [实验1: 建立分页管理机制](zh/chapter-3/pages_managment.md)
     * [背景: 计算机物理内存分布和大小](zh/chapter-3/phymen_size.md)
