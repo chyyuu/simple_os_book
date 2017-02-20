@@ -18,6 +18,8 @@
     * [操作系统的特征](zh/preface/osfeature.md)
   * [“麻雀”操作系统--ucore](zh/preface/smallos_ucore.md)
     * [实现ucore的步骤](zh/preface/ucore.md)
+  * [小结](zh/preface/summary_preface.md)
+
 * [启动操作系统](zh/chapter-1/bootloader_up_os.md)
 
 * [实验一：显示字符的toy bootloader](zh/chapter-1/proj1_small_bootloader.md)
