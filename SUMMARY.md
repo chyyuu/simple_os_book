@@ -4,6 +4,7 @@
 * [封面](zh/cover/cover.md)
 * [前言](README.md)
 * [操作系统简介](zh/preface/preface.md)
+
   * [应具备的背景知识和学习环境](zh/preface/preknowledge.md)
   * [了解计算机硬件架构](zh/preface/hardware.md)
     * [计算机硬件架构](zh/preface/pc.md)
@@ -17,7 +18,7 @@
     * [操作系统的抽象](zh/preface/osabstract.md)
     * [操作系统的特征](zh/preface/osfeature.md)
   * [“麻雀”操作系统--ucore](zh/preface/smallos_ucore.md)
-    * [实现ucore的步骤](zh/preface/ucore.md)
+    * [ucor简介](zh/preface/ucore.md)
   * [小结](zh/preface/summary_preface.md)
 
 * [启动操作系统](zh/chapter-1/bootloader_up_os.md)
@@ -32,11 +33,13 @@
   * [实现：显示字符串](zh/chapter-1/show_string.md)
 
 * [实验二：读ELF格式文件的baby bootloader](zh/chapter-1/proj2_bootloader_load_ucore.md)
+
   * [背景：访问硬盘数据控制](zh/chapter-1/access_harddisk.md)
   * [背景：理解ELF文件格式](zh/chapter-1/elf_format.md)
   * [背景：操作系统执行代码的组成](zh/chapter-1/ucore_code.md)
   * [实现：bootloader加载并运行ucore](zh/chapter-1/load_run_ucore.md)
   * [实现：可输出字符串的ucore](zh/chapter-1/show_string_in_ucore.md)
+
 * [小结](zh/chapter-1/summary.md)
 * [参考资料](zh/chapter-1/reference.md)
 
@@ -60,6 +63,7 @@
   * [小结](zh/chapter-2/summary.md)
 
 * [物理内存管理](zh/chapter-3/ucore_phymem_management.md)
+
   * [实验1: 建立分页管理机制](zh/chapter-3/pages_managment.md)
     * [背景: 计算机物理内存分布和大小](zh/chapter-3/phymen_size.md)
     * [实现: 物理内存探测](zh/chapter-3/phymem_analysis.md)
@@ -80,6 +84,7 @@
     * [实现: 页面置换机制实现](zh/chapter-3/implement_swap.md)
     * [proj9.1：实现共享内存](zh/chapter-3/implement_shared_mem.md)
     * [proj9.2：实现写时复制](zh/chapter-3/implement_copy_on_write.md)
+
 * [进程管理与调度](zh/chapter-4/process_managment.md)
   * [实验1: 创建并执行内核线程](zh/chapter-4/create_kern_thread.md)
     * [原理: 进程的属性与特征解析](zh/chapter-4/what_is_process.md)
