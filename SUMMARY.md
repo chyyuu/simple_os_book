@@ -9,7 +9,7 @@
     * [计算机硬件架构](zh/preface/pc.md)
     * [CPU](zh/preface/cpu.md)
     * [内存](zh/preface/memory.md)
-    * [外设](zh/preface/.md)
+    * [外设](zh/preface/io.md)
   * [了解操作系统](zh/preface/understandos.md)
     * [操作系统的定义](zh/preface/osconcept.md)
     * [操作系统的接口](zh/preface/osinterface.md)
