@@ -11,6 +11,7 @@
     * [内存](zh/preface/memory.md)
     * [外设](zh/preface/io.md)
   * [了解操作系统](zh/preface/understandos.md)
+    * [操作系统的历史](zh/preface/oshistory.md)
     * [操作系统的定义](zh/preface/osconcept.md)
     * [操作系统的接口](zh/preface/osinterface.md)
     * [操作系统的抽象](zh/preface/osabstract.md)
