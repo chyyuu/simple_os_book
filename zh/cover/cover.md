@@ -1,7 +1,9 @@
-# **操作系统简单实现与基本原理--基于ucore OS**
+# **操作系统的基本原理与简单实现**
+
+## *--基于ucore OS + RISC-V*
 
 
  - **陈渝**  yuchen AT tsinghua.edu.cn
- -  **向勇**  xyong AT tsinghua.edu.cn
+ - **向勇**  xyong AT tsinghua.edu.cn
 
- 2015年3月
+ 2018年

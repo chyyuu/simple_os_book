@@ -7,10 +7,8 @@
 
   * [应具备的背景知识和学习环境](zh/preface/preknowledge.md)
   * [了解计算机硬件架构](zh/preface/hardware.md)
-    * [计算机硬件架构](zh/preface/pc.md)
-    * [CPU](zh/preface/cpu.md)
-    * [内存](zh/preface/memory.md)
-    * [外设](zh/preface/io.md)
+    * [一般计算机硬件架构](zh/preface/pc.md)
+    * [RISC-V硬件架构](zh/preface/riscv.md)
   * [了解操作系统](zh/preface/understandos.md)
     * [操作系统的历史](zh/preface/oshistory.md)
     * [操作系统的定义与目标](zh/preface/osconcept.md)
