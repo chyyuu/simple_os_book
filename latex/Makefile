@@ -14,14 +14,16 @@ BST_FILE=gbt7714-2005.bst
 BST_URL=https://raw.githubusercontent.com/Haixing-Hu/GBT7714-2005-BibTeX-Style/master/gbt7714-2005.bst
 SOURCES=$(PACKAGE).dtx $(PACKAGE).ins
 CLS=$(PACKAGE).cls $(PACKAGE).cfg dtx-style.sty
-SAMPLE=sample
+#SAMPLE=sample
+SAMPLE=sosbook
 SAMPLECONTENTS=$(SAMPLE).tex
 SAMPLEBIB=$(SAMPLE).bib
 TEXMFLOCAL=$(shell get_texmf_dir.sh)
 
-.PHONY: all clean cls doc sample
+.PHONY: all clean cls doc sample sosbook
 
-all: bst cls doc sample
+#all: bst cls doc sample
+all: bst cls doc sosbook
 
 ###### update bst file
 bst:  $(BST_FILE)
@@ -46,8 +48,8 @@ $(PACKAGE).pdf: $(CLS)
 	xelatex $(PACKAGE).dtx
 
 ###### for sample
-
-sample:	 $(SAMPLE).pdf
+sosbook:	 $(SAMPLE).pdf
+#sample:	 $(SAMPLE).pdf
 
 $(SAMPLE).pdf: $(CLS) $(BST_FILE) $(SAMPLE).tex $(SAMPLEBIB)
 	xelatex $(SAMPLE).tex
@@ -94,4 +96,5 @@ clean:
 		*.cls \
 		*.sty \
 		*.hd \
-		sample.pdf zhbook.pdf
+		*.synctex.gz \
+		sample.pdf zhbook.pdf sosbook.pdf
