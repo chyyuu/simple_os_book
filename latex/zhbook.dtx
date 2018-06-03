@@ -1,0 +1,2774 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2017-2018, Haixing Hu.
+% School of Physics, Nanjing University.
+%
+% This file may be distributed and/or modified under the conditions of the
+% LaTeX Project Public License, either version 1.2 of this license or (at your
+% option) any later version. The latest version of this license is in:
+%
+% http://www.latex-project.org/lppl.txt
+%
+% and version 1.2 or later is part of all distributions of LaTeX version
+% 1999/12/01 or later.
+%
+% Home Page of the Project: http://haixing-hu.github.io/xelatex-zh-book/
+%
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{zhbook.dtx}
+%</driver>
+%<cls>\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+%<cls>\ProvidesClass{zhbook}
+%<cfg>\ProvidesFile{zhbook.cfg}
+%<*cls>
+ [2018/04/08 v1.1.3 Document Class for the Typesetting Chinese Books]
+%</cls>
+%<*driver>
+\documentclass[12pt,a4paper,oneside]{ltxdoc}
+\usepackage{dtx-style}
+\EnableCrossrefs
+\CodelineIndex
+\GetFileInfo{zhbook.dtx}
+\begin{document}
+  \DocInput{zhbook.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{0}
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \DoNotIndex{\begin,\end,\begingroup,\endgroup}
+% \DoNotIndex{\ifx,\ifdim,\ifnum,\ifcase,\else,\or,\fi}
+% \DoNotIndex{\let,\def,\xdef,\newcommand,\renewcommand}
+% \DoNotIndex{\expandafter,\csname,\endcsname,\relax,\protect}
+% \DoNotIndex{\Huge,\huge,\LARGE,\Large,\large,\normalsize}
+% \DoNotIndex{\small,\footnotesize,\scriptsize,\tiny}
+% \DoNotIndex{\normalfont,\bfseries,\slshape,\interlinepenalty}
+% \DoNotIndex{\hfil,\par,\vskip,\vspace,\quad}
+% \DoNotIndex{\centering,\raggedright}
+% \DoNotIndex{\c@secnumdepth,\@startsection,\@setfontsize}
+% \DoNotIndex{\@plus,\@minus,\p@,\z@,\@m,\@M,\@ne,\m@ne,\@@par,\@dottedtocline}
+% \DoNotIndex{\ ,\,,\.,\\}
+% \DoNotIndex{\|}
+% \DoNotIndex{\@dottedtocline}
+% \DoNotIndex{\@afterindenttrue,\@arabic,\@biblabel,\@clubpenalty}
+% \DoNotIndex{\@empty,\@highpenalty,\@ifnextchar,\@latex@warning,\@listI,\@listi}
+% \DoNotIndex{\@mainmatterfalse,\@mainmattertrue,\@mkboth,\@nobreakfalse}
+% \DoNotIndex{\@nobreaktrue,\@noitemerr,\@openbib@code,\@pnumwidth,\@restonecolfalse}
+% \DoNotIndex{\@restonecoltrue,\@starttoc,\@tempcnta,\@tempdima,\@tocrmarg}
+% \DoNotIndex{\@afterindenttrue,\@arabic,\@biblabel,\@clubpenalty,\@dottedtocline}
+% \DoNotIndex{\@empty,\@highpenalty,\@ifnextchar,\@latex@warning,\@listI,\@listi}
+% \DoNotIndex{\@mainmatterfalse,\@mainmattertrue,\@mkboth,\@nobreakfalse,\@nobreaktrue}
+% \DoNotIndex{\@noitemerr,\@openbib@code,\@pnumwidth,\@restonecolfalse}
+% \DoNotIndex{\@restonecoltrue,\@starttoc,\@tempcnta,\@tempdima,\@tocrmarg}
+% \DoNotIndex{\abovedisplayshortskip,\abovedisplayskip,\addpenalty,\addvspace}
+% \DoNotIndex{\advance,\alph,\arabic,\arraybackslash,\arraystretch,\AtBeginDocument}
+% \DoNotIndex{\belowdisplayshortskip,\belowdisplayskip,\bf,\blacksquare,\bottomfraction}
+% \DoNotIndex{\bullet,\c@enumiv,\c@page,\c@tocdepth,\captionsetup,\cdot,\CJKfamily}
+% \DoNotIndex{\CJKglue,\CJKnumber,\CJKunderline,\CJKunderlinecolor,\ClassError}
+% \DoNotIndex{\clearpage,\CurrentOption,\dagger,\day,\ddagger}
+% \DoNotIndex{\DeclareGraphicsExtensions,\DeclareMathSizes,\DeclareOption}
+% \DoNotIndex{\DeclareRobustCommand,\defaultfontfeatures,\DefineFNsymbolsTM}
+% \DoNotIndex{\Diamondblack,\endlist,\ensuremath,\efill,\equal,\everypar}
+% \DoNotIndex{\fontsize,\global,\hb@xt@,\hbox,\hfill,\hline,\hskip,\hspace,\hss}
+% \DoNotIndex{\if@mainmatter,\if@restonecol,\if@twocolumn,\if@twoside,\ifodd}
+% \DoNotIndex{\ifthenelse,\ignorespaces,\includegraphics,\input,\it,\item}
+% \DoNotIndex{\itemsep,\kern,\l@chapter,\l@part,\labelsep,\labelwidth,\leaders}
+% \DoNotIndex{\leavevmode,\leftmargin,\leftmargini,\leftmark,\leftskip,\list}
+% \DoNotIndex{\LoadClass,\m@th,\makebox,\MakeUppercase,\markboth,\markright}
+% \DoNotIndex{\mathparagraph,\mathsection,\mkern,\month,\multicolumn}
+% \DoNotIndex{\newcolumntype,\newenvironment,\newif,\newline,\newlist,\newpage}
+% \DoNotIndex{\newtheorem,\nobreak,\normalcolor,\null,\number,\onecolumn,\p@enumiv}
+% \DoNotIndex{\pagestyle,\parbox,\parfillskip,\parindent,\parsep,\PassOptionsToClass}
+% \DoNotIndex{\pdfbookmark,\penalty,\ProcessOptions,\punctstyle,\raisebox,\renewenvironment}
+% \DoNotIndex{\RequirePackage,\RequireXeTeX,\restylefloat,\rightmargin,\rightmark,\rightskip}
+% \DoNotIndex{\roman,\rule,\selectfont,,\setcounter,\setfnsymbol}
+% \DoNotIndex{\setlength,\setlist,\settowidth,\sfcode,\sloppy,\square,\stretch,\tabcolsep}
+% \DoNotIndex{\textasteriskcentered,\textbardbl,\textbf,\textdagger,\textdaggerdbl}
+% \DoNotIndex{\textfraction,\textnormal,\textparagraph,\textsection,\textwidth}
+% \DoNotIndex{\theenumiv,\theoremseparator,\theoremstyle,\theoremsymbol,\thispagestyle}
+% \DoNotIndex{\titleformat,\titlespacing,\topsep,\twocolumn,\ULthickness}
+% \DoNotIndex{\usecounter,\widowpenalty,\year,\color,\clubpenalty,\chaptermark}
+% \DoNotIndex{\chaptertitlename,\geometry,\l@chapter,\l@part}
+%
+% \MakeShortVerb{\|}
+% \newcommand*{\zhbook}{\texttt{Zh-Book}}
+% \newcommand*{\texlive}{{\TeX}\ Live\ 2017}
+% \renewcommand*{\fileversion}{1.1.3}
+% \renewcommand*{\filedate}{\today}
+%
+% \pagestyle{empty}
+% \title{\zhbook：中文书籍排版\\
+%        {\XeLaTeX}模板}
+% \author{{胡海星}\\
+%         {\texttt{haixing.hu@qq.com}}\\
+%         {南京大学物理学院}}
+% \date{\fileversion\ (\filedate)}
+% \maketitle
+% \thispagestyle{empty}
+%
+% \begin{abstract}
+%
+% \noindent\hspace{2em}文档类{\zhbook}提供了一个中文科技书籍排版的{\XeLaTeX}
+% 模板。该文档类严格遵守中文科技文献排版的相关规范和标准，底层通过
+% |xeCJK|宏包支持中文。
+%
+% 本文档是{\zhbook}的说明文档，其中包含模板文件的设置说明以及其源代码的完全注释。
+% \end{abstract}
+% \clearpage
+% \newpage
+% \section*{{\hfill}修订历史{\hfill}}
+% \begin{center}
+% \noindent
+% \begin{longtable}[C]{C{1.1cm}
+%                      C{2cm}
+%                      C{1.5cm}
+%                      p{\textwidth-6.4cm}}
+% \toprule
+%   \textbf{版本}
+%   & \textbf{日期}
+%   & \textbf{修订者}
+%   & \textbf{修订内容} \\
+% \midrule
+%  v1.0.0 & 2017/12/24 & 胡海星 & 完成第一个可工作版本 \\
+%  v1.1.0 & 2018/04/06 & 胡海星 & 修改了一些常量名称；增加了对|cleveref|的中文化支持 \\
+%  v1.1.1 & 2018/04/06 & 胡海星 & 修正一些小bug \\
+%  v1.1.2 & 2018/04/07 & 胡海星 & 删除了对|\ref|命令的修改，所有交叉引用可直接用|\cref|命令 \\
+%  v1.1.3 & 2018/04/08 & 胡海星 & 修正了一些|\crefformat|的定义\\
+% \bottomrule
+% \end{longtable}
+% \end{center}
+% \clearpage
+%
+% \tableofcontents
+% \clearpage
+%
+% \pagestyle{fancy}
+% \section{简介}
+%
+% 文档类{\zhbook}是为了帮助老师同学们撰写中文科技类教科书的模板。
+% 该模板提供了一个中文书籍的{\XeLaTeX}文档类，用于生成符合中文书籍排版规范的科技类教科书。
+% 该宏包的底层通过|xeCJK|宏包支持中文。
+%
+% 本文档将尽量完整的介绍{\zhbook}的使用方法，如有不清楚之处可以参考示例文档或
+% 者与作者联系。由于作者水平有限，虽然现在的这个版本基本上满足了中文书籍的撰写需
+% 求，但难免还存在不足之处，欢迎大家积极反馈意见。
+%
+% 本模板的编写过程中参考了以下代码和文档，这里一并向这些代码和文档的作者表示感谢：
+%
+% \begin{itemize}
+% \item 胡海星. \textsl{南京大学学位书籍{\LaTeX}模板}. \url{http://haixing-hu.github.io/nju-thesis/}.
+% \item 杨文博. \textsl{南京大学学位书籍{\LaTeX}模板}. \url{https://code.google.com/p/zhbook/}.
+% \item 薛瑞尼. \textsl{清华大学学位书籍{\LaTeX}模板}.
+% \item 胡卫谊. \textsl{武汉理工大学学位书籍{\LaTeX}模板}.
+% \item 吴凯. \textsl{GBT7714-2005NLang.bst}. v1.0 beta 2. 2006.
+% \item \textsl{CTeX宏包}. \url{http://www.ctex.org}.
+% \item The {\LaTeX}3 Project. \textsl{{\LaTeXe} for class and package writers}.
+% \item Frank Mittelbach, Michel Gooseens. \textsl{The {\LaTeX} Companion}. 2nd ed.
+% \item Scott Pakin. \textsl{How to Package Your {\LaTeX} Package}.
+% \url{http://www.iitg.ernet.in/trivedi/LatexHelp/Latex%20Manual/dtxtut.pdf}.
+% \item Oren Patashnik. \textsl{Designing \BibTeX Styles}. 1988.
+% \end{itemize}
+%
+% \section{遵循的要求和标准}
+%
+% {\zhbook}所遵循的中华人民共和国国家标准如下：
+% \begin{itemize}
+% \item \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E5%9B%BE%E4%B9%A6%E3%80%81%E6%9C%9F%E5%88%8A%E3%80%81%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E6%8E%92/%E3%80%90GB:T%207714-2005%E3%80%91%E6%96%87%E5%90%8E%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E8%91%97%E5%BD%95%E8%A7%84%E5%88%99.pdf}%
+% {\std{GB/T 7714-2005}\textsl{文后参考文献著录规则}}
+% \item \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E5%9B%BE%E4%B9%A6%E3%80%81%E6%9C%9F%E5%88%8A%E3%80%81%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E6%8E%92/%E3%80%90GB:T%207713.1-2006%E3%80%91%E5%AD%A6%E4%BD%8D%E8%AE%BA%E6%96%87%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99.pdf}%
+% {\std{GB/T 7713.1-2006}\textsl{学位书籍编写规则}}%
+% \item \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E5%9B%BE%E4%B9%A6%E3%80%81%E6%9C%9F%E5%88%8A%E3%80%81%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E6%8E%92/%E3%80%90GB:T%207713.3-2009%E3%80%91%E7%A7%91%E6%8A%80%E6%8A%A5%E5%91%8A%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99.pdf}%
+% {\std{GB/T 7713.3-2009}\textsl{科技报告编写规则}}
+% \item \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E5%9B%BE%E4%B9%A6%E3%80%81%E6%9C%9F%E5%88%8A%E3%80%81%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E6%8E%92/%E3%80%90GB:T%207713-1987%E3%80%91%E7%A7%91%E5%AD%A6%E6%8A%80%E6%9C%AF%E6%8A%A5%E5%91%8A%E3%80%81%E5%AD%A6%E4%BD%8D%E8%AE%BA%E6%96%87%E5%92%8C%E5%AD%A6%E6%9C%AF%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E5%86%99%E6%A0%BC%E5%BC%8F.pdf}%
+% {\std{GB/T 7713-1987}\textsl{科学技术报告、学位书籍和学术书籍的编写格式}},
+% 该标准已被%
+% \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E5%9B%BE%E4%B9%A6%E3%80%81%E6%9C%9F%E5%88%8A%E3%80%81%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E6%8E%92/%E3%80%90GB:T%207713.1-2006%E3%80%91%E5%AD%A6%E4%BD%8D%E8%AE%BA%E6%96%87%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99.pdf}%
+% {\std{GB/T 7713.1-2006}}和%
+% \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E5%9B%BE%E4%B9%A6%E3%80%81%E6%9C%9F%E5%88%8A%E3%80%81%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E6%8E%92/%E3%80%90GB:T%207713.3-2009%E3%80%91%E7%A7%91%E6%8A%80%E6%8A%A5%E5%91%8A%E7%BC%96%E5%86%99%E8%A7%84%E5%88%99.pdf}%
+% {\std{GB/T 7713.3-2009}}部分替代
+% \item \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E5%9B%BE%E4%B9%A6%E3%80%81%E6%9C%9F%E5%88%8A%E3%80%81%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E6%8E%92/%E3%80%90GB:T%207156-2003%E3%80%91%E6%96%87%E7%8C%AE%E4%BF%9D%E5%AF%86%E7%AD%89%E7%BA%A7%E4%BB%A3%E7%A0%81%E4%B8%8E%E6%A0%87%E8%AF%86.pdf}%
+% {\std{GB/T 7156-2003}\textsl{文献保密等级代码与标识}}
+% \item \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E6%95%B0%E5%AD%97%E6%96%87%E5%AD%97/%E3%80%90GB:T%2016159-2012%E3%80%91%E6%B1%89%E8%AF%AD%E6%8B%BC%E9%9F%B3%E6%AD%A3%E8%AF%8D%E6%B3%95%E5%9F%BA%E6%9C%AC%E8%A7%84%E5%88%99.pdf}%
+% {\std{GB/T 16159-2012}\textsl{汉语拼音正词法基本规则}}，
+% 该标准取代了%
+% \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E6%95%B0%E5%AD%97%E6%96%87%E5%AD%97/%E3%80%90GB:T%2016159-1996%E3%80%91%E6%B1%89%E8%AF%AD%E6%8B%BC%E9%9F%B3%E6%AD%A3%E8%AF%8D%E6%B3%95%E5%9F%BA%E6%9C%AC%E8%A7%84%E5%88%99.pdf}%
+% {\std{GB/T 16159-1996}}
+% \item \href{https://github.com/Haixing-Hu/typesetting-standard/raw/master/%E5%9B%BE%E4%B9%A6%E3%80%81%E6%9C%9F%E5%88%8A%E3%80%81%E8%AE%BA%E6%96%87%E7%9A%84%E7%BC%96%E6%8E%92/%E3%80%90CY:T%2035-2001%E3%80%91%E7%A7%91%E6%8A%80%E6%96%87%E7%8C%AE%E7%9A%84%E7%AB%A0%E8%8A%82%E7%BC%96%E5%8F%B7%E6%96%B9%E6%B3%95.pdf}%
+% {\std{CY/T 35-2001}\textsl{科技文献的章节编号方法}}
+% \end{itemize}
+%
+% 上述要求和标准的电子版均可在对应的链接地址中找到。
+%
+% \section{安装}
+%
+% \subsection{下载}
+%
+% 可在{\zhbook}项目主页上下载最新版本，亦可在代码库主页上反馈bug和意见建议：
+% \begin{itemize}
+% \item 项目主页：\url{http://haixing-hu.github.io/xelatex-zh-book/}
+% \item 代码库主页：\url{http://haixing-hu.github.io/xelatex-zh-book/}
+% \end{itemize}
+%
+% \subsection{模板的组成部分}
+%
+% \begin{table}
+%   \centering\noindent
+%   \begin{tabular*}{\textwidth}{p{4cm}p{\textwidth-4.5cm}}
+%     \toprule
+%     \textbf{文件（夹）}        & \textbf{功能描述}\\
+%     \midrule
+%     |zhbook.ins|             & 模板驱动文件 \\
+%     |zhbook.dtx|             & 模板文档代码的混合文件\\
+%     |zhbook.cls|             & 模板类文件\\
+%     |zhbook.cfg|             & 模板配置文件\\
+%     |gbt7714-2005.bst|          & 符合国标\std{GB/T 7714-2005}的参考文献样式文件\\
+%     |dtx-style.sty|             & 用户手册样式文件\\
+%     \hline
+%     |sample.tex|                & 示例文档，亦可作为书籍的基本模板 \\
+%     |sample.bib|                & 示例文档的参考文献数据库 \\
+%     |figures/|                  & 示例文档图片目录\\
+%     \hline
+%     |Makefile|                  & make 脚本 \\
+%     |get_texmf_dir.sh|          & 获取本地|textmf|目录路径的脚本\\
+%     \hline
+%     |README.md|                 & 说明文件 \\
+%     |zhbook.pdf|                & 用户手册（本文档）\\
+%     \bottomrule
+%   \end{tabular*}
+%   \caption{{\zhbook}的主要文件及其功能}\label{table:component}
+% \end{table}
+%
+% 表\ref{table:component}列出了{\zhbook}的主要文件及其功能。其中|zhbook.cls|,
+% |zhbook.cfg|和|dtx-sty.sty|可以由|zhbook.ins|和|zhbook.dtx|生成，但为
+% 了降低新手用户的使用难度，故将其一起发布。
+%
+% \subsection{准备工作}
+%
+% 表\ref{table:dependence}列出了{\zhbook}模板用到的宏包。这些包在常见的{\TeX}系
+% 统中都有（推荐使用{\texlive}），如果没有请到\url{www.ctan.org}下载。
+%
+% \begin{table}
+%   \centering\noindent
+%   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}*{6}{l}}
+%   \hline
+%     |ifxetex|  & |indentfirst| & |xeCJK|    & |lastpage|  & |geometry|  & |graphicx| \\
+%     |subfig|   & |caption|     & |float|    & |array|     & |longtable| & |booktabs| \\
+%     |multirow| & |hyperref|    & |enumitem| & |xcolor|    & |amsmath|   & |amsfonts| \\
+%     |amsthm|   & |amssymb|     & |bm|       & |mathrsfs|  & |txfonts|   & |pifont|  \\
+%     |setspace| & |wasysym|     & |hypernat| & |fancyhdr|  & |natbib|    & |tabularx| \\
+%     |titlesec| & |glossaries|  & |ifthen|   & |makeidx|   & |footmisc|  &  |CJKnumb| \\
+%     |url|      & |etoolbox|    & |commath|  & |mathtools| & |blindtext| & |diagbox| \\
+%     |cleveref| &               &            &             &             &  \\
+%   \hline
+%   \end{tabular*}
+%   \caption{{\zhbook}用到的宏包}\label{table:dependence}
+% \end{table}
+%
+% \subsection{推荐的{\TeX}系统}
+%
+% 本模板当前版本v{\fileversion}{\ }({\filedate})在{\texlive}下编写，尚未在其他
+% {\TeX}系统上测试。因此推荐用户使用{\texlive}。其安装包可以在下述网址下载：
+% \begin{center}
+% \url{http://tug.org/texlive/}
+% \end{center}
+%
+% \begin{note}
+% 由于本模板采用{\XeLaTeX}引擎处理，所以{\TeX}源文件应使用\textbf{UTF-8}编码。
+% \end{note}
+%
+% \subsection{开始安装}
+%
+% \subsubsection{生成模板}
+%
+% 默认的发行包中已经包含了所有文件，可以直接使用。如果对如何由|*.dtx|生成模板文件以及模板文
+% 档不感兴趣，请跳过本小节。
+%
+% 模板解压缩后生成文件夹|zhbook-VERSION|，其中|VERSION|为版本号。该文件夹中包括：
+% \begin{itemize}
+% \item 模板源文件：|zhbook.ins|和|zhbook.dtx|
+% \item 参考文献样式：|gbt7714-2005.bst|
+% \item 示例文档：|sample.tex|、|sample.bib|和|figure|目录
+% \end{itemize}
+%
+% 在使用之前需要先生成模板文件和配置文件，具体命令细节请参考|README|和|Makefile|。下面是
+% 在Linux或Mac系统中生成模板所需执行的|shell|命令：
+%
+% \begin{shell}
+% $ cd zhbook-VERSION
+% # 清理以前执行make生成的旧文件
+% $ make clean
+% # 生成 zhbook.cls 和 zhbook.cfg
+% $ make cls
+% # 生成文档类手册
+% $ make doc
+% # 生成样例文档
+% $ make sample
+% \end{shell}
+%
+% \subsubsection{安装到{\TeX}系统中}
+%
+% 假设当前{\TeX}系统的texmf-local目录为|${TEXMFLOCAL}|。下面是在Linux或Mac系统中将模
+% 板安装到本机的{\TeX}系统中所需执行的|shell|命令：
+%
+% \begin{shell}
+% $ cd zhbook-VERSION
+% # 建立zhbook文档类目录
+% $ mkdir -p ${TEXMFLOCAL}/tex/latex/zhbook
+% # 复制zhbook文档类文件
+% $ cp zhbook.cls ${TEXMFLOCAL}/tex/latex/zhbook/
+% $ cp zhbook.cfg ${TEXMFLOCAL}/tex/latex/zhbook/
+% # 复制zhbook文档类的源码，此过程可选
+% $ cp zhbook.ins ${TEXMFLOCAL}/tex/latex/zhbook/
+% $ cp zhbook.dtx ${TEXMFLOCAL}/tex/latex/zhbook/
+% # 创建本地的BibTeX样式文件目录
+% $ mkdir -p ${TEXMFLOCAL}/bibtex/bst
+% # 复制GB/T 7714-2005参考文献样式
+% $ cp gbt7714-2005.bst ${TEXMFLOCAL}/bibtex/bst/
+% # 建立zhbook文档类手册目录
+% $ mkdir -p ${TETEXMFLOCALXMF}/doc/latex/zhbook
+% # 复制zhbook文档类手册和示例文档
+% $ cp zhbook.pdf ${TEXMFLOCAL}/doc/latex/zhbook/
+% $ cp sample.pdf ${TEXMFLOCAL}/doc/latex/zhbook/
+% # 刷新tex文件名数据库
+% $ texhash
+% \end{shell}
+%
+% \begin{note}
+% 上面的某些命令可能需要管理员权限，或通过|sudo|执行。
+% \end{note}
+%
+% 当然，也可以直接使用|Makefile|提供的|install|操作进行安装：
+% \begin{shell}
+% $ sudo make install
+% \end{shell}
+%
+% \begin{note}
+% |Makefile|使用了脚本|get_texmf_dir.sh|来获取当前机器上所安装的{\TeX}系统的本地
+% |textmf|目录（通常是{\TeX}安装目录下的|textmf-local|目录）。用户最好在执行
+% |make install|之前先执行一下|get_texmf_dir.sh|脚本，看看输出的目录路径是否正确。
+% 如不正确，可以手工修改|Makefile|中对|TEXMFLOCAL|变量的定义。
+% \end{note}
+%
+% \section{使用说明}
+%
+% 本手册假定用户已经能处理一般的{\LaTeX}文档，并对{\BibTeX}有一定了解。如果你从来没有接
+% 触过{\TeX}和{\LaTeX}，建议先学习相关的基础知识。
+%
+% \subsection{\zhbook{} 示例文件}
+%
+% 模板核心文件只有三个：|zhbook.cls|，|zhbook.cfg|和 |gbt7714-2005.bst|，但
+% 是如果没有示例文档用户会发现很难下手。所以推荐新用户从模板自带的示例文档入手，
+% 里面包括了文档写作用到的所有命令及其使用方法，只需要用自己的内容进行相应替换就
+% 可以。对于不清楚的命令可以查阅本手册。具体内容可以参考模板附带的|sample.tex|和
+% |sample.bib|。
+%
+% \subsection{选项}
+%
+% 本文档类提供了一些选项以方便使用：
+% \begin{description}
+% \item[winfonts, linuxfonts, macfonts, adobefonts] |winfonts|选项使得文档使
+%   用Windows系统提供的字体；|linuxfonts|选项使得文档使用Linux系统提供的字
+%   体；|macfonts|选项使得文档使用Mac系统提供的字体；|adobefonts|选项使得文档使
+%   用Adobe提供的OTF中文字体，一般来说OTF字体的显示效果要优于ttf字体。
+%   默认选项是|adobefonts|。
+% \begin{example}
+% \documentclass[winfonts]{zhbook}
+% \end{example}
+%   表\ref{table:fontnames}中列出了默认配置下使用不同字体选项时所采用的实际字体
+%   名称。系统中必须正确安装了相应的字体才能正常编译文档。\\
+%   Adobe的宋体和黑体可以在其公司网站免费下载：
+%   \begin{center}
+%   \url{http://www.adobe.com/support/downloads/detail.jsp?ftpID=4421}
+%   \end{center}
+%   楷体无免费下载，但在网上可以找到。下面的网址提供了一个打包下载的地址：
+%   \begin{center}
+%   \url{http://tinker-bot.googlecode.com/files/cfonts.tar.gz}
+%   \end{center}
+%   \begin{table}
+%     \centering\noindent
+%     \begin{tabular}[t]{ccccc}
+%     \toprule
+%           & \textbf{adobefonts} &  \textbf{winfonts} & \textbf{linuxfonts} & \textbf{macfonts} \\
+%     \midrule
+%     \textbf{宋体} & {Adobe Song Std}  & {SimSun} & {AR PL SungtiL GB} &  {STSong} \\
+%     \textbf{黑体} & {Adobe Heiti Std} & {SimHei} & {WenQuanYi Zen Hei Mono} &  {STHeiti} \\
+%     \textbf{楷书} & {Adobe Kaiti Std} & {KaiTi}  & {AR PL KaitiM GB} & {STKaiti} \\
+%     \textbf{仿宋体} & {Adobe Fangsong Std} & {FangSong} & {STFangSong} & {STFangSong} \\
+%     \bottomrule
+%     \end{tabular}
+%     \caption{默认配置下不同字体选项所使用的实际字体名称}
+%     \label{table:fontnames}
+%   \end{table}
+%
+% \end{description}
+%
+% 本文档类不再提供对字号、字体和单双面打印的选择选项。因为国内各出版社对中文科技类教科书的排版基本上都要求
+% 使用小四号宋体，双面打印。
+%
+% \subsection{命令和环境}
+%
+% 文档类中的命令和环境分为三类：一是格式控制，二是内容替换，三是文档结构。格式控制如字体、字
+% 号、字距和行距等；内容替换如文档名称、作者、项目、编号等；文档结构如中文摘要、中文关键词、
+% 英文摘要、英文关键词、作者简历、致谢等。
+%
+% \subsubsection{格式控制命令}
+%
+% \myentry{中文字体}
+% \DescribeMacro{\songti}
+% \DescribeMacro{\heiti}
+% \DescribeMacro{\kaishu}
+% \DescribeMacro{\fangsong}
+% 可采用下述命令选择中文字体
+% \begin{itemize}
+% \item \cs{songti} 切换宋体
+% \item \cs{heiti} 切换黑体
+% \item \cs{kaishu} 切换楷书
+% \item \cs{fangsong} 切换仿宋体
+% \end{itemize}
+%
+% \begin{example}
+% {\songti 乾：元，亨，利贞}
+% {\heiti 九二，见龙在田，利见大人}
+% {\kaishu 九三，君子终日乾乾，夕惕若，厉，无咎}
+% {\fangsong 九四，或跃在渊，无咎}
+% \end{example}
+%
+% \myentry{字号}
+% \DescribeMacro{\zihao}
+% \cs{zihao}命令可用于选择字号。其语法为：
+% \begin{syntax}
+% \cs{zihao}\marg{n}
+% \end{syntax}
+% 其中参数\meta{n}为要使用的字号；在\meta{n}前加负号$-$表示小号字体。目前提供的字号包括：
+% \begin{itemize}
+% \item 初号(|\zihao{0}|)、小初号(|\zihao{-0}|)
+% \item 一号(|\zihao{1}|)、小一号(|\zihao{-1}|)
+% \item 二号(|\zihao{2}|)、小二号(|\zihao{-2}|)
+% \item 三号(|\zihao{3}|)、小三号(|\zihao{-3}|)
+% \item 四号(|\zihao{4}|)、小四号(|\zihao{-4}|)
+% \item 五号(|\zihao{5}|)、小五号(|\zihao{-5}|)
+% \item 六号(|\zihao{6}|)、小六号(|\zihao{-6}|)
+% \item 七号(|\zihao{7}|)
+% \item 八号(|\zihao{8}|)
+% \end{itemize}
+%
+% \begin{example}
+% {\zihao{2} 二号} {\zihao{3} 三号} {\zihao{4} 四号} {\zihao{-4} 小四}
+% \end{example}
+%
+% \myentry{字距}
+% \DescribeMacro{\ziju}
+% \cs{ziju}命令可用于更改汉字之间默认的距离。其语法为：
+% \begin{syntax}
+% \cs{ziju}\marg{width}
+% \end{syntax}
+% 其中的参数\meta{width}只要是合格的{\TeX}距离即可。
+%
+% \begin{example}
+% {\ziju{4bp}调整字距示例}
+% \end{example}
+%
+% \myentry{缩进}
+% \DescribeMacro{\indent}
+% \DescribeMacro{\noindent}
+% \cs{indent}命令将当前行正常的缩进两个汉字字宽的距离，同时在汉字大小和字距改变的情况都
+% 可以自动修改缩进距离。
+%
+% \cs{noindent}则取消缩进。
+%
+% \myentry{破折号}
+% \DescribeMacro{\zhdash}
+% 中文破折号在CJK-{\LaTeX}里没有很好的处理，我们平时输入的都是两个小短线，比如这样，
+% ``{中国——中华人民共和国}''。这不符合中文习惯。所以这里定义了一个命令生成更好看的破折号。
+% 不过这似乎不是一个好的解决办法，比如不能用在\cs{section}等命令中使用。简单的办法是可以
+% 提供一个不带破折号的段标题：
+% \begin{syntax}
+% \cs{section}\oarg{没有破折号精简标题}\marg{带破折号的标题}
+% \end{syntax}
+%
+% \begin{example}
+% 测试--中文破折号
+% 测试{\zhdash}中文破折号
+% \end{example}
+%
+% 上述例子的显示效果分别如下：
+% \begin{itemize}
+% \item 测试--中文破折号
+% \item 测试{\zhdash}中文破折号
+% \end{itemize}
+%
+% \subsubsection{中文封面内容替换命令}
+%
+% 本节描述书籍中文封面的内容替换命令。
+%
+% \myentry{书籍标题}
+% \DescribeMacro{\title}
+% 命令\cs{title}用于设置书籍的中文标题。
+%
+% \begin{example}
+% \title{量子行走理论、实现和应用}
+% \end{example}
+%
+% \begin{note}
+% \cs{title}的参数中不可换行，也不能使用\cs{thanks}脚注。
+% \end{note}
+%
+% \myentry{书籍标题分行}
+% \DescribeMacro{\titlea}
+% \DescribeMacro{\titleb}
+% 命令\cs{titlea}和\cs{titleb}用于在书籍标题很长时，设置分行的书籍中文标题。
+% 其中\cs{titlea}设置书籍标题的第一行，\cs{titleb}设置书籍标题的第二行。
+%
+% \begin{example}
+% \titlea{半轻衰变$D^+\to \omega(\phi)e^+\nu_e$的研究}
+% \titleb{和弱衰变$J/\psi \to D_s^{(*)-}e^+\nu_e$的寻找}
+% \end{example}
+%
+% \begin{note}
+% \cs{title}的参数中不可换行，也不能使用\cs{thanks}脚注。
+% \end{note}
+%
+% \myentry{作者姓名}
+% \DescribeMacro{\author}
+% 命令\cs{author}用于设置书籍作者的姓名。此属性必须被设置。
+%
+% \begin{example}
+% \author{张三}
+% \author{张三、李四、王五等}
+% \end{example}
+%
+% \begin{note}
+% \cs{author}的参数中不可换行，也不能使用\cs{thanks}脚注。
+% \end{note}
+%
+% \myentry{出版社名称}
+% \DescribeMacro{\publisher}
+% 命令\cs{publisher}用于设置书籍出版社的名称。此命令为可选，默认值为``南京大学出版社''。
+%
+% \begin{example}
+% \publisher{南京大学出版社}
+% \end{example}
+%
+% \begin{note}
+% \cs{publisher}的参数中不可换行。
+% \end{note}
+%
+% \myentry{印刷日期}
+% \DescribeMacro{\date}
+% 命令\cs{date}用于设置书籍的定稿日期，该日期将出现在中文封面下方以及书脊下方。可设
+% 置年、月、日。此属性可选，默认值为最后一次编译时的日期，精确到日。
+%
+% \begin{example}
+% \date{2013年5月27日}
+% \end{example}
+%
+% \subsubsection{英文封面内容替换命令}
+%
+% 本节描述书籍的英文封面的内容替换命令。
+%
+% \myentry{书籍标题}
+% \DescribeMacro{\englishtitle}
+% 命令\cs{englishtitle}用于设置书籍的英文标题。此属性必须被设置。
+%
+% \begin{example}
+% \englishtitle{Network Models of Data Centers based on the Small World Theory}
+% \end{example}
+%
+% \begin{note}
+% \cs{englishtitle}的参数中不可换行，也不能使用\cs{thanks}脚注。
+% \end{note}
+%
+% \subsubsection{中文摘要页内容替换命令}
+%
+% 本节描述书籍的中文摘要页的内容替换命令。
+%
+% \myentry{标题及副标题}
+% \DescribeMacro{\abstracttitlea}
+% \DescribeMacro{\abstracttitleb}
+% 命令\cs{abstracttitlea}和\cs{abstracttitleb}分别用于设置中文摘要页面的书籍标题
+% 及副标题的第一行和第二行。\cs{abstracttitlea}命令为可选，其默认值为使用\cs{title}
+% 命令所设置的书籍标题；\cs{abstracttitleb}命令为可选，其默认值为空白。这两个命令
+% 是为了让用户在书籍标题较长时手动进行分割换行。
+%
+% \begin{example}
+% \abstracttitlea{基于小世界理论的}
+% \abstracttitleb{数据中心网络模型研究}
+% \end{example}
+%
+% \begin{note}
+% \cs{abstracttitlea}和\cs{abstracttitleb}命令的参数中都不能出现换行。
+% \end{note}
+%
+% \subsubsection{英文摘要页内容替换命令}
+%
+% 本节描述书籍的英文摘要页的内容替换命令。
+%
+% \myentry{标题及副标题}
+% \DescribeMacro{\englishabstracttitlea}
+% \DescribeMacro{\englishabstracttitleb}
+% 命令\cs{abstracttitlea}和\cs{abstracttitleb}分别用于设置英文摘要页面的书籍标题
+% 及副标题的第一行和第二行。\cs{englishabstracttitlea}命令为可选，其默认值为使用
+% \cs{englishtitle}命令所设置的书籍英文标题；\cs{englishabstracttitleb}命令为可
+% 选，其默认值为空白。这两个命令是为了让用户在书籍标题较长时手动进行分割换行。
+%
+% \begin{example}
+% \englishabstracttitlea{A Network Model of Data Centers}
+% \englishabstracttitleb{Based on the Small World Theory}
+% \end{example}
+%
+% \begin{note}
+% \cs{englishabstracttitlea}和\cs{englishabstracttitleb}命令的参数中都不能换行。
+% \end{note}
+%
+% \subsubsection{文档结构命令和环境}
+%
+% 本节描述书籍中可能用到的其他文档结构命令和环境。
+%
+% \myentry{生成中文封面}
+% \DescribeMacro{\maketitle}
+% 命令\cs{maketitle}用于生成书籍的中文封面。此命令必须被用在{\TeX}文档的
+% \cs{begin{document}}命令之后和\cs{frontmatter}命令之前。
+%
+% \begin{example}
+% \maketitle
+% \end{example}
+%
+% \myentry{生成英文封面}
+% \DescribeMacro{\makeenglishtitle}
+% 命令\cs{makeenglishtitle}用于生成书籍的英文封面。此命令必须被用在{\TeX}文档的
+% \cs{begin{document}}命令之后和\cs{frontmatter}命令之前。
+%
+% \begin{example}
+% \makeenglishtitle
+% \end{example}
+%
+% \myentry{内容简介}
+% \DescribeEnv{abstract}
+% \env{abstract}为内容简介环境。此环境必须被用在{\TeX}文档的\cs{frontmatter}命令之后和
+% \cs{mainmatter}命令之前。
+%
+% \begin{example}
+% \begin{abstract}
+% 本文基于小世界理论，研究了数据中心的网络模型。………………
+% \end{abstract}
+% \end{example}
+%
+% \myentry{中文关键词}
+% \DescribeMacro{\keywords}
+% 命令\cs{keywords}用于设置中文关键词。此命令必须被用在\env{abstract}环境中。关键词
+% 之间用中文全角分号隔开。
+%
+% \begin{example}
+% \begin{abstract}
+% 本文基于小世界理论，研究了数据中心的网络模型。………………
+% \keywords{数据中心；网络模型；小世界理论}
+% \end{abstract}
+% \end{example}
+%
+% \myentry{序言}
+% \DescribeEnv{prologue}
+% \env{prologue}为书籍序言环境。此环境必须被用在{\TeX}文档的
+% \env{abstract}环境之后和\cs{tableofcontents}命令之前。
+%
+% \myentry{前言}
+% \DescribeEnv{preface}
+% \env{preface}为书籍前言环境。此环境必须被用在{\TeX}文档的
+% \env{abstract}环境之后和\cs{tableofcontents}命令之前。
+%
+% \begin{example}
+% \begin{preface}
+%  复杂网络的研究可上溯到20世纪60年代对ER网络的研究。90年后代随着Internet
+%  的发展，以及对人类社会、通信网络、生物网络、社交网络等各领域研究的深入，
+%  发现了小世界网络和无尺度现象等普适现象与方法。对复杂网络的定性定量的科
+%  学理解和分析，已成为如今网络时代科学研究的一个重点课题。
+%
+%  在此背景下，由于云计算时代的到来，本文针对面向云计算的数据中心网络基础
+%  设施设计中的若干问题，进行了几方面的研究。本文的创造性研究成果主要如下
+%  几方面：
+%
+%  ………
+%
+%
+%  \vspace{1cm}
+%  \begin{flushright}
+%   韦小宝\\
+%   2013年夏于南京大学南苑
+%  \end{flushright}
+% \end{preface}
+% \end{example}
+%
+% \myentry{目次}
+% \DescribeMacro{\tableofcontents}
+% 命令\cs{tableofcontents}用于生成书籍目次。此命令必须被用在{\TeX}文档的
+% \env{preface}环境之后和\cs{mainmatter}命令之前。
+%
+% \begin{example}
+% \tableofcontents
+% \end{example}
+%
+% \myentry{附表清单}
+% \DescribeMacro{\listoftables}
+% 命令\cs{listoftables}用于生成书籍的附表清单。此命令为可选命令。此命令必须被用在
+% {\TeX}文档的\cs{tableofcontents}命令之后和\cs{mainmatter}命令之前。
+%
+% \begin{example}
+% \listoftables
+% \end{example}
+%
+% \myentry{插图清单}
+% \DescribeMacro{\listoffigures}
+% 命令\cs{listoffigures}用于生成书籍插图清单。此命令为可选命令。此命令必须被用在
+% {\TeX}文档的\cs{tableofcontents}命令之后和\cs{mainmatter}命令之前。
+%
+% \begin{example}
+% \listoffigures
+% \end{example}
+%
+% \myentry{致谢章节}
+% \DescribeEnv{acknowledgement}
+% \env{acknowledgement}环境用于生成致谢章节。此环境必须被用在书籍的最后一章（通
+% 常是“结论”章节）之后以及{\TeX}文档的\cs{appendix}命令和\cs{backmatter}命令之前。
+%
+% \begin{example}
+% \begin{acknowledgement}
+% 首先感谢我的母亲韦春花对我的支持。其次感谢我的导师陈近南对我的精心指导和热心帮助。接
+% 下来，感谢我的师兄茅十八和风际中，他们阅读了我的书籍草稿并提出了很有价值的修改建议。
+%
+% 最后，感谢我亲爱的老婆们：双儿、苏荃、阿珂、沐剑屏、曾柔、建宁公主、方怡，感谢你们在
+% 生活上对我无微不至的关怀和照顾。
+% \end{acknowledgement}
+% \end{example}
+%
+% \subsubsection{其它命令和环境}
+%
+% \myentry{列表环境}
+% \DescribeEnv{itemize}
+% \DescribeEnv{enumerate}
+% \DescribeEnv{description}
+% 为了适合中文习惯，{\zhbook}文档类使用|paralist|宏包重新定义了|itemize|、
+% |enumerate|和|description|这三个常用的列表环境。一方面满足了多余空间的清楚，另
+% 一方面可以自己指定标签的样式和符号。
+%
+% 使用的细节请参看|paralist|文档，此处不再赘述。
+%
+% \subsection{数学环境}
+%
+% {\zhbook}宏包预定义了一些数学定理环境，如表\ref{table:math-env}所示。
+%
+% \begin{table}
+% \noindent\centering
+% \begin{tabular}{*{7}{l}}
+%   \hline
+%   axiom     & theorem   & definition & proposition & lemma      & conjecture & notation \\
+%   公理       & 定理      & 定义        & 命题         & 引理       & 猜想        & 记号 \\
+%   \hline
+%   proof     & corollary & example    & exercise    & assumption & remark     & problem \\
+%   证明       & 推论      & 例子        & 练习         & 假设        & 评注       & 问题\\
+%   \hline
+%   postulate &  hypothesis  &  principle  &  algorithm &           &      &  \\
+%   公设       &  假说        &   定律       &  算法       &         &        & \\
+%   \hline
+% \end{tabular}
+% \caption{预定义的数学定理环境}\label{table:math-env}
+% \end{table}
+%
+% 例如：
+% \begin{example}
+% \begin{definition}
+% 小世界网络是指其平均路径长度和其节点总数成对数关系的网络。
+% \end{definition}
+% \end{example}
+% 上述代码将产生（自动编号）：
+% \begin{flushleft}
+% {\heiti 定义~1.1~~~} {小世界网络是指其平均路径长度和其节点总数成对数关系的网络。}
+% \end{flushleft}
+%
+% 列举出来的数学环境毕竟是有限的，如果想用{\heiti 胡说}这样的数学环境，那么很容易定义：
+% \begin{example}
+% \newtheorem{nonsense}{胡说}[chapter]
+% \end{example}
+%
+% 然后这样使用：
+% \begin{example}
+% \begin{nonsense}
+% 契丹武士要来中原夺武林秘笈。\zhdash 慕容博
+% \end{nonsense}
+% \end{example}
+% 上述代码将产生（自动编号）：
+% \begin{flushleft}
+% {\heiti 胡说~1.1~~~} {契丹武士要来中原夺武林秘笈。\zhdash 慕容博}
+% \end{flushleft}
+%
+% \subsection{自定义以及其它}
+%
+% 文档类的配置文件|zhbook.cfg|中定义了很多固定词汇，一般无须修改。如果有特殊需求，
+% 推荐在导言区使用\cs{renewcommand}。当然，导言区里可以直接使用中文。
+%
+% \section{实现细节}
+%
+% \subsection{定义选项}
+%
+% {\zhbook}宏包的默认选项为|adobefonts|。
+%    \begin{macrocode}
+%<*cls>
+\newif\ifzhbook@adobefonts\zhbook@adobefontstrue
+\newif\ifzhbook@winfonts\zhbook@winfontsfalse
+\newif\ifzhbook@linuxfonts\zhbook@linuxfontsfalse
+\newif\ifzhbook@macfonts\zhbook@macfontsfalse
+\newif\ifzhbook@backinfo\zhbook@backinfotrue
+\newif\ifzhbook@phd\zhbook@phdfalse
+\newif\ifzhbook@master\zhbook@masterfalse
+\newif\ifzhbook@bachelor\zhbook@bachelorfalse
+\DeclareOption{adobefonts}{\zhbook@adobefontstrue
+  \zhbook@winfontsfalse
+  \zhbook@linuxfontsfalse
+  \zhbook@macfontsfalse}
+\DeclareOption{winfonts}{\zhbook@winfontstrue
+  \zhbook@adobefontsfalse
+  \zhbook@linuxfontsfalse
+  \zhbook@macfontsfalse}
+\DeclareOption{linuxfonts}{\zhbook@linuxfontstrue
+  \zhbook@adobefontsfalse
+  \zhbook@winfontsfalse
+  \zhbook@macfontsfalse}
+\DeclareOption{macfonts}{\zhbook@macfontstrue
+  \zhbook@adobefontsfalse
+  \zhbook@winfontsfalse
+  \zhbook@linuxfontsfalse}
+\DeclareOption{nobackinfo}{\zhbook@backinfofalse}
+\DeclareOption{phd}{\zhbook@phdtrue
+  \zhbook@masterfalse
+  \zhbook@bachelorfalse}
+\DeclareOption{master}{\zhbook@mastertrue
+  \zhbook@phdfalse
+  \zhbook@bachelorfalse}
+\DeclareOption{bachelor}{\zhbook@bachelortrue
+  \zhbook@phdfalse
+  \zhbook@masterfalse}
+%    \end{macrocode}
+%
+% 把没有定义的选项传递给底层的文档类，在这里为|book|。
+%
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+%    \end{macrocode}
+%
+% 处理选项：
+%    \begin{macrocode}
+\ProcessOptions\relax
+%    \end{macrocode}
+%
+% \subsection{底层文档类}
+%
+% 文档基于{\LaTeX}的标准|book|类。正文使用小四字号（对应于12.05pt，这里近似使用12pt），
+% 纸张使用A4，双面打印。
+%    \begin{macrocode}
+\LoadClass[12pt,a4paper,twoside]{book}
+%    \end{macrocode}
+%
+% \subsection{装载宏包}
+%
+% 使用本文档类所写的文档需要使用{\XeLaTeX}引擎处理，因此首先要检查引擎是否正确。
+%    \begin{macrocode}
+\RequirePackage{ifxetex}
+\RequireXeTeX
+%    \end{macrocode}
+%
+% 使用|lastpage|宏包来获得最后一页的页码，从而生成“第3页，共20页”这样的页码标签。
+%    \begin{macrocode}
+\RequirePackage{lastpage}
+%    \end{macrocode}
+%
+% 使用|geometry|宏包定义页面布局，定义段间距。
+%    \begin{macrocode}
+\RequirePackage{geometry}
+%    \end{macrocode}
+%
+% 使用|titlesec|宏包设置标题格式。
+%    \begin{macrocode}
+\RequirePackage{titlesec}
+%    \end{macrocode}
+%
+% 使用|graphicx|宏包支持插入图片。
+%    \begin{macrocode}
+\RequirePackage{graphicx}
+%    \end{macrocode}
+%
+% 如果插入的图片没有指定扩展名，那么依次搜索下面的扩展名所对应的文件
+%    \begin{macrocode}
+\DeclareGraphicsExtensions{.pdf,.eps,.jpg,.png}
+%    \end{macrocode}
+%
+% |caption2|宏包已经不再推荐使用，改用新的|caption|宏包处理浮动图形和表格的标题
+% 样式。
+%    \begin{macrocode}
+\RequirePackage{caption}
+%    \end{macrocode}
+%
+% |float|宏包为浮动图形和表格环境提供了一个H选项，强制将其放在当前位置。
+%    \begin{macrocode}
+\RequirePackage{float}
+%    \end{macrocode}
+%
+% |subfigure|宏包已经不再推荐使用，改用新的|subfig|宏包支持插入子图和子表。
+%    \begin{macrocode}
+\RequirePackage{subfig}
+%    \end{macrocode}
+%
+% 使用|array|宏包扩展表格的列选项。
+%    \begin{macrocode}
+\RequirePackage{array}
+%    \end{macrocode}
+%
+% 使用|longtable|宏包处理长表格。
+%    \begin{macrocode}
+\RequirePackage{longtable}
+%    \end{macrocode}
+%
+% |booktabs|宏包可生成三线表，支持\cs{toprule}，\cs{midrule}，\cs{bottomrulle}等命令。
+%    \begin{macrocode}
+\RequirePackage{booktabs}
+%    \end{macrocode}
+%
+% |multirow|宏包支持在表格中跨行。
+%    \begin{macrocode}
+\RequirePackage{multirow}
+%    \end{macrocode}
+%
+% |enumitem|宏包支持自定义列表环境。
+%    \begin{macrocode}
+\RequirePackage{enumitem}
+%    \end{macrocode}
+%
+% |xcolor|宏包提供色彩控制。
+%    \begin{macrocode}
+\RequirePackage{xcolor}
+%    \end{macrocode}
+%
+% |commath|和|mathtools|宏包提供常用数学公式支持。
+%    \begin{macrocode}
+\RequirePackage{commath}
+\RequirePackage{mathtools}
+%    \end{macrocode}
+%
+% |amsmath|宏包提供数学公式支持。
+%    \begin{macrocode}
+\RequirePackage{amsmath}
+%    \end{macrocode}
+%
+% |amsthm|宏包支持自定义数学定理环境。
+%    \begin{macrocode}
+\RequirePackage{amsthm}
+%    \end{macrocode}
+%
+% |amsfonts|宏包、|amssymb|宏包、|bm|宏包和|mathrsfs|宏包提供数学符号和字体支持。
+%    \begin{macrocode}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{bm}
+\RequirePackage{mathrsfs}
+%    \end{macrocode}
+%
+% |wasysym|宏包提供特殊符号支持。
+%    \begin{macrocode}
+\RequirePackage{wasysym}
+%    \end{macrocode}
+%
+% |pifont|宏包提供带圈的数字符号。
+%    \begin{macrocode}
+\RequirePackage{pifont}
+%    \end{macrocode}
+%
+% |txfonts|宏包用自己的typewriter字体替换系统Courier字体，它必须在{\AmSTeX}之后引入。
+%    \begin{macrocode}
+\RequirePackage{txfonts}
+%    \end{macrocode}
+%
+% |setspace|宏包支持行距控制。它需要在|hyperref|宏包之前加载，避免脚注超链接失效。
+%    \begin{macrocode}
+\RequirePackage{setspace}
+%    \end{macrocode}
+%
+% |fancyhdr|宏包支持自定义页眉页脚。
+%    \begin{macrocode}
+\RequirePackage{fancyhdr}
+%    \end{macrocode}
+%
+% |shortvrb|提供了一个\cs{MakeShortVerb}命令，可将某个符号定义为\cs{verb}命令的缩写。
+%    \begin{macrocode}
+\RequirePackage{shortvrb}
+%    \end{macrocode}
+%
+% 使用|xltxtra|宏包来获取{\XeLaTeX}的符号。
+%    \begin{macrocode}
+\RequirePackage{xltxtra}
+%    \end{macrocode}
+%
+% 使用|xeCJK|宏包处理中文。宏包选项|CJKnumber|表示调用|CJKnumber|宏包处理中文数
+% 字；|CJKchecksingle|表示避免单个汉字单独占一行。|xeCJK|宏包必须放在|amssymb|之后，
+% 否则会有冲突。
+% \begin{note}
+%   因为我们将使用黑体作为粗体，使用楷体作为斜体，因此载入|xeCJK|宏包时不需要开启
+%   |BoldFont|选项和|SlantFont|；否则的话，|xeCJK|会自动生成宋体的粗体和斜体，而那会
+%   非常难看。
+% \end{note}
+% \begin{note}
+% 由于TeX Live升级到2014版后，直接用|xeCJK|的|CJKnumber|选项会出现bug，我们需单独导入
+% |CJKnumb|宏包；但|xeCJK|的|CJKnumber|选项依然需要，否则在Tex Live 2012下编译会报错。
+% \end{note}
+%    \begin{macrocode}
+\RequirePackage[CJKnumber,CJKchecksingle]{xeCJK}
+\RequirePackage{CJKnumb}
+%    \end{macrocode}
+%
+% 让{\XeLaTeX}能够处理dash的惯例(使用"--"和"---"获得较长的dash)。
+%    \begin{macrocode}
+\defaultfontfeatures{Mapping=tex-text}
+%    \end{macrocode}
+%
+% 设置中文标点格式，使用|plain|方案。其他可选方案参见|xeCJK|文档。
+%    \begin{macrocode}
+\punctstyle{plain}
+%    \end{macrocode}
+%
+% |xeCJKfntef|宏包提供了中文下划线命令\cs{CJKunderline}，它将在制作书籍封面时用到。
+%    \begin{macrocode}
+\RequirePackage{xeCJKfntef}
+%    \end{macrocode}
+%
+% 设置中文下划线颜色为黑色。
+%    \begin{macrocode}
+\xeCJKsetup{ underline/format = \color{black} }
+%    \end{macrocode}
+%
+% 使用|indentfirst|宏包支持首行缩进。
+%    \begin{macrocode}
+%\RequirePackage{indentfirst}
+%    \end{macrocode}
+%
+% |url|宏包支持超链接排版，我们为它提供|hyphens|选项，从而使得长链接可在连字符处自动折行。
+% 注意|url|宏包必须在|hyperref|宏包之前载入，否则其选项不起作用。
+%    \begin{macrocode}
+\RequirePackage[hyphens]{url}
+%    \end{macrocode}
+%
+% |hyperref|宏包可根据交叉引用生成超链接，同时生成PDF文档的书签。
+%    \begin{macrocode}
+\RequirePackage{hyperref}
+%    \end{macrocode}
+%
+% 设置|hyperref|宏包参数。
+%    \begin{macrocode}
+\hypersetup{%
+    unicode=true,
+    hyperfootnotes=true,
+    hyperindex=true,
+    pageanchor=true,
+    CJKbookmarks=true,
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    bookmarksopenlevel=0,
+    breaklinks=true,
+    colorlinks=false,
+    plainpages=false,
+    pdfpagelabels,
+    pdfborder=0 0 0%
+}
+%    \end{macrocode}
+%
+% 设置URL样式，使其与上下文一致。
+%    \begin{macrocode}
+\urlstyle{same}
+%    \end{macrocode}
+%
+% 使用宏包|cleveref|，可以通过|\cref{label}|进行交叉引用，而无需手动添加引用对象的名称。
+% |\cref{label}|可以自动添加引用对象的名称。例如，|参见式\eqref{eq1}|，|参见定义\ref{thm1}|
+% 可以简化为|参见\cref{eq1}|，|参见\cref{thm1}|。
+%    \begin{macrocode}
+\RequirePackage{cleveref}
+%    \end{macrocode}
+%
+% 美化参考文献排序和引用格式的宏包|natbib|。
+%    \begin{macrocode}
+\RequirePackage[sort&compress,numbers]{natbib}
+%    \end{macrocode}
+%
+% |hypernat|可以让|hyperref|和|natbib|混合使用，但它需要放在这两者之后。
+%    \begin{macrocode}
+\RequirePackage{hypernat}
+%    \end{macrocode}
+%
+% |tabularx|宏包支持自动扩展的列宽，但它需要在|hyperref|之后引入才不会导致正文
+% 的footnote的超链接失效。
+%    \begin{macrocode}
+\RequirePackage{tabularx}
+%    \end{macrocode}
+%
+% |makeidx|宏包支持建立索引。
+%    \begin{macrocode}
+\RequirePackage{makeidx}
+%    \end{macrocode}
+%
+% |glossaries|宏包可用于制作术语表。但该宏包必须在|hyperref|之后载入。
+%    \begin{macrocode}
+\RequirePackage{glossaries}
+%    \end{macrocode}
+%
+% |ifthen|宏包提供了\cs{ifthenelse}命令，本文档类将使用该命令定义一些其他命令。
+%    \begin{macrocode}
+\RequirePackage{ifthen}
+%    \end{macrocode}
+%
+% |footmisc|宏包提供了对脚注样式的控制功能。
+%    \begin{macrocode}
+\RequirePackage[perpage,symbol*]{footmisc}
+%    \end{macrocode}
+%
+% |etoolbox|宏包提供了一些工具宏。
+%    \begin{macrocode}
+\RequirePackage{etoolbox}
+%    \end{macrocode}
+%
+% |diagbox|宏包提供斜线划分表格单元格的简单办法。
+%    \begin{macrocode}
+\RequirePackage{diagbox}
+%    \end{macrocode}
+%
+% |blindtext|宏包提供了命令用于生成随机的占位文字，从而在草稿阶段可以看到排版的整体效果。
+% |math|参数允许|blindtext|生成带数学公式的占位文字。
+%    \begin{macrocode}
+\RequirePackage[math]{blindtext}
+%    \end{macrocode}
+%
+%</cls>
+%
+% \subsection{字符串常量定义}
+%
+% 定义书籍中各章节的中文标题名称字符串常量：
+%    \begin{macrocode}
+%<*cfg>
+\newcommand*{\zhbook@cap@cover}{封面}
+\newcommand*{\zhbook@cap@abstract}{内容简介}
+\newcommand*{\zhbook@cap@contents}{目\hspace{2em}次}
+\newcommand*{\zhbook@cap@revisionhistory}{修订历史}
+\newcommand*{\zhbook@cap@listfigure}{插图清单}
+\newcommand*{\zhbook@cap@listtable}{附表清单}
+\newcommand*{\zhbook@cap@listsymbol}{符号清单}
+\newcommand*{\zhbook@cap@listequation}{公式清单}
+\newcommand*{\zhbook@cap@equation}{公式}
+\newcommand*{\zhbook@cap@bib}{参考文献}
+\newcommand*{\zhbook@cap@glossary}{术\hspace{0.5em}语\hspace{0.5em}表}
+\newcommand*{\zhbook@cap@index}{索\hspace{2em}引}
+\newcommand*{\zhbook@cap@figure}{图}
+\newcommand*{\zhbook@cap@table}{表}
+\newcommand*{\zhbook@cap@prologue}{序\hspace{2em}言}
+\newcommand*{\zhbook@cap@preface}{前\hspace{2em}言}
+\newcommand*{\zhbook@cap@acknowledgement}{致\hspace{2em}谢}
+\newcommand*{\zhbook@cap@appendix}{附录\thechapter}
+%    \end{macrocode}
+%
+% 定义用于重定义\cs{chaptername}命令的常量。若当前所处位置是文档的|mainmatter|部分，ze
+% 将其定义为``第XX章''的形式，否则将其定义为空字符串。
+%    \begin{macrocode}
+\newcommand*{\zhbook@cap@chapter}{%
+  \if@mainmatter{第\CJKnumber{\thechapter}章}\fi%
+}
+%    \end{macrocode}
+%
+% 定义常用数学定理环境的字符串常量：
+%    \begin{macrocode}
+\newcommand*{\zhbook@cap@definition}{定义}
+\newcommand*{\zhbook@cap@notation}{记号}
+\newcommand*{\zhbook@cap@theorem}{定理}
+\newcommand*{\zhbook@cap@lemma}{引理}
+\newcommand*{\zhbook@cap@corollary}{推论}
+\newcommand*{\zhbook@cap@proposition}{命题}
+\newcommand*{\zhbook@cap@fact}{事实}
+\newcommand*{\zhbook@cap@assumption}{假设}
+\newcommand*{\zhbook@cap@conjecture}{猜想}
+\newcommand*{\zhbook@cap@hypothesis}{假说}
+\newcommand*{\zhbook@cap@axiom}{公理}
+\newcommand*{\zhbook@cap@postulate}{公设}
+\newcommand*{\zhbook@cap@principle}{定律}
+\newcommand*{\zhbook@cap@problem}{问题}
+\newcommand*{\zhbook@cap@exercise}{习题}
+\newcommand*{\zhbook@cap@example}{例}
+\newcommand*{\zhbook@cap@remark}{评注}
+\newcommand*{\zhbook@cap@proof}{证明}
+\newcommand*{\zhbook@cap@solution}{解}
+\newcommand*{\zhbook@cap@algorithm}{算法}
+\newcommand*{\zhbook@cap@result}{结果}
+%    \end{macrocode}
+%
+% 定义自定义列表环境的字符串常量：
+%    \begin{macrocode}
+\newcommand*{\zhbook@cap@case}{情况}
+\newcommand*{\zhbook@cap@subcase}{子情况}
+\newcommand*{\zhbook@cap@step}{步骤}
+\newcommand*{\zhbook@cap@substep}{子步骤}
+%    \end{macrocode}
+%
+% 定义日期中的中文字符：
+%    \begin{macrocode}
+\newcommand*{\zhbook@cap@year}{年}
+\newcommand*{\zhbook@cap@month}{月}
+\newcommand*{\zhbook@cap@day}{日}
+\newcommand*{\zhbook@cap@to}{至}
+%    \end{macrocode}
+%
+% \subsection{格式控制常量定义}
+%
+% 定义Windows下宋体、黑体、楷书和仿宋体四种中文字体的名称。默认采用微软字体。
+%    \begin{macrocode}
+\newcommand*{\zhbook@zhfn@songti@win}{SimSun}
+\newcommand*{\zhbook@zhfn@heiti@win}{SimHei}
+\newcommand*{\zhbook@zhfn@kaishu@win}{KaiTi}
+\newcommand*{\zhbook@zhfn@fangsong@win}{FangSong}
+%    \end{macrocode}
+%
+% 定义Windows下英文字体的名称。默认采用Windows自带的字体。
+%    \begin{macrocode}
+\newcommand*{\zhbook@enfn@main@win}{Times New Roman}
+\newcommand*{\zhbook@enfn@sans@win}{Arial}
+\newcommand*{\zhbook@enfn@mono@win}{Courier New}
+%    \end{macrocode}
+%
+% 定义Linux下宋体、黑体、楷书和仿宋体四种中文字体的名称。默认采用文鼎宋体、楷体；
+% 文泉黑体；以及华文仿宋体(需要单独安装)。
+%    \begin{macrocode}
+\newcommand*{\zhbook@zhfn@songti@linux}{AR PL SungtiL GB}
+\newcommand*{\zhbook@zhfn@heiti@linux}{WenQuanYi Zen Hei Mono}
+\newcommand*{\zhbook@zhfn@kaishu@linux}{AR PL KaitiM GB}
+\newcommand*{\zhbook@zhfn@fangsong@linux}{STFangSong}
+%    \end{macrocode}
+%
+% 定义Linux下英文字体的名称。默认采用的字体若未安装请自行安装。
+%    \begin{macrocode}
+%\newcommand*{\zhbook@enfn@main@linux}{Times}
+%\newcommand*{\zhbook@enfn@sans@linux}{Helvetica}
+%\newcommand*{\zhbook@enfn@mono@linux}{Courier}
+\newcommand*{\zhbook@enfn@main@linux}{Times New Roman}
+\newcommand*{\zhbook@enfn@sans@linux}{Arial}
+\newcommand*{\zhbook@enfn@mono@linux}{Courier New}
+%    \end{macrocode}
+%
+% 定义Mac下宋体、黑体、楷书和仿宋体四种中文字体的名称。默认采用华文字体。
+%    \begin{macrocode}
+\newcommand*{\zhbook@zhfn@songti@mac}{STSong}
+\newcommand*{\zhbook@zhfn@heiti@mac}{STHeiti}
+\newcommand*{\zhbook@zhfn@kaishu@mac}{STKaiti}
+\newcommand*{\zhbook@zhfn@fangsong@mac}{STFangsong}
+%    \end{macrocode}
+%
+% 定义Mac下英文字体的名称。默认采用Mac自带的字体。
+%    \begin{macrocode}
+\newcommand*{\zhbook@enfn@main@mac}{Times}
+\newcommand*{\zhbook@enfn@sans@mac}{Helvetica}
+\newcommand*{\zhbook@enfn@mono@mac}{Courier}
+%    \end{macrocode}
+%
+% 定义Adoble提供的宋体、黑体、楷书和仿宋体四种中文字体的名称。Adoble的宋体、黑体和
+% 仿宋体可以在其网站免费下载，地址为
+% \begin{center}
+%  \url{http://www.adobe.com/support/downloads/detail.jsp?ftpID=4421}
+% \end{center}
+% 但Adobe的楷体只随Adobe Creative Suite软件提供。不过，所有Adobe中文字体都可以在这里
+% 打包下载：
+% \begin{center}
+% \url{http://tinker-bot.googlecode.com/files/cfonts.tar.gz}
+% \end{center}
+%    \begin{macrocode}
+\newcommand*{\zhbook@zhfn@songti@adobe}{Adobe Song Std}
+\newcommand*{\zhbook@zhfn@heiti@adobe}{Adobe Heiti Std}
+\newcommand*{\zhbook@zhfn@kaishu@adobe}{Adobe Kaiti Std}
+\newcommand*{\zhbook@zhfn@fangsong@adobe}{Adobe Fangsong Std}
+%    \end{macrocode}
+%
+% 定义英文字体的名称。默认采用Mac自带的字体。
+%    \begin{macrocode}
+%\newcommand*{\zhbook@enfn@main@adobe}{Times}
+%\newcommand*{\zhbook@enfn@sans@adobe}{Helvetica}
+%\newcommand*{\zhbook@enfn@mono@adobe}{Courier}
+\newcommand*{\zhbook@enfn@main@adobe}{Times New Roman}
+\newcommand*{\zhbook@enfn@sans@adobe}{Arial}
+\newcommand*{\zhbook@enfn@mono@adobe}{Courier New}
+%    \end{macrocode}
+%
+% \subsection{中文化cleveref宏包}
+%
+% 中文化|cleveref|宏包所用到的字符串常量：
+%    \begin{macrocode}
+\crefformat{equation}{#2式~\textnormal{(}#1\textnormal{)}~#3}
+\crefformat{figure}{#2图~#1~#3}
+\crefformat{table}{#2表~#1~#3}
+\crefformat{listing}{#2清单~#1~#3}
+\crefformat{page}{#2第~#1~页#3}
+\crefformat{line}{#2第~#1~行#3}
+\crefformat{part}{#2第~#1~部#3}
+\crefformat{chapter}{#2第~#1~章#3}
+\crefformat{section}{#2~#1~节#3}
+\crefformat{subsection}{#2~#1~节#3}
+\crefformat{appendix}{#2附录~#1~#3}
+\crefformat{enumi}{#2第~#1~点#3}
+\crefformat{footnote}{#2脚注~#1~#3}
+\crefformat{definition}{#2定义~#1~#3}
+\crefformat{notation}{#2记号~#1~#3}
+\crefformat{theorem}{#2定理~#1~#3}
+\crefformat{lemma}{#2引理~#1~#3}
+\crefformat{corollary}{#2推论~#1~#3}
+\crefformat{proposition}{#2命题~#1~#3}
+\crefformat{fact}{#2事实~#1~#3}
+\crefformat{assumption}{#2假设~#1~#3}
+\crefformat{conjecture}{#2猜想~#1~#3}
+\crefformat{hypothesis}{#2假说~#1~#3}
+\crefformat{axiom}{#2公理~#1~#3}
+\crefformat{postulate}{#2公设~#1~#3}
+\crefformat{principle}{#2定律~#1~#3}
+\crefformat{problem}{#2问题~#1~#3}
+\crefformat{exercise}{#2习题~#1~#3}
+\crefformat{example}{#2例~#1~#3}
+\crefformat{remark}{#2评注~#1~#3}
+\crefformat{proof}{#2证明~#1~#3}
+\crefformat{solution}{#2解~#1~#3}
+\crefformat{algorithm}{#2算法~#1~#3}
+\crefformat{result}{#2结果~#1~#3}
+%    \end{macrocode}
+%</cfg>
+%
+% \subsection{载入字符串常量配置}
+%
+% 在进行其他配置之前先载入预定义的字符串常量配置。
+%    \begin{macrocode}
+%<*cls>
+\input{zhbook.cfg}
+%    \end{macrocode}
+%
+% \subsection{字体设置}
+%
+% 首先根据文档选项选择正确的中文字体名称。
+%    \begin{macrocode}
+\ifzhbook@adobefonts
+  \newcommand*{\zhbook@zhfn@songti}{\zhbook@zhfn@songti@adobe}
+  \newcommand*{\zhbook@zhfn@heiti}{\zhbook@zhfn@heiti@adobe}
+  \newcommand*{\zhbook@zhfn@kaishu}{\zhbook@zhfn@kaishu@adobe}
+  \newcommand*{\zhbook@zhfn@fangsong}{\zhbook@zhfn@fangsong@adobe}
+  \newcommand*{\zhbook@enfn@main}{\zhbook@enfn@main@adobe}
+  \newcommand*{\zhbook@enfn@sans}{\zhbook@enfn@sans@adobe}
+  \newcommand*{\zhbook@enfn@mono}{\zhbook@enfn@mono@adobe}
+\else
+  \ifzhbook@winfonts
+      \newcommand*{\zhbook@zhfn@songti}{\zhbook@zhfn@songti@win}
+      \newcommand*{\zhbook@zhfn@heiti}{\zhbook@zhfn@heiti@win}
+      \newcommand*{\zhbook@zhfn@kaishu}{\zhbook@zhfn@kaishu@win}
+      \newcommand*{\zhbook@zhfn@fangsong}{\zhbook@zhfn@fangsong@win}
+      \newcommand*{\zhbook@enfn@main}{\zhbook@enfn@main@win}
+      \newcommand*{\zhbook@enfn@sans}{\zhbook@enfn@sans@win}
+      \newcommand*{\zhbook@enfn@mono}{\zhbook@enfn@mono@win}
+  \else
+    \ifzhbook@linuxfonts
+      \newcommand*{\zhbook@zhfn@songti}{\zhbook@zhfn@songti@linux}
+      \newcommand*{\zhbook@zhfn@heiti}{\zhbook@zhfn@heiti@linux}
+      \newcommand*{\zhbook@zhfn@kaishu}{\zhbook@zhfn@kaishu@linux}
+      \newcommand*{\zhbook@zhfn@fangsong}{\zhbook@zhfn@fangsong@linux}
+      \newcommand*{\zhbook@enfn@main}{\zhbook@enfn@main@linux}
+      \newcommand*{\zhbook@enfn@sans}{\zhbook@enfn@sans@linux}
+      \newcommand*{\zhbook@enfn@mono}{\zhbook@enfn@mono@linux}
+    \else
+       \ifzhbook@macfonts
+          \newcommand*{\zhbook@zhfn@songti}{\zhbook@zhfn@songti@mac}
+          \newcommand*{\zhbook@zhfn@heiti}{\zhbook@zhfn@heiti@mac}
+          \newcommand*{\zhbook@zhfn@kaishu}{\zhbook@zhfn@kaishu@mac}
+          \newcommand*{\zhbook@zhfn@fangsong}{\zhbook@zhfn@fangsong@mac}
+          \newcommand*{\zhbook@enfn@main}{\zhbook@enfn@main@mac}
+          \newcommand*{\zhbook@enfn@sans}{\zhbook@enfn@sans@mac}
+          \newcommand*{\zhbook@enfn@mono}{\zhbook@enfn@mono@mac}
+       \else
+         \ClassError{zhbook}{No fonts was selected.}{}
+       \fi
+    \fi
+  \fi
+\fi
+%    \end{macrocode}
+%
+% 接下来定义文档使用的中文字体：
+%    \begin{macrocode}
+\setCJKfamilyfont{song}{\zhbook@zhfn@songti}
+\setCJKfamilyfont{hei}{\zhbook@zhfn@heiti}
+\setCJKfamilyfont{kai}{\zhbook@zhfn@kaishu}
+\setCJKfamilyfont{fangsong}{\zhbook@zhfn@fangsong}
+\setCJKmainfont[BoldFont={\zhbook@zhfn@heiti},%
+                ItalicFont={\zhbook@zhfn@kaishu}]%
+               {\zhbook@zhfn@songti}
+\setCJKsansfont{\zhbook@zhfn@heiti}
+\setCJKmonofont{\zhbook@zhfn@fangsong}
+%    \end{macrocode}
+%
+% 定义文档使用的英文字体。
+%    \begin{macrocode}
+\setmainfont{\zhbook@enfn@main}
+\setsansfont{\zhbook@enfn@sans}
+\setmonofont{\zhbook@enfn@mono}
+%    \end{macrocode}
+%
+% 定义中文字体选择命令。
+%    \begin{macrocode}
+\newcommand*{\songti}{\CJKfamily{song}}
+\newcommand*{\heiti}{\CJKfamily{hei}}
+\newcommand*{\kaishu}{\CJKfamily{kai}}
+\newcommand*{\fangsong}{\CJKfamily{fangsong}}
+%    \end{macrocode}
+%
+% \begin{table}
+%   \centering
+%   \subtable[科学出版社编写的《著译编辑手册》(1994年)中定义的中文字号大小]{
+%     \label{table:fontsize:standard}
+%     \noindent
+%     \begin{tabular}{ccc}
+%       \toprule
+%       \textbf{字号}  &   \textbf{大小(pt)} & \textbf{大小(mm)}   \\
+%       \midrule
+%       七号  &    5.25  &    1.845 \\
+%       六号  &    7.875 &    2.768 \\
+%       小五  &    9     &    3.163 \\
+%       五号  &    10.5  &    3.69  \\
+%       小四  &    12    &    4.2175 \\
+%       四号  &    13.75 &    4.83   \\
+%       三号  &    15.75 &    5.53  \\
+%       二号  &    21    &    7.38  \\
+%       一号  &    27.5  &    9.48  \\
+%       小初  &    36    &    12.65 \\
+%       初号  &    42    &    14.76 \\
+%       \bottomrule
+%     \end{tabular}
+%   }
+%   \qquad
+%   \subtable[Microsoft Word中定义的中文字号大小，其中$1$bp=$72.27/72$pt]{
+%     \label{table:fontsize:word}
+%     \noindent
+%     \begin{tabular}{cccc}
+%       \toprule
+%       \textbf{字号}  & \textbf{大小(bp)} & \textbf{大小(mm)} & \textbf{大小(pt)}   \\
+%       \midrule
+%       初号  & 42     & 14.82 & 42.1575  \\
+%       小初  & 36     & 12.70 & 36.135   \\
+%       一号  & 26     & 9.17  & 26.0975  \\
+%       小一  & 24     & 8.47  & 24.09    \\
+%       二号  & 22     & 7.76  & 22.0825  \\
+%       小二  & 18     & 6.35  & 18.0675  \\
+%       三号  & 16     & 5.64  & 16.06    \\
+%       小三  & 15     & 5.29  & 15.05625 \\
+%       四号  & 14     & 4.94  & 14.0525  \\
+%       小四  & 12     & 4.23  & 12.045   \\
+%       五号  & 10.5   & 3.70  & 10.59375 \\
+%       小五  & 9      & 3.18  & 9.03375  \\
+%       六号  & 7.5    & 2.56  &            \\
+%       小六  & 6.5    & 2.29  &            \\
+%       七号  & 5.5    & 1.94  &            \\
+%       八号  & 5      & 1.76  &            \\
+%       \bottomrule
+%     \end{tabular}
+%   }
+%   \caption{中文字号对应的字体大小}
+%   \label{table:fontsize}
+% \end{table}
+%
+% 下面定义中文字号对应的大小，其标准参见表\ref{table:fontsize:standard}和
+% 表\ref{table:fontsize:word}。
+%    \begin{macrocode}
+\newcommand*{\zhbook@fs@eight}{5.02} % 八号字 5bp
+\newcommand*{\zhbook@fs@eightskip}{6.02}
+\newcommand*{\zhbook@fs@seven}{5.52} % 七号字 5.5bp
+\newcommand*{\zhbook@fs@sevenskip}{6.62}
+\newcommand*{\zhbook@fs@ssix}{6.52} % 小六号 6.5bp
+\newcommand*{\zhbook@fs@ssixskip}{7.83}
+\newcommand*{\zhbook@fs@six}{7.53} % 六号字 7.5bp
+\newcommand*{\zhbook@fs@sixskip}{9.03}
+\newcommand*{\zhbook@fs@sfive}{9.03} % 小五号 9bp
+\newcommand*{\zhbook@fs@sfiveskip}{10.84}
+\newcommand*{\zhbook@fs@five}{10.54} % 五号 10bp
+\newcommand*{\zhbook@fs@fiveskip}{12.65}
+\newcommand*{\zhbook@fs@sfour}{12.05} % 小四号 12bp
+\newcommand*{\zhbook@fs@sfourskip}{14.45}
+\newcommand*{\zhbook@fs@four}{14.05} % 四号字 14bp
+\newcommand*{\zhbook@fs@fourskip}{16.86}
+\newcommand*{\zhbook@fs@sthree}{15.06} % 小三号 15bp
+\newcommand*{\zhbook@fs@sthreeskip}{18.07}
+\newcommand*{\zhbook@fs@three}{16.06} % 三号字 16bp
+\newcommand*{\zhbook@fs@threeskip}{19.27}
+\newcommand*{\zhbook@fs@stwo}{18.07} % 小二号 18bp
+\newcommand*{\zhbook@fs@stwoskip}{21.68}
+\newcommand*{\zhbook@fs@two}{22.08} % 二号字 22bp
+\newcommand*{\zhbook@fs@twoskip}{26.50}
+\newcommand*{\zhbook@fs@sone}{24.09} % 小一号 24bp
+\newcommand*{\zhbook@fs@soneskip}{28.91}
+\newcommand*{\zhbook@fs@one}{26.10} % 一号字 26bp
+\newcommand*{\zhbook@fs@oneskip}{31.32}
+\newcommand*{\zhbook@fs@szero}{36.14} % 小初号 36bp
+\newcommand*{\zhbook@fs@szeroskip}{43.36}
+\newcommand*{\zhbook@fs@zero}{42.16} % 初号字 42bp
+\newcommand*{\zhbook@fs@zeroskip}{50.59}
+%    \end{macrocode}
+%
+% 声明不同字号下的数学字体大小。
+%    \begin{macrocode}
+\DeclareMathSizes{\zhbook@fs@eight}
+                 {\zhbook@fs@eight}
+                 {5}
+                 {5}
+\DeclareMathSizes{\zhbook@fs@seven}
+                 {\zhbook@fs@seven}
+                 {5}
+                 {5}
+\DeclareMathSizes{\zhbook@fs@ssix}
+                 {\zhbook@fs@ssix}
+                 {5}
+                 {5}
+\DeclareMathSizes{\zhbook@fs@six}
+                 {\zhbook@fs@six}
+                 {5}
+                 {5}
+\DeclareMathSizes{\zhbook@fs@sfive}
+                 {\zhbook@fs@sfive}
+                 {6}
+                 {5}
+\DeclareMathSizes{\zhbook@fs@five}
+                 {\zhbook@fs@five}
+                 {7}
+                 {5}
+\DeclareMathSizes{\zhbook@fs@sfour}
+                 {\zhbook@fs@sfour}
+                 {8}
+                 {6}
+\DeclareMathSizes{\zhbook@fs@four}
+                 {\zhbook@fs@four}
+                 {\zhbook@fs@five}
+                 {\zhbook@fs@six}
+\DeclareMathSizes{\zhbook@fs@sthree}
+                 {\zhbook@fs@sthree}
+                 {\zhbook@fs@sfour}
+                 {\zhbook@fs@sfive}
+\DeclareMathSizes{\zhbook@fs@three}
+                 {\zhbook@fs@three}
+                 {\zhbook@fs@four}
+                 {\zhbook@fs@five}
+\DeclareMathSizes{\zhbook@fs@stwo}
+                 {\zhbook@fs@stwo}
+                 {\zhbook@fs@sthree}
+                 {\zhbook@fs@sfour}
+\DeclareMathSizes{\zhbook@fs@two}
+                 {\zhbook@fs@two}
+                 {\zhbook@fs@three}
+                 {\zhbook@fs@four}
+\DeclareMathSizes{\zhbook@fs@sone}
+                 {\zhbook@fs@sone}
+                 {\zhbook@fs@stwo}
+                 {\zhbook@fs@sthree}
+\DeclareMathSizes{\zhbook@fs@one}
+                 {\zhbook@fs@one}
+                 {\zhbook@fs@two}
+                 {\zhbook@fs@three}
+\DeclareMathSizes{\zhbook@fs@szero}
+                 {\zhbook@fs@szero}
+                 {\zhbook@fs@sone}
+                 {\zhbook@fs@stwo}
+\DeclareMathSizes{\zhbook@fs@zero}
+                 {\zhbook@fs@zero}
+                 {\zhbook@fs@one}
+                 {\zhbook@fs@two}
+%    \end{macrocode}
+%
+% 定义字号选择命令。字号前面加负号表示采用对应的小体字号，例如|\zihao{-3}|表示小
+% 三号。
+% \begin{note}
+% 为了让|\zihao{-0}|能正确表示小初号，在判断参数正负的时候把参数后面再接一个字符`1'，从
+% 而将``-0''变为``-01''，而``-01''转换为数字为$-1$，故可正确判断其是否小于零。
+% \end{note}
+%    \begin{macrocode}
+\def\zhbook@zihao{}
+\DeclareRobustCommand*{\zihao}[1]{%
+  \def\zhbook@zihao{#1}%
+  \ifnum #11<0%
+    \@tempcnta=-#1
+    \ifcase\@tempcnta%
+        \fontsize\zhbook@fs@szero\zhbook@fs@szeroskip%
+    \or \fontsize\zhbook@fs@sone\zhbook@fs@soneskip%
+    \or \fontsize\zhbook@fs@stwo\zhbook@fs@stwoskip%
+    \or \fontsize\zhbook@fs@sthree\zhbook@fs@sthreeskip%
+    \or \fontsize\zhbook@fs@sfour\zhbook@fs@sfourskip%
+    \or \fontsize\zhbook@fs@sfive\zhbook@fs@sfiveskip%
+    \or \fontsize\zhbook@fs@ssix\zhbook@fs@ssixskip%
+    \else \ClassError{zhbook}{%
+            Undefined Chinese font size in command \protect\zihao}{%
+            The old font size is used if you continue.}%
+    \fi%
+  \else%
+    \@tempcnta=#1
+    \ifcase\@tempcnta%
+        \fontsize\zhbook@fs@zero\zhbook@fs@zeroskip%
+    \or \fontsize\zhbook@fs@one\zhbook@fs@oneskip%
+    \or \fontsize\zhbook@fs@two\zhbook@fs@twoskip%
+    \or \fontsize\zhbook@fs@three\zhbook@fs@threeskip%
+    \or \fontsize\zhbook@fs@four\zhbook@fs@fourskip%
+    \or \fontsize\zhbook@fs@five\zhbook@fs@fiveskip%
+    \or \fontsize\zhbook@fs@six\zhbook@fs@sixskip%
+    \or \fontsize\zhbook@fs@seven\zhbook@fs@sevenskip%
+    \or \fontsize\zhbook@fs@eight\zhbook@fs@eightskip%
+    \else \ClassError{zhbook}{%
+            Undefined Chinese font size in command \protect\zihao}{%
+            The old font size is used if you continue.}%
+    \fi%
+  \fi%
+  \selectfont\ignorespaces}
+%    \end{macrocode}
+%
+% 修改常用字体大小选择命令。
+%
+%    \begin{macrocode}
+\renewcommand{\tiny}{% 小六号 6.5bp
+  \@setfontsize\tiny{\zhbook@fs@ssix}{\zhbook@fs@ssixskip}}
+\renewcommand{\scriptsize}{% 六号字 7.5bp
+  \@setfontsize\scriptsize{\zhbook@fs@six}{\zhbook@fs@sixskip}}
+\renewcommand{\footnotesize}{% 小五号 9bp
+  \@setfontsize\footnotesize{\zhbook@fs@sfive}{\zhbook@fs@sfiveskip}%
+  \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus\p@
+  \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+  \def\@listi{\leftmargin\leftmargini
+    \topsep 3\p@ \@plus\p@ \@minus\p@
+    \parsep 2\p@ \@plus\p@ \@minus\p@
+    \itemsep \parsep}%
+  \belowdisplayskip \abovedisplayskip}
+\renewcommand{\small}{% 五号 10bp
+  \@setfontsize\small{\zhbook@fs@five}{\zhbook@fs@fiveskip}%
+  \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus2\p@
+  \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+  \def\@listi{\leftmargin\leftmargini
+    \topsep 4\p@ \@plus2\p@ \@minus2\p@
+    \parsep 2\p@ \@plus\p@ \@minus\p@
+    \itemsep \parsep}%
+  \belowdisplayskip \abovedisplayskip}
+\renewcommand{\normalsize}{% 小四号 12bp
+  \@setfontsize\normalsize{\zhbook@fs@sfour}{\zhbook@fs@sfourskip}%
+  \abovedisplayskip 10\p@ \@plus2\p@ \@minus5\p@
+  \abovedisplayshortskip \z@ \@plus3\p@
+  \belowdisplayshortskip 6\p@ \@plus3\p@ \@minus3\p@
+  \belowdisplayskip \abovedisplayskip
+  \let\@listi\@listI}
+\renewcommand{\large}{% 小三号 15bp
+  \@setfontsize\large{\zhbook@fs@sthree}{\zhbook@fs@sthreeskip}}
+\renewcommand{\Large}{% 小二号 18bp
+  \@setfontsize\Large{\zhbook@fs@stwo}{\zhbook@fs@stwoskip}}
+\renewcommand{\LARGE}{% 小一号 24bp
+  \@setfontsize\LARGE{\zhbook@fs@sone}{\zhbook@fs@soneskip}}
+\renewcommand{\huge}{% 一号 26bp
+  \@setfontsize\huge{\zhbook@fs@one}{\zhbook@fs@oneskip}}
+\renewcommand{\Huge}{% 小初号 36bp
+  \@setfontsize\Huge{\zhbook@fs@szero}{\zhbook@fs@szeroskip}}
+%    \end{macrocode}
+%
+% 定义中文字距修改命令，直接修改\cs{CJKglue}即可。
+%    \begin{macrocode}
+\newcommand*{\ziju}[1]{\renewcommand*{\CJKglue}{\hskip {#1}}}
+%    \end{macrocode}
+%
+% 修改\cs{textsc}命令，使其可在中文编码下正常工作。
+%    \begin{macrocode}
+\renewcommand{\textsc}[1]{{\usefont{OT1}{cmr}{m}{sc}{#1}}}
+%    \end{macrocode}
+%
+% \subsection{数学公式和定理}
+%
+% 按照\std{CY/T 35-2001}规范的要求，重定义公式、图、表的编号格式。例如：
+% \begin{itemize}
+% \item 图\dashnumber{1}{2}
+% \item 表\dashnumber{2}{3}
+% \item 附注 1)
+% \item 文献[4]
+% \item 式(\dashnumber{6}{3})
+% \end{itemize}
+% 子图和子表的应用序号外加小括号，例如
+% \begin{itemize}
+% \item 图\dashnumber{1}{2}(a)
+% \item 表\dashnumber{2}{3}(b)
+% \end{itemize}
+%    \begin{macrocode}
+\newcommand{\dashnumber}[2]%
+  {{#1}\kern.07em\rule[.5ex]{.4em}{.15ex}\kern.07em{#2}}
+\renewcommand*{\thefigure}{\dashnumber{\thechapter}{\arabic{figure}}}
+\renewcommand*{\thetable}{\dashnumber{\thechapter}{\arabic{table}}}
+\renewcommand*{\theequation}{\dashnumber{\thechapter}{\arabic{equation}}}
+\renewcommand*{\thesubfigure}{(\alph{subfigure})}
+\renewcommand*{\thesubtable}{(\alph{subtable})}
+%    \end{macrocode}
+%
+% 定义常用的数学定理环境及其样式。
+%    \begin{macrocode}
+\newtheoremstyle{plain}% name
+                {1em}%      Space above, empty = `usual value'
+                {1em}%      Space below
+                {\normalfont}% Body font
+                {}%         Indent amount
+                {\normalfont\bfseries}% Thm head font
+                {}%         Punctuation after thm head
+                {1em}%      Space after thm head: \newline = linebreak
+                {}%         Thm head spec
+\newtheorem{definition}{\zhbook@cap@definition}[chapter]
+\newtheorem{notation}[definition]{\zhbook@cap@notation}
+\newtheorem{theorem}{\zhbook@cap@theorem}[chapter]
+\newtheorem{lemma}[theorem]{\zhbook@cap@lemma}
+\newtheorem{corollary}[theorem]{\zhbook@cap@corollary}
+\newtheorem{proposition}[theorem]{\zhbook@cap@proposition}
+\newtheorem{fact}[theorem]{\zhbook@cap@fact}
+\newtheorem{assumption}[theorem]{\zhbook@cap@assumption}
+\newtheorem{conjecture}[theorem]{\zhbook@cap@conjecture}
+\newtheorem{hypothesis}{\zhbook@cap@hypothesis}[chapter]
+\newtheorem{axiom}{\zhbook@cap@axiom}[chapter]
+\newtheorem{postulate}{\zhbook@cap@postulate}[chapter]
+\newtheorem{principle}{\zhbook@cap@principle}[chapter]
+\newtheorem{problem}{\zhbook@cap@problem}[chapter]
+\newtheorem{exercise}{\zhbook@cap@exercise}[chapter]
+\newtheorem{example}{\zhbook@cap@example}[chapter]
+\newtheorem{remark}{\zhbook@cap@remark}[chapter]
+\newtheorem{result}{\zhbook@cap@result}[chapter]
+
+\renewenvironment{proof}[1][\zhbook@cap@proof]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep\textbf{#1}\@addpunct{:}]\ignorespaces
+}{\popQED\endtrivlist\@endpefalse}
+
+\newenvironment{solution}[1][\zhbook@cap@solution]{\par
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \trivlist
+  \item[\hskip\labelsep\textbf{#1}\@addpunct{:}]\ignorespaces
+}{\endtrivlist\@endpefalse}
+
+\newtheorem{algorithm}{\zhbook@cap@algorithm}[chapter]
+%    \end{macrocode}
+%
+% 修改上面定义的各定理环境的编号样式：
+%    \begin{macrocode}
+\renewcommand*{\thedefinition}{\dashnumber{\thechapter}{\arabic{definition}}}
+\renewcommand*{\thetheorem}{\dashnumber{\thechapter}{\arabic{theorem}}}
+\renewcommand*{\theaxiom}{\dashnumber{\thechapter}{\arabic{axiom}}}
+\renewcommand*{\theproblem}{\dashnumber{\thechapter}{\arabic{problem}}}
+\renewcommand*{\theexercise}{\dashnumber{\thechapter}{\arabic{exercise}}}
+\renewcommand*{\theexample}{\dashnumber{\thechapter}{\arabic{example}}}
+\renewcommand*{\theremark}{\dashnumber{\thechapter}{\arabic{remark}}}
+%    \end{macrocode}
+%
+% \subsection{设置浮动环境格式}
+%
+% 默认情况下，{\LaTeX}要求每页的文字至少占据$20\%$，否则该页就只单独放置一个浮动环境。而
+% 这通常不是我们想要的。我们将这个要求降低到$5\%$。
+%    \begin{macrocode}
+\renewcommand*{\textfraction}{0.05}
+%    \end{macrocode}
+% 有时如果多个浮动环境连续放在一起，{\LaTeX}会将它们分在几个不同页，即使它们可在同一页放
+% 得下。我们可以通过修改\cs{topfraction}和\cs{bottomfraction}分别设置顶端和底端的浮动
+% 环境的最大比例。
+%    \begin{macrocode}
+\renewcommand*{\topfraction}{0.9}
+\renewcommand*{\bottomfraction}{0.8}
+%    \end{macrocode}
+% 有时{\LaTeX}会把一个浮动环境单独放在一页，我们要求这个环境至少要占据$85\%$才能单独放在
+% 一页。
+% \begin{note}
+% \cs{floatpagefraction}的数值必须小于\cs{topfraction}。
+% \end{note}
+%    \begin{macrocode}
+\renewcommand*{\floatpagefraction}{0.85}
+%    \end{macrocode}
+%
+% \subsection{中文标题名称}
+%
+% 设置常见的中文标题名称。
+%    \begin{macrocode}
+\newcommand*{\abstractname}{\zhbook@cap@abstract}
+\renewcommand*{\contentsname}{\zhbook@cap@contents}
+\renewcommand*{\listfigurename}{\zhbook@cap@listfigure}
+\renewcommand*{\listtablename}{\zhbook@cap@listtable}
+\newcommand*{\listsymbolname}{\zhbook@cap@listsymbol}
+\newcommand*{\listequationname}{\zhbook@cap@listequation}
+\renewcommand*{\glossaryname}{\zhbook@cap@glossary}
+\renewcommand*{\indexname}{\zhbook@cap@index}
+\newcommand*{\equationname}{\zhbook@cap@equation}
+\renewcommand*{\bibname}{\zhbook@cap@bib}
+\renewcommand*{\figurename}{\zhbook@cap@figure}
+\renewcommand*{\tablename}{\zhbook@cap@table}
+\renewcommand*{\chaptername}{\zhbook@cap@chapter}
+\renewcommand*{\appendixname}{\zhbook@cap@appendix}
+%    \end{macrocode}
+%
+% \subsection{中文标题格式}
+%
+% 设置章节格式如下：
+% \begin{description}
+% \item[零级节标题] 命令为\cs{chapter}，格式为一号黑体，居中排列，段前空4ex，段后空3ex；
+% \item[一级节标题] 命令为\cs{section}，格式为小二号黑体，左排列，段前空3.5ex，段后空2.3ex；
+% \item[二级节标题] 命令为\cs{subsection}，格式为三号黑体，左排列，段前空3.0ex，段后空1.5ex；
+% \item[三级节标题] 命令为\cs{subsubsection}，格式为小三号黑体，左排列，段前空2.5ex，段后空1.5ex；
+% \item[四级节标题] 命令为\cs{paragraph}，格式为四号黑体，左排列，段前空2.0ex，段后空1ex；
+% \item[五级节标题] 命令为\cs{subparagraph}，格式为小四号黑体，左排列，段前空1.5ex，段后空1ex；
+% \end{description}
+%
+% 使用|titlesec|宏包提供的\cs{titleformat}和\cs{titlespacing}命令可以方便地设置标题
+% 的样式：
+%    \begin{macrocode}
+\titleformat{\chapter}[hang]
+            {\centering\zihao{-1}\bfseries}
+            {\chaptertitlename}{1em}{}
+\titlespacing{\chapter}
+             {0pt}
+             {*4}
+             {*3}
+\titleformat{\section}[hang]
+            {\zihao{-2}\bfseries}
+            {\thesection}{1em}{}
+\titlespacing{\section}
+             {0pt}
+             {*3.5}
+             {*2.3}
+\titleformat{\subsection}[hang]
+            {\zihao{3}\bfseries}
+            {\thesubsection}{1em}{}
+\titlespacing{\subsection}
+             {0pt}
+             {*3}
+             {*1.5}
+\titleformat{\subsubsection}[hang]
+            {\zihao{-3}\bfseries}
+            {\thesubsubsection}{1em}{}
+\titlespacing{\subsubsection}
+             {0pt}
+             {*2.5}
+             {*1.5}
+\titleformat{\paragraph}[hang]
+            {\zihao{4}\bfseries}
+            {}{0em}{}
+\titlespacing{\paragraph}
+             {0pt}
+             {*2}
+             {*1}
+\titleformat{\subparagraph}[hang]
+            {\zihao{-4}\bfseries}
+            {}{0em}{}
+\titlespacing{\subparagraph}
+             {0pt}
+             {*1.5}
+             {*1}
+%    \end{macrocode}
+%
+% 设置章节标题编号最多到第4层（即\cs{subsubsection}），超过第四层的章节不再自动编号。
+%    \begin{macrocode}
+\setcounter{secnumdepth}{4}
+%    \end{macrocode}
+%
+% 修改章节编号的样式：
+%    \begin{macrocode}
+\renewcommand{\thechapter}{\arabic{chapter}}
+\renewcommand{\thesection}{\thechapter\thinspace.\thinspace\arabic{section}}
+\renewcommand{\thesubsection}{\thesection\thinspace.\thinspace\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection\thinspace.\thinspace\arabic{subsubsection}}
+%    \end{macrocode}
+%
+% \subsection{浮动环境}
+%
+% 设置浮动环境标题的字体大小。根据学位书籍格式要求，插图和表格标题字体需要比正文字体略小。
+%    \begin{macrocode}
+\captionsetup{font=small}
+%    \end{macrocode}
+%
+% 根据学位书籍格式要求，表格的标题必须位于表格上方，插图的标题必须位于插图下方。
+%    \begin{macrocode}
+\captionsetup[table]{position=above}
+\captionsetup[figure]{position=below}
+\floatstyle{plaintop}
+\restylefloat{table}
+%    \end{macrocode}
+%
+% \subsection{页幅设置}
+%
+% 正文统一用小四号字，间距为固定值20pt。\cs{linestrech}的值为$1$时为单倍行距， $1.2$时是
+% 一倍半行距， 而为$1.6$时是双倍行距。其实不同尺寸的字体行间距都不相同，而是成比例关系。这
+% 个20pt是对正文主要字体来说的。
+%
+% 在{\TeX}中基本的行间距是\cs{baselineskip}, 对于12pt的字体，这个值等于14.5pt,
+% 而真正的行间距是\cs{baselineskip}$\times$\cs{baselinestretch}，
+% \cs{baselinestretch}默认为$1$, 但我们可以重新设置它的值，如
+% |\renewcommand{\baselinestretch}{1.38}|就得到真正的行间距为14.5pt*1.38≈20pt。
+% 而这样定义之后，对不同尺寸的字体都会按同样的比例因子1.38放大行间距，使得全文排
+% 版能协调一致。
+%    \begin{macrocode}
+\renewcommand*{\baselinestretch}{1.38}
+%    \end{macrocode}
+%
+% 修改|tabular|环境，设置表格中的行间距为正文行间距。
+%    \begin{macrocode}
+\let\zhbook@oldtabular\tabular
+\let\zhbook@endoldtabular\endtabular
+\renewenvironment{tabular}%
+{\bgroup%
+\renewcommand{\arraystretch}{1.38}%
+\zhbook@oldtabular}%
+{\zhbook@endoldtabular\egroup}
+%    \end{macrocode}
+%
+% 文章用A4纸标准大小的白纸打印，页眉：2.6cm，页脚：2.4cm，页边距上下：3.5cm，左
+% 右：3.2cm。
+%    \begin{macrocode}
+\geometry{headheight=2.6cm,headsep=3mm,footskip=13mm}
+\geometry{top=3.5cm,bottom=3.5cm,left=3.2cm,right=3.2cm}
+%    \end{macrocode}
+%
+% 设置每一段的首行缩进两个汉字。
+% \begin{note}
+% 直接将|parindent|设置为|2em|并不能正确地设置段首缩进为恰好两个中文字符。因此我们采用下面的
+% 网页提供办法：\\
+% \url{https://github.com/ElegantLaTeX/ElegantLaTeX/blob/master/CJKindent.md}
+% \end{note}
+%
+% 首先，我们需要计算出当前字符的宽度：
+%    \begin{macrocode}
+\def\zhbook@CJK@charwidth{\hskip \f@size \p@}
+%    \end{macrocode}
+% 接下来，我们需要考虑到字符间距，计算出当前相邻两字符中心的距离：
+%    \begin{macrocode}
+\newdimen\zhbook@CJK@chardimen
+\settowidth\zhbook@CJK@chardimen{\zhbook@CJK@charwidth\CJKglue}
+%    \end{macrocode}
+% 最后，我们设置段首缩进长度：
+%    \begin{macrocode}
+\newcommand{\zhbook@CJK@setfontspace}{%
+\settowidth\zhbook@CJK@chardimen{\zhbook@CJK@charwidth\CJKglue}%
+\ifdim\parindent=0pt\relax\else\parindent2\zhbook@CJK@chardimen\fi%
+}
+\renewcommand*{\indent}{\zhbook@CJK@setfontspace\parindent2\zhbook@CJK@chardimen}
+\AtBeginDocument{\indent}
+%    \end{macrocode}
+%
+% \subsection{页眉页脚}
+%
+% 我们使用|fancyhdr|宏包来设置页眉页脚。|fancyhdr|宏包提供了一个|fancy|页面风格，
+% 在该风格下，章节的起始页（即包含“第XX章”标题的页面）的页眉页脚将使用|plain|风
+% 格，而章节的后继页面的页眉页脚将使用|fancy|风格的默认定义或用户通过
+% \cs{fancyhead}或\cs{fancyfoot}命令定义的样式。
+%
+% 首先，我们需要修改|plain|风格的页眉页脚，将其页脚默认的页码去掉。
+%    \begin{macrocode}
+\fancypagestyle{plain}{%
+   \fancyhead{}                       % get rid of headers and footers
+   \renewcommand{\headrulewidth}{0pt} % and the header line
+   \renewcommand{\footrulewidth}{0pt} % and the footer line
+}
+%    \end{macrocode}
+%
+% 接下来我们按照如下规则修改|fancy|风格的页眉页脚设置，注意学位书籍始终是双面打印的：
+% \begin{itemize}
+%    \item 令偶数页的页眉如下：
+%      \begin{itemize}
+%      \item 左上角显示当前页页码
+%      \item 右上角显示当前章（chapter）的编号和标题；
+%      \item 若当前不为于|mainmatter|中，则右上角只显示当前章的标题。
+%      \end{itemize}
+%    \item 令奇数页的页眉如下：
+%      \begin{itemize}
+%      \item 左上角显示当前节（section）的编号和标题
+%      \item 右上角显示当前页页码；
+%      \item 若当前页面尚未开始此章的第一节，即节编号和节标题为空；则左上角显示当前
+%      章（chapter）的编号和标题；若当前不为于|mainmatter|中，则左上角只显示当前章的
+%      标题。
+%      \end{itemize}
+%    \item 无论奇偶页，页眉下都有一条分割线；
+%    \item 无论奇偶页，页脚都为空，页脚上都无分割线。
+% \end{itemize}
+%
+% 设置|fancy|风格下的页脚，令页脚为空；令页脚分割线宽度为$0$：
+%    \begin{macrocode}
+\fancyfoot{}
+\renewcommand{\footrulewidth}{0pt}
+%    \end{macrocode}
+%
+% 设置|fancy|风格下的页眉，令偶数页左上角和奇数页右上角显示当前页码，令页眉的分
+% 割线宽度为$1$：
+%    \begin{macrocode}
+\fancyhead[LE,RO]{\thepage}
+\renewcommand{\headrulewidth}{1pt}
+%    \end{macrocode}
+%
+% 设置|fancy|风格的页眉，令偶数页右上角和奇数页左上角分别显示当前章信息和当前节
+% 信息；但若当前页面尚未开始本章的第一节（即\cs{rightmark}为空），则奇数页左上角也
+% 显示当前章信息（即\cs{leftmark}）。
+%    \begin{macrocode}
+\fancyhead[RE]{\leftmark}
+\fancyhead[LO]{%
+ \ifthenelse{\equal{\rightmark}{}}% if \rightmark is empty
+            {\leftmark}%
+            {\rightmark}%
+}
+%    \end{macrocode}
+%
+% 设置全局使用|fancy|风格。
+%    \begin{macrocode}
+\pagestyle{fancy}
+%    \end{macrocode}
+%
+% 重新定义|chaptermark|，让其显示当前章信息和当前节信息。注意下面的重定义必须放
+% 在第一次调用|\pagestyle{fancy}|之后，因为第一次调用该命令会设置\cs{chaptermark}。
+%    \begin{macrocode}
+\renewcommand{\chaptermark}[1]{\markboth{%
+ \bfseries\if@mainmatter\chaptertitlename\hspace{1em}\fi{#1}%
+}{}}
+%    \end{macrocode}
+%
+% 重新定义|sectionmark|，让其显示当前节信息。注意下面的重定义必须放在第一次调用
+% |\pagestyle{fancy}|之后，因为第一次调用该命令会设置\cs{sectionmark}。
+%    \begin{macrocode}
+\renewcommand{\sectionmark}[1]{\markright{%
+ \bfseries\if@mainmatter\thesection\hspace{1em}\fi{#1}%
+}}
+%    \end{macrocode}
+%
+% 另一个麻烦的问题是：默认的|fancy|风格会在每一章最后的空白页（由于是双面打印）
+% 也加上页眉页脚，但我们通常不希望如此。解决方法是修改{\LaTeX}内部的\cs{cleardoublepage}
+% 命令的定义如下：
+%    \begin{macrocode}
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+  \hbox{}\thispagestyle{empty}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+%    \end{macrocode}
+%
+% \subsection{列表环境}
+%
+% {\LaTeX}默认的列表：|enumerate|，|itemize|，和|description|都不符合中文习惯。
+% 符合中文习惯的列表需要满足：
+% \begin{enumerate}
+% \item 列表标签要与正文的左边界对齐；
+% \item 列表文本左侧要和左边界对齐；
+% \item 列表项的间距应当等于正文中的段落间距，通常为$0$；
+% \item 列表文本的右侧与正文的右边界对齐。
+% \end{enumerate}
+% 因此需要重新设置默认的列表的格式。
+%    \begin{macrocode}
+\setlist{%
+  topsep=0.3em,             % 列表顶端的垂直空白
+  partopsep=0pt,            % 列表环境前面紧接着一个空白行时其顶端的额外垂直空白
+  itemsep=0ex plus 0.1ex,   % 列表项之间的额外垂直空白
+  parsep=0pt,               % 列表项内的段落之间的垂直空白
+  leftmargin=1.5em,         % 环境的左边界和列表之间的水平距离
+  rightmargin=0em,          % 环境的右边界和列表之间的水平距离
+  labelsep=0.5em,           % 包含标签的盒子与列表项的第一行文本之间的间隔
+  labelwidth=2em,           % 包含标签的盒子的正常宽度；若实际宽度更宽，则使用实际宽度。
+}
+%    \end{macrocode}
+%
+% 设置无序列表的标签符号。
+%    \begin{macrocode}
+\setlist[itemize,1]{label=$\medbullet$}
+\setlist[itemize,2]{label=$\blacksquare$}
+\setlist[itemize,3]{label=$\Diamondblack$}
+%    \end{macrocode}
+%
+% \subsection{引用}
+%
+% 默认的引用环境|quote|和|quotation|都不符合中文习惯，我们将其重新定义如下:
+%    \begin{macrocode}
+\renewenvironment{quote}%
+                 {\list{}{\leftmargin=4em\rightmargin=4em}\item[]}%
+                 {\endlist}
+\renewenvironment{quotation}%
+                 {\list{}{\leftmargin=4em\rightmargin=4em}\item[]}%
+                 {\endlist}
+%    \end{macrocode}
+%
+% \subsection{目次}
+%
+% 前置部分的封面在后面详细介绍，首先看目次。其具体要求为：目次页由书籍的章、节、条、项、
+% 附录等的序号、名称和页码组成，另页排在序之后。目次页标注学位书籍的前三级目录。
+% 标题统一用“目次”，黑体3字号字居中，段前、段后间距为1行; 各章（一级目录）名称用
+% 黑体5号字，段前间距为0.5行，段后间距为0行; 其它（二、三级目录）用宋体5号字，
+% 段前、段后间距为0行。
+%
+% \begin{macro}{\nchapter}
+% 用于产生没有编号但在目次中列出的章。
+%    \begin{macrocode}
+\newcommand\nchapter[1]{%
+  \if@mainmatter%
+    \@mainmatterfalse%
+    \chapter{#1}%
+    \@mainmattertrue%
+  \else
+    \chapter{#1}%
+  \fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@dottedtocline}
+% 改变缺省的目次中的点线为中文习惯。
+%    \begin{macrocode}
+\def\@dottedtocline#1#2#3#4#5{%
+  \ifnum #1>\c@tocdepth \else
+    \vskip \z@ \@plus.2\p@
+    {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+     \parindent #2\relax\@afterindenttrue
+     \interlinepenalty\@M
+     \leavevmode
+     \@tempdima #3\relax
+     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+     {#4}\nobreak
+     \leaders\hbox{$\m@th\mkern 1.5mu\cdot\mkern 1.5mu$}\hfill
+     \nobreak
+     \hb@xt@\@pnumwidth{\hfil\normalfont \normalcolor #5}%
+     \par}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@part}
+% 改变缺省的目次中的点线为中文习惯。
+%    \begin{macrocode}
+\renewcommand*{\l@part}[2]{%
+  \ifnum \c@tocdepth >-2\relax
+    \addpenalty{-\@highpenalty}%
+    \addvspace{2.25em \@plus\p@}%
+    \setlength\@tempdima{3em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      {\leavevmode
+       \large \bfseries #1
+       \leaders\hbox{$\m@th\mkern 1.5mu\cdot\mkern 1.5mu$}
+       \hfil \hb@xt@\@pnumwidth{\hss #2}}\par
+       \nobreak
+         \global\@nobreaktrue
+         \everypar{\global\@nobreakfalse\everypar{}}%
+    \endgroup
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@chapter}
+% 改变缺省的目次中的点线为中文习惯。
+%    \begin{macrocode}
+\renewcommand*{\l@chapter}[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip 1.0em \@plus\p@
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \bfseries
+      \advance\leftskip\@tempdima
+      \hskip -\leftskip
+      #1\nobreak
+      \leaders\hbox{$\m@th\mkern 1.5mu\cdot\mkern 1.5mu$}
+      \hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+      \penalty\@highpenalty
+    \endgroup
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tableofcontents}
+% 修改\cs{tableofcontents}命令用于生成目次页，并将目次页本身也被加入目次中。
+%    \begin{macrocode}
+\renewcommand*{\tableofcontents}{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \nchapter{\contentsname}%
+    \@mkboth{\MakeUppercase\contentsname}{\MakeUppercase\contentsname}%
+    \@starttoc{toc}%
+    \if@restonecol\twocolumn\fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\listoftables}
+% 修改\cs{listoftables}命令，使得附表清单被加入目次中。
+%    \begin{macrocode}
+\renewcommand*{\listoftables}{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \nchapter{\listtablename}%
+    \@mkboth{\MakeUppercase\listtablename}{\MakeUppercase\listtablename}%
+    \@starttoc{lot}%
+    \if@restonecol\twocolumn\fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\listoffigures}
+% 修改\cs{listoffigures}命令，使得插图清单被加入目次中。
+%    \begin{macrocode}
+\renewcommand*{\listoffigures}{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \nchapter{\listfigurename}%
+    \@mkboth{\MakeUppercase\listfigurename}{\MakeUppercase\listfigurename}%
+    \@starttoc{lof}%
+    \if@restonecol\twocolumn\fi
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{参考文献}
+%
+% \begin{environment}{thebibliography}
+% 修改|thebibliography|环境用于在目次中加入参考文献页。
+%    \begin{macrocode}
+\renewenvironment{thebibliography}[1]
+     {\nchapter{\bibname}%
+      \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}%
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+%    \end{macrocode}
+% \end{environment}
+%
+% 使用|gbt7714-2005.bst|作为参考文献样式。
+%    \begin{macrocode}
+\bibliographystyle{gbt7714-2005}
+%    \end{macrocode}
+%
+% 使用符合\std{GB/T 7714-2005}规范的参考文献引用样式。
+%    \begin{macrocode}
+\setcitestyle{super,square}
+%    \end{macrocode}
+%
+% 修改|natbib|内部的\cs{NAT@citesuper}命令，使其生成的上标引用编号可以正确地把
+% \cs{cite}命令的可选参数（通常是引文页码）也作为上标放在引文编号方框之后。
+%    \begin{macrocode}
+\renewcommand\NAT@citesuper[3]{%
+\ifNAT@swa%
+  \if*#2*\else#2\NAT@spacechar\fi%
+  \unskip\kern\p@\textsuperscript{\NAT@@open#1\NAT@@close#3}%
+\else #1\fi\endgroup%
+}
+%    \end{macrocode}
+%
+% \subsection{脚注}
+%
+% 使用|footmisc|宏包和|pifont|宏包设置符合\std{GB/T 7713.1-2006}规范的脚注样式。注意，
+% 由于|pifont|宏包提供的特殊符号的限制，一页之中最多只能有$10$个脚注。
+%    \begin{macrocode}
+\DefineFNsymbols*{circlednumber}[text]{%
+   {\ding{192}} %
+   {\ding{193}} %
+   {\ding{194}} %
+   {\ding{195}} %
+   {\ding{196}} %
+   {\ding{197}} %
+   {\ding{198}} %
+   {\ding{199}} %
+   {\ding{200}} %
+   {\ding{201}} %
+}%
+\setfnsymbol{circlednumber}
+%    \end{macrocode}
+%
+% \subsection{封面字段设置}
+%
+% 定义默认封面字段值
+%    \begin{macrocode}
+\newcommand*{\zhbook@value@title}{(书籍标题)}
+\newcommand*{\zhbook@value@en@title}{English Book Title}
+\newcommand*{\zhbook@value@author}{(作者姓名)}
+\newcommand*{\zhbook@value@abstract}{}
+\newcommand*{\zhbook@value@abstract@keywords}{}
+\newcommand*{\zhbook@value@publisherlogo}{}
+\newcommand*{\zhbook@value@publisher}{出版社名称}
+\newcommand*{\zhbook@value@publishercity}{北\hspace{1.5em}京}
+\newcommand*{\zhbook@value@date}{{\CJKnumber\year}年}
+%    \end{macrocode}
+%
+% 中文封面字段设置：
+%    \begin{macrocode}
+\renewcommand*{\title}[1]{\renewcommand*{\zhbook@value@title}{#1}}
+\newcommand*{\titlea}[1]{\renewcommand*{\zhbook@value@titlea}{#1}}
+\newcommand*{\titleb}[1]{\renewcommand*{\zhbook@value@titleb}{#1}}
+\renewcommand*{\author}[1]{\renewcommand*{\zhbook@value@author}{#1}}
+\newcommand*{\publisher}[1]{\renewcommand*{\zhbook@value@publisher}{#1}}
+\newcommand*{\publishercity}[1]{\renewcommand*{\zhbook@value@publishercity}{#1}}
+\newcommand*{\publisherlogo}[1]{\renewcommand*{\zhbook@value@publisherlogo}{#1}}
+\renewcommand*{\date}[1]{\renewcommand*{\zhbook@value@date}{#1}}
+\newcommand*{\abstract}[1]{\renewcommand*{\zhbook@value@abstract}{#1}}
+\newcommand*{\keywords}[1]{\renewcommand*{\zhbook@value@abstract@keywords}{#1}}
+%    \end{macrocode}
+%
+% 英文封面字段设置：
+%    \begin{macrocode}
+\newcommand*{\englishtitle}[1]{\renewcommand{\zhbook@value@en@title}{#1}}
+%    \end{macrocode}
+%
+% \subsection{生成封面}
+%
+% \begin{macro}{\zhbookunderline}
+% 定义封面中用到的生成下划线的宏。
+%    \begin{macrocode}
+\newcommand{\zhbook@underline}[2][\textwidth]%
+           {\CJKunderline{\makebox[#1]{#2}}}
+\def\zhbookunderline{\@ifnextchar[\zhbook@underline\CJKunderline}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\maketitle}
+% 重新定义{\LaTeX}提供的\cs{maketitle}命令，使其生成中文科技书籍所需的中文封面。
+% 注意我们使用了前面修改过的\cs{cleardoublepage}命令来插入无页眉页脚的空白页。
+%    \begin{macrocode}
+\renewcommand*{\maketitle}{%
+  \thispagestyle{empty}
+  \pdfbookmark[0]{\zhbook@cap@cover}{cover}
+  \begin{center}
+    \vspace{50mm}%
+    \rule{\textwidth}{2pt}\\%
+    \vspace{10mm}%
+    {\zihao{1}\textbf{\zhbook@value@title}}\\
+    \vspace{10mm}%
+    {\zihao{-1}\textsf{\textbf{\zhbook@value@en@title}}}\\
+    \vspace{6mm}%
+    \rule{\textwidth}{2pt}\\%
+    \vspace{10mm}
+    {\zihao{-2}\textsl{\zhbook@value@author}}\\
+    \vskip\stretch{1}%
+    {\zihao{1}\textsl{\zhbook@value@publisher}}\\
+    \vspace{6mm}%
+    {\zihao{3}{\zhbook@value@publishercity}} \\
+    \vspace{3mm}%
+    {\zihao{3}{\zhbook@value@date}}
+  \end{center}
+  \clearpage
+  \thispagestyle{empty}
+  \begin{center}
+    \LARGE\textbf{\zhbook@cap@abstract}
+  \end{center}
+  \vspace{4mm}%
+
+  \clearpage
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+% \subsection{序言章节}
+%
+% \begin{environment}{prologue}
+% 该环境用于``序言''页。
+%    \begin{macrocode}
+\newenvironment{prologue}{%
+  \nchapter{\zhbook@cap@prologue}
+}{}
+%    \end{macrocode}
+% \end{environment}
+%
+% \subsection{前言章节}
+%
+% \begin{environment}{preface}
+% 该环境用于``前言''页。
+%    \begin{macrocode}
+\newenvironment{preface}{%
+  \nchapter{\zhbook@cap@preface}
+}{}
+%    \end{macrocode}
+% \end{environment}
+%
+% \subsection{致谢章节}
+%
+% \begin{environment}{acknowledgement}
+% 该环境用于``致谢''页。
+%    \begin{macrocode}
+\newenvironment{acknowledgement}{%
+  \nchapter{\zhbook@cap@acknowledgement}
+}{}
+%    \end{macrocode}
+% \end{environment}
+%
+% \subsection{其他自定义命令和环境}
+%
+% \begin{macro}{\zhbook}
+% 定义{\zhbook}文档类的logo。
+%    \begin{macrocode}
+\newcommand{\zhbook}{\texttt{NJU-Thesis}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\zhdash}
+% 定义中文破折号。
+%    \begin{macrocode}
+\newcommand{\zhdash}{\kern0.3ex\rule[0.8ex]{2em}{0.1ex}\kern0.3ex}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\cell}
+% \cs{cell}\marg{width}\marg{height}\marg{text}用于定义一个宽度为\meta{width}，
+% 高度为\meta{height}，内容为\meta{text}的的单元格。该单元格可放在表格中，用于控
+% 制表格单元格的大小。
+%    \begin{macrocode}
+\newcommand{\cell}[3]{\parbox[c][#2][c]{#1}{\makebox[#1]{#3}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{C}
+% 定义一个新的表格列模式，|C{width}|，表示将内容居中，且列宽度为|width|。
+%
+% |array|环境中的\cs{centering}命令会改变\cs{newline}的定义，因此我们需要用
+% \cs{arraybackslash}将其恢复；另外，我们也可能会在列内容中使用\cs{newline}，因此在
+% \cs{centering}后重新定义了\cs{newline}。
+%
+%    \begin{macrocode}
+\newcolumntype{C}[1]{>{\centering\let\newline\\%
+    \arraybackslash\hspace{0pt}}p{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{arabicenum}
+% 阿拉伯数字列表环境。该列表最多三层。
+%    \begin{macrocode}
+\newlist{arabicenum}{enumerate}{3}
+\setlist[arabicenum,1]{label=\textnormal%
+  {\textnormal{(\arabic*)}}}
+\setlist[arabicenum,2]{label=\textnormal%
+  {\textnormal{(\arabic{arabicenumi}.\arabic*)}}}
+\setlist[arabicenum,3]{label=\textnormal%
+  {\textnormal{(\arabic{arabicenumi}.\arabic{arabicenumii}.\arabic*)}}}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{romanenum}
+% 罗马数字列表环境。该列表最多两层。
+%    \begin{macrocode}
+\newlist{romanenum}{enumerate}{2}
+\setlist[romanenum,1]{label={\textnormal{\roman*.}}}
+\setlist[romanenum,2]{label={\textnormal{\alph*\,)}}}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{alphaenum}
+% 小写字母列表环境。该列表最多两层。
+%    \begin{macrocode}
+\newlist{alphaenum}{enumerate}{2}
+\setlist[alphaenum,1]{label={\textnormal{\alph*\,)}}}
+\setlist[alphaenum,2]{label={\textnormal{\alph{alphaenumi}.\arabic*\,)}}}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{caseenum}
+% 情况分类列表环境。该列表最多两层。
+%    \begin{macrocode}
+\newlist{caseenum}{enumerate}{2}
+\setlist[caseenum,1]{label={\textnormal{\zhbook@cap@case\arabic*.}}}
+\setlist[caseenum,2]{label={\textnormal{\zhbook@cap@subcase\arabic{caseenumi}.\arabic*.}}}
+\setlist[caseenum]{leftmargin=*}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{stepenum}
+% 步骤列表环境。该列表最多两层。
+%    \begin{macrocode}
+\newlist{stepenum}{enumerate}{2}
+\setlist[stepenum,1]{label={\textnormal{\zhbook@cap@step\arabic*.}}}
+\setlist[stepenum,2]{label={\textnormal{\zhbook@cap@substep\arabic{stepenumi}.\arabic*.}}}
+\setlist[stepenum]{leftmargin=*}
+%    \end{macrocode}
+% \end{environment}
+%
+% \subsection{设置PDF文档属性}
+%
+% \begin{macro}{\zhbook@setpdfinfo}
+% 此命令设置PDF文档属性，依赖于|hyperref|宏包。
+%    \begin{macrocode}
+\newcommand*{\zhbook@setpdfinfo}{\hypersetup{%
+        pdftitle={\zhbook@value@title},
+        pdfauthor={\zhbook@value@author},
+        pdfkeywords={\zhbook@value@abstract@keywords},
+        pdfcreator={\zhbook@value@author},
+        pdfproducer={XeLaTeX with the Zh-Book document class}}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% 在文档的\cs{begin{document}}之后立即调用\cs{njut@setpdfinfo}命令设置PDF文档属性。
+%    \begin{macrocode}
+\AtBeginDocument{\zhbook@setpdfinfo}
+%</cls>
+%    \end{macrocode}
+% \StopEventually{\PrintIndex}
+% \Finale
+%
+% \iffalse
+%    \begin{macrocode}
+%<*dtx-style>
+\ProvidesPackage{dtx-style}
+\RequirePackage{amssymb}
+\RequirePackage{calc}
+\RequirePackage{array,longtable}
+\RequirePackage{fancybox,fancyvrb}
+\RequirePackage{xcolor}
+\RequirePackage{txfonts}
+\RequirePackage{xltxtra}
+\RequirePackage{subfigure}
+\RequirePackage{marvosym}
+\RequirePackage{booktabs}
+\RequirePackage{paralist}
+\RequirePackage{enumitem}
+\RequirePackage{titlesec}
+\RequirePackage{titling}
+\RequirePackage{fancyhdr}
+\RequirePackage{geometry}
+\RequirePackage{indentfirst}
+\RequirePackage[CJKnumber,CJKchecksingle]{xeCJK}
+\RequirePackage[hyphens]{url} % must be load before hypdoc package
+\RequirePackage{hypdoc} % it will load hyperref package
+\RequirePackage[normalem]{ulem}
+
+\hypersetup{%
+    unicode=true,
+    hyperfootnotes=true,
+    hyperindex=true,
+    pageanchor=true,
+    CJKbookmarks=true,
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    bookmarksopenlevel=0,
+    breaklinks=true,
+    colorlinks=false,
+    plainpages=false,
+    pdfpagelabels,
+    pdfborder=0 0 0%
+}
+
+\newcommand{\env}[1]{\texttt{#1}}
+
+% 设置超链接为蓝色
+\hypersetup{colorlinks=true,urlcolor=blue}
+
+% 定义英文字体名称。
+\newcommand*{\zhbook@enfn@main}{Times New Roman}
+\newcommand*{\zhbook@enfn@sans}{Arial}
+\newcommand*{\zhbook@enfn@mono}{Courier New}
+
+% 选择中文字体
+\newcommand*{\zhbook@zhfn@songti}{Adobe Song Std}
+\newcommand*{\zhbook@zhfn@heiti}{Adobe Heiti Std}
+\newcommand*{\zhbook@zhfn@kaishu}{Adobe Kaiti Std}
+\newcommand*{\zhbook@zhfn@fangsong}{Adobe Fangsong Std}
+
+% 定义中文字体
+\setCJKfamilyfont{song}{\zhbook@zhfn@songti}
+\setCJKfamilyfont{hei}{\zhbook@zhfn@heiti}
+\setCJKfamilyfont{kai}{\zhbook@zhfn@kaishu}
+\setCJKfamilyfont{fangsong}{\zhbook@zhfn@fangsong}
+
+\setCJKmainfont[BoldFont={\zhbook@zhfn@heiti},
+                ItalicFont={\zhbook@zhfn@kaishu}]{\zhbook@zhfn@songti}
+\setCJKsansfont{\zhbook@zhfn@heiti}
+\setCJKmonofont{\zhbook@zhfn@fangsong}
+
+% 定义文档使用的英文字体
+\setmainfont{\zhbook@enfn@main}
+\setsansfont{\zhbook@enfn@sans}
+\setmonofont{\zhbook@enfn@mono}
+
+% 定义中文字体选择命令
+\newcommand*{\songti}{\CJKfamily{song}}
+\newcommand*{\heiti}{\CJKfamily{hei}}
+\newcommand*{\kaishu}{\CJKfamily{kai}}
+\newcommand*{\fangsong}{\CJKfamily{fangsong}}
+
+\renewcommand{\contentsname}{目\hspace{2em}录}
+\renewcommand{\abstractname}{摘\hspace{2em}要}
+\renewcommand{\indexname}{索\hspace{2em}引}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\renewcommand{\refname}{参考文献}
+
+\setlength{\parskip}{4pt plus1pt minus0pt}
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
+\setlength{\parindent}{2em}
+\addtolength{\oddsidemargin}{-1cm}
+\advance\textwidth 1.5cm
+\addtolength{\topmargin}{-1cm}
+\addtolength{\headsep}{0.3cm}
+\addtolength{\textheight}{2.3cm}
+
+\newcommand{\zhdash}{\kern0.3ex\rule[0.8ex]{2em}{0.1ex}\kern0.3ex}
+
+\renewcommand{\baselinestretch}{1.3}
+
+\DefineVerbatimEnvironment{shell}{Verbatim}%
+  {frame=single,framerule=0.1mm,rulecolor=\color{black},%
+   framesep=2mm,fontsize=\small,gobble=1}
+
+\DefineVerbatimEnvironment{example}{Verbatim}%
+  {frame=single,framerule=0.1mm,rulecolor=\color{black},%
+   framesep=2mm,baselinestretch=1.2,fontsize=\small,gobble=1}
+
+\long\def\myentry#1{\vskip5pt\par\noindent\llap{{\color{blue}\fangsong #1}}%
+  \marginpar{\strut}\hskip\parindent}
+
+% 使用|titlesec|宏包提供的\titleformat命令设置标题格式：
+\titleformat*{\section}{\Large\bfseries}
+\titleformat*{\subsection}{\large\bfseries}
+\titleformat*{\subsubsection}{\normalsize\bfseries}
+\titleformat*{\paragraph}{\normalsize\bfseries}
+\titleformat*{\subparagraph}{\normalsize\bfseries}
+
+% 使用|titling|宏包设置标题的字体
+\pretitle{\begin{center}\huge\bfseries}
+\posttitle{\par\end{center}\vskip 1em}
+\preauthor{\begin{center}
+             \large \lineskip 0.5em}
+\postauthor{\par\end{center}}
+\predate{\begin{center}\large}
+\postdate{\par\end{center}}
+
+% 修改\cs{tableofcontents}命令用于生成目次页。
+\renewcommand{\tableofcontents}{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \section*{\hfill\contentsname\hfill}%
+    \@mkboth{\MakeUppercase\contentsname}{\MakeUppercase\contentsname}%
+    \@starttoc{toc}%
+    \if@restonecol\twocolumn\fi
+}
+
+% 增加一种新的表格列对齐方式 C{width}，表示该列内容居中且宽度为width
+\newcolumntype{C}[1]{>{\centering\let\newline\\%
+    \arraybackslash\hspace{0pt}}p{#1}}
+
+
+% \dangericon 表示警告的图标
+\font\manfnt=manfnt
+\newcommand*{\dangericon}{\manfnt\char127}
+
+% note 环境表示需特别注意的内容
+\newenvironment{note}
+               {\vskip1.5ex\par\noindent\llap{\dangericon\hskip2mm}\textbf{注意：}}
+               {\vskip1.5ex}
+
+% syntax 环境表示语法描述
+\newenvironment{syntax}
+               {\begin{center}}
+               {\end{center}}
+
+\newenvironment{suggestion}
+               {\par\noindent\textbf{建议：}}{}
+
+% 重新设置默认的列表的格式。
+\setlist{%
+  topsep=0.3em,             % 列表顶端的垂直空白
+  partopsep=0pt,            % 列表环境前面紧接着一个空白行时其顶端的额外垂直空白
+  itemsep=0ex plus 0.1ex,   % 列表项之间的额外垂直空白
+  parsep=0pt,               % 列表项内的段落之间的垂直空白
+  leftmargin=1.5em,           % 环境的左边界和列表之间的水平距离
+  rightmargin=0em,          % 环境的右边界和列表之间的水平距离
+  labelsep=0.5em,           % 包含标签的盒子与列表项的第一行文本之间的间隔
+  labelwidth=2em,           % 包含标签的盒子的正常宽度；若实际宽度更宽，则使用实际宽度。
+}
+
+% 设置无序列表的标签符号。
+\setlist[itemize,1]{label=$\bullet$}
+\setlist[itemize,2]{label=$\blacksquare$}
+\setlist[itemize,3]{label=$\Diamondblack$}
+
+% 默认的|fancy|风格会在每一章最后的空白页（由于是双面打印）也加上页眉页脚，但我
+% 们通常不希望如此。解决方法是修改{\LaTeX}内部的\cleardoublepage命令的定义如下：
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+  \hbox{}\thispagestyle{empty}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+
+% 文章用A4纸标准大小的白纸打印，页眉：2.6cm，页脚：2.4cm，页边距上下：3.5cm，左
+% 右：3.2cm。
+\geometry{headheight=2.6cm,headsep=3mm,footskip=13mm}
+\geometry{top=3.5cm,bottom=3.5cm,left=3.2cm,right=3.2cm}
+
+
+% \std{code}表示国家标准编号
+\newcommand*{\std}[1]{{\normalfont #1}}
+
+% 增加环境命令： \env{name} 表示名为 name 的环境
+%% \newcommand{\env}[1]{\texttt{#1}}
+
+% 修改\tableofcontents命令用于生成目次页，将目次页本身也被加入目次中。
+\makeatletter
+\renewcommand*{\tableofcontents}{%
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \section*{\hfill\contentsname\hfill}%
+    \@mkboth{\MakeUppercase\contentsname}{\MakeUppercase\contentsname}%
+    \addcontentsline{toc}{section}{\contentsname}%
+    \@starttoc{toc}%
+    \if@restonecol\twocolumn\fi
+}
+\makeatother
+
+% 设置索引页面的样式
+\IndexPrologue{\clearpage\section*{\hfill\indexname\hfill}%
+\markboth{\indexname}{\indexname}%
+\addcontentsline{toc}{section}{\indexname}%
+斜体数字表示对应项的描述所在页面的页码， %
+带下划线的数字表示对应项的定义所在的代码行号，%
+其他数字表示对应项所被引用的代码行号。%
+}
+
+% 设置索引页面的栏数
+\setcounter{IndexColumns}{2}
+
+
+\newcommand{\dashnumber}[2]%
+  {{#1}\kern.07em\rule[.5ex]{.4em}{.1ex}\kern.07em{#2}}
+
+%</dtx-style>
+%    \end{macrocode}
+% \fi
+\endinput
