@@ -223,3 +223,6 @@ TSWLatexianTemp*
 
 #sync tex
 *.synctex.gz
+dtx-style.sty
+zhbook.cfg
+zhbook.cls
