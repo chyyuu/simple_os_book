@@ -1,0 +1,82 @@
+\section{可管理中断并处理中断方式I/O的ucore}\label{ux53efux7ba1ux7406ux4e2dux65adux5e76ux5904ux7406ux4e2dux65adux65b9ux5f0fioux7684ucore}
+
+\subsection{实验目标}\label{ux5b9eux9a8cux76eeux6807}
+
+前面的project都没有引入中断机制，所以bootloader和ucore都是正常地顺序执行，不会受到外界（比如外设）的``干扰''。虽然实现简单，但无法解决上述问题。我们需要扩展ucore的功能，让ucore能够支持中断，这需要读者了解基本的80386硬件中断机制，对保护模式有更深入的了解；需要清楚在中断的处理过程中，硬件主动完成了什么事情，软件在硬件完成的基础上又要完成哪些事情。通过学习和实践，读者可以了解清楚上述问题，并进一步知道通过操作系统的中断处理例程（Interrupt
+Process Routine, IPR）完成设备请求处理的方法等。
+
+\subsection{proj4概述}\label{proj4ux6982ux8ff0}
+
+\subsubsection{实现描述}\label{ux5b9eux73b0ux63cfux8ff0}
+
+proj4建立在proj3.1的基础上，实现了一个通过中断机制完成设备（键盘、串口和时钟）中断请求处理的ucore。简单地说proj4扩展与中断相关的工作有两个，一个是初始化中断，涉及初始化中断控制器8259A（打通外设与CPU的通路）和中断门描述符表（建立外设中断与中断服务例程的联系）和各种外设。以proj4的ucore为例，操作系统内核启动以后，kern\_init函数（kern/init/init.c）通过调用pic\_init函数完成对中断控制器的初始化工作，调用idt\_init函数完成了对整个中断门描述符表的创建，调用cons\_init和clock\_init函数完成对串口、键盘和时钟外设的中断初始化工作。
+
+ucore的另一个重要工作是中断服务，即收到中断后，对中断进行处理的中断服务例程（比如收到100个时钟中断后，显示一个字符串``100
+ticks''）等。这主要集中在vectors.S（包括256个中断服务例程的入口地址和第一步初步处理实现）、trapentry.S（紧接着第一步初步处理后，进一步完成第二步初步处理的实现以及中断处理完毕后的返回准备工作）和trap.c中（紧接着第二步初步处理后，继续完成具体的各种中断处理操作）。
+
+\subsubsection{项目组成}\label{ux9879ux76eeux7ec4ux6210}
+
+proj4整体目录结构如下所示：
+
+\begin{lstlisting}
+proj4
+|-- kern
+|   |-- driver
+|   |   |-- clock.c
+|   |   |-- clock.h
+|   |   |-- console.c
+|   |   |-- console.h
+|   |   |-- picirq.c
+|   |   `-- picirq.h
+|   |-- init
+|   |   `-- init.c
+|   |-- mm
+|   |   |-- memlayout.h
+|   |   `-- mmu.h
+|   `-- trap
+|       |-- trap.c
+|       |-- trapentry.S
+|       |-- trap.h
+|       `-- vectors.S
+`-- tools
+    `-- vector.c
+…… 
+\end{lstlisting}
+
+proj4是基于proj3.1（会在内置监控自身运行状态的ucore一节中进一步说明）进一步扩展完成的。相对于proj3.1，增加了大约10个文件，相关增加和改动主要集中在kern/driver和kern/trap目录下，使得ucore具有外设中断处理功能，这一个比较大的跨越。主要增加和修改的文件如下所示：
+
+\begin{itemize}
+\tightlist
+\item
+  tools/vector.c：生成vectors.S，此文件包含了中断向量处理的统一实现。
+\item
+  kern/driver/intr.{[}ch{]}：实现了通过设置CPU的eflags来屏蔽和使能中断的函数；
+\item
+  kern/driver/picirq.{[}ch{]}：实现了对中断控制器8259A的初始化和使能操作；
+\item
+  kern/driver/clock.{[}ch{]}：实现了对时钟控制器8253的初始化操作；
+\item
+  kern/driver/console.{[}ch{]}：实现了对串口和键盘的中断方式的处理操作；
+\item
+  kern/trap/vectors.S：包括256个中断服务例程的入口地址和第一步初步处理实现；
+\item
+  kern/trap/trapentry.S：紧接着第一步初步处理后，进一步完成第二步初步处理；并且有恢复中断上下文的处理，即中断处理完毕后的返回准备工作；
+\item
+  kern/trap/trap.{[}ch{]}：紧接着第二步初步处理后，继续完成具体的各种中断处理操作；
+\end{itemize}
+
+\subsubsection{编译运行}\label{ux7f16ux8bd1ux8fd0ux884c}
+
+\textbf{编译运行}
+
+编译并运行proj4的命令如下：
+
+\begin{lstlisting}
+make
+make qemu
+\end{lstlisting}
+
+则可以得到如下显示界面 
+
+通过上图可以看到时钟中断已经能够正常相应，每隔100个时钟中断会显示一次``100
+ticks''的信息。一个简单的显示信息的背后蕴藏着中断处理的复杂实现。下面我们将从中断基本概念、中断控制器、保护模式的中断处理机制等方面来分析上图中背后的东西。

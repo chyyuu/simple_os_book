@@ -1,0 +1,469 @@
+\section{【实现】页面置换机制实现（应该放在第四章进程管理与调度）}\label{ux5b9eux73b0ux9875ux9762ux7f6eux6362ux673aux5236ux5b9eux73b0ux5e94ux8be5ux653eux5728ux7b2cux56dbux7ae0ux8fdbux7a0bux7ba1ux7406ux4e0eux8c03ux5ea6}
+
+\lstinline![下面的内容要去掉，并换成局部页置换的实现]!
+
+如果要实现页面置换机制，只考虑页面置换算法的设计与实现是远远不够的，还需考虑其他问题：
+
+\begin{itemize}
+\tightlist
+\item
+  哪些页可以被换出？
+\item
+  一个虚拟的页如何与硬盘上的扇区建立对应关系？
+\item
+  何时进行换入和换出操作？
+\item
+  在proj7的基础上，如何设计数据结构已支持页面置换算法？
+\item
+  如何完成页的换入换出操作？
+\end{itemize}
+
+这些问题在下面会逐一进行分析。注意，在proj8中实现了换入换出机制，但现在还没有涉及lab3才实现的用户进程（激活页面置换的用户方）和内核线程（完成页面置换的服务方），所以还无法通过内核线程机制实现一个完整意义上的虚拟内存页面置换功能，并给用户进程提供大于实际物理空间的虚空间。这要等到lab3的proj11才提供上述支持。
+
+\subsection{可以被换出的页}\label{ux53efux4ee5ux88abux6362ux51faux7684ux9875}
+
+在操作系统的设计中，一个基本的原则是：并非所有的物理页都可以交换出去的，只有映射到用户空间且被用户程序直接访问的页面才能被交换，而被内核直接使用的内核空间的页面不能被换出。这里面的原因是什么呢？操作系统是执行的关键代码，需要保证运行的高效性和实时性，如果在操作系统执行过程中，发生了缺页现象，则操作系统不得不等很长时间（硬盘的访问速度比内存的访问速度慢2\textasciitilde{}3个数量级），这将导致整个系统运行低效。而且，不难想象，处理缺页过程所用到的内核代码或者数据如果被换出，整个内核都面临崩溃的危险。
+
+但在proj8实现的ucore中，我们只是实现了换入换出机制，还没有设计用户态执行的程序，所以我们在proj8中仅仅通过执行check\_swap函数在内核中分配一些页，模拟对这些页的访问，然后直接调用page\_launder函数来查询这些页的访问情况并执行页面置换算法换出``不常用''的页到磁盘上。
+
+\subsection{虚存中的页与硬盘上的扇区之间的映射关系}\label{ux865aux5b58ux4e2dux7684ux9875ux4e0eux786cux76d8ux4e0aux7684ux6247ux533aux4e4bux95f4ux7684ux6620ux5c04ux5173ux7cfb}
+
+如果一个页被置换到了硬盘上，那操作系统如何能简捷来表示这种情况呢？在ucore的设计上，充分利用了页表中的PTE来表示这种情况：当一个
+PTE
+用来描述一般意义上的物理页时，显然它应该维护各种权限和映射关系，以及应该有
+PTE\_P
+标记；但当它用来描述一个被置换出去的物理页时，它被用来维护该物理页与
+swap 磁盘上扇区的映射关系，并且该 PTE 不应该由 MMU
+将它解释成物理页映射(即没有 PTE\_P 标记)，与此同时对应的权限则交由
+mm\_struct 来维护，当对位于该页的内存地址进行访问的时候，必然导致
+\#PF，然后内核能够根据 PTE 描述的 swap
+项将相应的物理页重新建立起来，并根据虚存所描述的权限重新设置好 PTE
+使得内存访问能够继续正常进行。
+
+如果一个页（4KB/页）被置换到了硬盘某8个扇区（0.5KB/扇区），该
+PTE的最低位--present位应该为0 （没有 PTE\_P
+标记），接下来的7位暂时保留，可以用作各种扩展；而原来用来表示页帧号的高24位地址，恰好可以用来表示此页在硬盘上的起始扇区的位置（其从第几个扇区开始）。为了在页表项中区别
+0 和 swap 分区的映射，将 swap 分区的一个 page
+空出来不用，也就是说一个高24位不为0，而最低位为0的PTE表示了一个放在硬盘上的页的起始扇区号（见swap.h中对swap\_entry\_t的描述）：
+
+\begin{lstlisting}
+swap_entry_t
+  --------------------------------------------
+  |         offset        |   reserved   | 0      |
+  --------------------------------------------
+            24 bits            7 bits    1 bit
+\end{lstlisting}
+
+考虑到硬盘的最小访问单位是一个扇区，而一个扇区的大小为512（2\^{}8）字节，所以需要8个连续扇区才能放置一个4KB的页。在ucore中，用了第二个IDE硬盘来保存被换出的扇区，根据proj8的输出信息
+
+\begin{lstlisting}
+“ide 1:     262144(sectors), 'QEMU HARDDISK'.”
+\end{lstlisting}
+
+我们可以知道proj8可以保存262144/8=32768个页，即128MB的内存空间。swap
+分区的大小是 swapfs\_init 里面根据磁盘驱动的接口计算出来的，目前 ucore
+里面要求 swap 磁盘至少包含 1000 个 page，并且至多能使用
+1\textless{}\textless{}24 个page。
+
+swap.c 中维护了全局的 mem\_map 表，用来记录 swap 分区的使用，它会在
+swap\_init 里面根据 swap 分区的大小进行适当的初始化。表中的每一项是一个
+unsigned short 类型的整数，用来记录该 entry 的引用计数。ucore
+使用一个非常大的整数 0xFFFF 表示一个 entry （这里 entry 指 swap
+分区上连续的 8 个扇区）是空闲的（没有被分配出去），并用 0xFFFE 表示一个
+entry
+的最大引用计数，通常一个页不会有这么大的引用计数，除非内核崩了。当一个
+entry 的引用计数 是 0 的时候，表示该 entry
+是可以被回收的，但是我们通常不是真的去回收他，只有当需要分配一个
+entry，并且在 mem\_map 里面实在找不到空闲的 entry
+的时候才会去回收一个引用计数为 0 的 entry。因为一个引用计数为 0
+的页很可能上面的数据和对应物理页上的数据一致，这样在换出该页的时候就可以避免写磁盘的代价，而和写磁盘比起来，遍历
+mem\_map 数组的时间开销总是会小很多。
+
+此外，为了简化实现，swap 只对页表中的数据页进行换出，即只对 PTE
+进行操作，而第二级页表是保留不动的。
+
+\subsection{执行换入换出的时机}\label{ux6267ux884cux6362ux5165ux6362ux51faux7684ux65f6ux673a}
+
+check\_mm\_struct 是在 lab2 里面用来做模块测试时使用的临时的
+mm\_struct。在 lab3 以后就没有用处了。在proj8中，
+check\_mm\_struct变量这个数据结构表示了目前
+ucore认为合法的所有虚拟内存空间集合，而mm中的每个vma表示了一段地址连续的合法虚拟空间。当ucore或应用程序访问地址所在的页不在内存时，就会产生
+\#PF异常，引起调用do\_pgfault函数，此函数会判断产生访问异常的地址属于check\_mm\_struct某个vma表示的合法虚拟地址空间，且保存在硬盘swap文件中（即对应的PTE的高24位不为0，而最低位为0），则是执行页换入的时机，将调用swap\_in\_page函数完成页面换入。
+
+换出页面的时机相对复杂一些，针对不同的策略有不同的时机。ucore目前大致有两种策略，即积极换出策略和消极换出策略。积极换出策略是指操作系统周期性地（或在系统不忙的时候）主动把某些认为``不常用''的页换出到硬盘上，从而确保系统中总有一定数量的空闲页存在，这样当需要空闲页时，基本上能够及时满足需求；消极换出策略是指，只是当试图得到空闲页时，发现当前没有空闲的物理页可供分配，这时才开始查找``不常用''页面，并把一个或多个这样的页换出到硬盘上。
+
+在proj8中，可支持上述两种情况，但都需要到lab3/proj11中才会完整实现。对于第一种积极换出策略，即创建了一个每隔1秒执行一次的内核线程kswapd（在lab3的proj11中第一次出现），实现积极的换出策略。对于第二种消极的换出策略，则是在ucore调用alloc\_pages函数获取空闲页时，此函数如果发现无法从页分配器（比如buddy
+system）获得空闲页，就会进一步调用try\_free\_pages来唤醒线程kswapd，并将
+cpu 让给 kswapd 使得换出某些页，实现一种消极的换出策略。
+
+\subsection{页面置换算法的数据结构设计}\label{ux9875ux9762ux7f6eux6362ux7b97ux6cd5ux7684ux6570ux636eux7ed3ux6784ux8bbeux8ba1}
+
+到proj7为止，我们知道目前表示内存中物理页使用情况的变量是基于数据结构Page的全局变量pages数组，pages的每一项表示了计算机系统中一个物理页的使用情况。为了表示物理页可被换出或已被换出的情况，可对Page数据结构进行扩展：
+
+\begin{lstlisting}
+struct Page {
+    uint32_t flags;   // array of flags that describe the status of the page frame
+    swap_entry_t index;      // stores a swapped-out page identifier
+list_entry_t swap_link; // swap hash link
+……
+};
+\end{lstlisting}
+
+首先flag的含义做了扩展：
+
+\begin{lstlisting}
+// the page is in the active or inactive page list (and swap hash table)
+#define PG_swap   4 
+// the page is in the active page list
+#define PG_active  5
+\end{lstlisting}
+
+前面提到swap.c 里面声明了全局的 mem\_map 数据结构，用来存储 swap
+分区上的页的使用计数。除此之外，swap.c 里还声明了两个链表，分别是
+active\_list 和 inactive\_list，分别表示已经分配了 swap entry
+的且处于``活跃''状态/``不活跃''状态的物理页链表。所有已经分配了 swap
+entry 的 page 必须处于两个链表中的一个。
+
+当一个物理页 （struct Page） 需要被 swap
+出去的时候，首先需要确保它已经分配了一个 swap entry。如果 page数据结构的
+flags 设置了PG\_swap 为1，则表示该 page 中的 index 是有效的 swap
+entry的索引值，从而该物理页上的数据可以被写出到 index 所表示的 swap page
+上去。
+
+如果一个物理页在硬盘上有一个页备份，则需要记录在硬盘中页备份的位置。Page结构中的index就起到这个记录的作用，它保存了被换出的页的页表项PTE高24位的内容---entry，即硬盘中对应页备份的起始扇区位置值（以字节为单位？？？）。
+
+Page结构中的swap\_link保存了以entry为hash索引的链表项，这样根据entry，就可以快速的对
+page 数据结构进行查找。但hash数组在哪里呢？
+
+对于在硬盘上有页备份的物理页（简称swap\_page），需要统一管理起来，为此在proj8中增加了全局变量：
+
+\begin{lstlisting}
+static list_entry_t hash_list[HASH_LIST_SIZE];
+\end{lstlisting}
+
+hash\_list数组就是我们需要的hash数组，根据 index(swap entry) 索引全部的
+swap\_ page 的指针，这样通过hash函数
+
+\begin{lstlisting}
+#define entry_hashfn(x)                 (hash32(x, HASH_SHIFT))
+\end{lstlisting}
+
+可以快速地根据entry找到对应的page 数据结构。
+
+正如页替换算法描述的那样，把``常用''的可被换出页和``不常用''的可被换出页分别集中管理起来，形成
+active\_list 和 inactive\_list 两个链表。
+ucore的页面置换算法会根据相应的准则把它认为``常用''的物理页放到active\_list链表中，而把它认为``不常用''的物理页放到inactive\_list链表中。一个标记了
+PG\_swap 的页总是需要在这两个链表之间移动。
+
+前面介绍过 mem\_map 数组，他是用来记录 swap\_page 的引用次数的。因为
+swap 分区上的 page 实际上是某个物理页的数据备份。所以，一个物理页page的
+page\_ref 与 对应swap\_page 的 mem\_map{[}offset{]} (offset =
+swap\_offset(entry)) 值的和是这个数据页的真实引用计数。page\_ref
+表示PTE对该物理页的映射的个数；mem\_map 表示 PTE对该 swap 备份页的
+映射个数。当 page\_ref 为0 的时候，表示物理页可以被回收；当
+mem\_map{[}offset{]} 为0的时候，表示 swap page
+可以被回收（前面介绍过，可以回收，但是在万不得已的情况下才真的回收）。在后面的实验中还可能涉及到，这里只是简单了解一下。
+
+\textbf{【注意】}
+
+ucore 目前使用的 PIO 的方式读写 IDE
+磁盘，这样的好处是，磁盘读入、写出操作可以认为是同步的，即当前CPU需要等待磁盘读写完毕后再进行进一步的工作。由于磁盘操作相对CPU的速度而言是很慢的，这使得会浪费大量的
+CPU 时间在等IO操作上。于是我们总是希望能够在 IO
+性能上有更大的提升，比如引入 DMA 这种异步的 IO
+机制，为了避免后续开发上的各种不便和冲突，我们假设所有的磁盘操作都是异步的（也包括后面的实验），即使目前是通过
+PIO 完成的。
+
+假定某page的 flags中的PG\_swap 标志位为 1，并且PG\_active标志位也为
+1，则表示该 page 在 swap 的 active\_list 中，否则在 inactive\_list 中。
+active\_list 中的页表示活跃的物理页，即页表中可能存在多个 PTE
+指向该物理页（这里可以是同一个页表中的多个
+entry，在后面lab3的实验里面有了进程以后，也可以是多个进程的页表的多个
+entry）；反过来，inactive\_list 链表所链接的 page 通常是指没有 PTE
+再指向的页。
+
+\textbf{【注意】}
+
+需要强调两点设计因素：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  一个 page 是在 active\_list 还是在 inactive\_list 的条件不是绝对的；
+\item
+  只有 inactive\_list 上的页才会被尝试换出。
+\end{enumerate}
+
+这两个设计因素的设计起因如下：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  我们知道一个 page
+  换出的代价是很大的（磁盘操作），并且我们假设所有的磁盘操作都是异步的，那么换出一个
+  active 的页就变得非常不值得。因为在还有多个 PTE
+  指向他情况下进行换出操作（异步 IO
+  可能导致进程切换）的较长过程中，这个页可以随时被其它进程写脏。而硬件提供给内核的接口（即页表项PTE的dirty位）使得内核只能知道一个页是否是脏的（不能明确知道一个页的哪个部分是脏的），当这种情况发生时，就导致了一次无效的写出。
+\item
+  active\_list 和 inactive\_list 的维护只能由
+  与swap有关的集中操作来完成。特别是在lab3/proj11引入
+  kswapd内核线程之后，所有的内存页换出任务都交给kswapd，这样减少了复杂的同步互斥实现（在lab5中会重点涉及）。
+\item
+  页面换入换出有关的操作需要做的就是尽可能的完成如下三件事情：
+
+  \begin{itemize}
+  \tightlist
+  \item
+    将 PG\_swap 为 0 的页转变成 PG\_swap 为1
+    的页。即尽可能的给每个物理页分配一个 swap
+    entry（当然前提是有足够大的 swap 分区）。
+  \item
+    将页从 active\_list 上移动到 inactive\_list 上。如果一个页还在
+    active\_list 上，说明还有 PTE
+    指向此``活跃''的物理页。所以需要在完成内存页换出时断开对这些物理页的引用，把它变成不活跃的（inactive）。只有把所有的PTE对某page的引用都断开（即
+    page的page\_ref 为0）后，就可以将此page从 active\_list 移动到
+    inactive\_list 上。
+  \item
+    将 inactive\_list 上的页写出并释放掉。inactive\_list
+    上的page表示已没有 PTE
+    指向此page了，那么该page可以被释放，如果该page被写过，那还需把此page换出到swap分区上。如果在整个换出过程（异步
+    IO）中没有其他进程再写这个物理页（即没有 PTE
+    在引用它或有PTE引用但页没有写脏），就认为这个物理页是可以安全释放的了。那么将它从
+    inactive\_list 上取下，并调用 page\_free函数 实现 page 的回收。
+  \end{itemize}
+\item
+  值得注意的是，内存页换出操作只有特定时候才被调用，即通过
+  执行try\_free\_pages函数或者定时器机制（在lab3/proj10.4才引入）定期唤醒kswapd内核线程。这样会导致内存页换出操作对两个链表上的数据都不够敏感。比如处于
+  active\_list 上的 page，可能在 kswapd 工作的时候，已经没有 PTE
+  再引用它了；再如相应的进程退出了，并且相应的地址空间已经被内核回收，从而变成了一个
+  inactive 的 page；还存在inactive\_list 上的 page
+  也可能在换出的时候，其它进程通过 page fault，又将 PTE
+  指向他，进而变成一个实际上 active 的页。所以说，active 和 inactive
+  条件并不绝对。
+\end{enumerate}
+
+\subsection{页面置换算法的执行逻辑}\label{ux9875ux9762ux7f6eux6362ux7b97ux6cd5ux7684ux6267ux884cux903bux8f91}
+
+其实在proj8中并没有完全实现页面置换算法，只是实现了其中的部分关键函数，并通过check\_swap来验证了这些函数的正确性。直到lab3的proj11才形成了完整的页面置换逻辑，而这个页面置换逻辑基本上是改进的时钟算法的一个实际扩展版本。
+
+ucore
+采用的页面置换算法是一个全局的页面置换算法，因为它收集了ucore中所有用户态进程（这里可理解为ucore中运行的每个用户态程序）的可换出页，并把这些可换出页中的一部分转换为空闲页。其次它考虑了页的访问情况（根据PTE中PTE\_A位的值）和读写情况（根据PTE中PTE\_D位的值）。如果页被访问过，则把PTE\_A位清零继续找下一页；如果页没有被访问过，这此页就成为了active状态的可换出页，并放入active\_list链表中，这时需要把对应的PTE转换成为一个swap
+entry(高24位保存为硬盘缓存页的起始扇区号，PTE\_P位清零)；接着refill\_inactive\_scan函数会把处于active状态的部分可换出页转换成inactive状态，并放入inactive\_list链表中；然后page\_launder函数扫描inactive\_list中的处于inactive状态的可换出页，如果此页不是dirty的，则把它直接转换成空闲页，如果此页是dirty的，则执行换出操作，把该页换出到硬盘上保存。这个页的状态变化图如下图所示。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{figures/10.png}
+\caption{9}
+\end{figure}
+
+ucore的物理页状态变化图
+
+下面具体讲述一下proj11中实现上述置换算法的页面置换逻辑。在proj11中同时实现了积极换出策略和消极换出策略，这都是通过在不同的时机执行kwapd\_main函数来完成的。当ucore调用alloc\_pages函数以获取空闲页，但物理页内存分配器无法满足请求时，alloc\_pages函数将调用tre\_free\_pages来执行kwapd\_main函数（通过直接唤醒线程的方式，在lab3中会进一步讲解），完成对页的换出操作和生成空闲页的操作。这是一种消极换出的策略。另外，ucore设立了每秒执行一次kwapd\_main函数（通过设置timer来唤醒线程的方式，在lab3中会进一步讲解），完成对页的换出操作和生成空闲页的操作。这是一种积极换出的策略。
+
+kswapd\_main是ucore整个页面置换算法的总控部分，其大致思路是根据当前的空闲页情况查找出足够多的可换出页（swap
+page），然后根据这些可换出页的访问情况确定哪些是``常用''页，哪些是``不常用''页，最后把``不常用''的页转换成空闲页。思路简单，但具体实现相对复杂。
+
+如前所述，swap 整个流程就是把尽可能多的 page 从变成
+PG\_active的，并移动到 active list中；把 active list
+中的页尽可能多的变成 inactive list 中页；最后把 inactive list
+的页换出（洗净），根据情况处理洗净后的 page 结构（根据 page ref
+以及相应的 dirty bit）。所以整个过程的核心是尽可能的断开页表中的 PTE
+映射。
+
+当 alloc\_pages 执行分配 n
+连续物理页失败的时候，则会通过调用tree\_free\_page来唤醒kswapd线程，此线程执行kswapd\_main函数。kswapd
+会发现它现在压力很大，需要尽可能的满足分配 n
+个连续物理页的需求。既然需求是 n 个连续物理页，那么 kswapd
+所需要释放的物理页就应该大于 n
+个；每个页可能在某个或者许多个页表的不同的地方有 PTE 映射（特别是 copy
+on write 之后，这种情况更为普遍），那么 kswapd 所需要断开的 PTE
+映射就远远不止 n 个。Linux 实现了能够根据 physical address
+在页表中快速定位的数据结构，但是实现起来过于复杂，这里 ucore
+采用了一个比较笨的方法，即遍历所有存在的页表结构，断开足够多的 PTE
+映射。这里足够多是个经验公式，采用 n\textless{}\textless{}5
+。当然这也可能失败，那么 kswapd
+就会尝试一定次数。当他实在无能为力的时候，也就放弃了。而 alloc\_pages
+也会不停的调用 try\_free\_pages
+进行尝试，当尝试不停的遭遇失败的时候，程序中会有许多句 warn
+来输出这些调试信息。而 Linux
+的方案是选择一个占用内存最多的进程杀掉并释放出资源，来尽可能的满足当前程序的需求（注意，这里当前程序是指内核服务或者调用），直到程序从内核态正常退出；ucore
+的这种设计显然是过于简单了，不过此是后话。
+
+扫描页表是一项艰巨的任务，因为除了内核空间，用户地址空间有将近 3G
+的空间，真正的程序很少能够用这么多。因此，充分利用虚存管理能够很大的提升扫描页表的速度。
+
+接下来，我们需要介绍一下 kswapd\_main 是如何一步一步完成 swap
+的操作的。正如前面介绍的那样，swap 的任务主要分成三个过程，
+
+现在我们来介绍以下 kswap\_main 是如何一步一步完成 swap
+的操作的。正如前面介绍过的，swap
+需要完成3件事情，下面对应的是这三个操作的具体细节：
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  kswapd\_main函数通过循环调用函数swap\_out\_mm并进一步调用swap\_out\_vma，来查找ucore中所有存在的虚存空间，并总共断开
+  m 个 PTE
+  到物理页的映射（这里需要和进程的概念有所结合，可以理解为每个用户程序都拥有一个自己的虚存空间。但是需要提一句的是，在后的实验中还会遇到虚存空间在多个进程之间的共享；遍历虚存空间而不是遍历每个进程是为了避免某个虚存空间被很多进程共享进而被
+  kswapd
+  过度压榨所带来的不公平。可以想象，被过度压榨的虚存空间，同时又由于被很多进程共享从而有很高的概率被使用到，最终必然会导致频繁的
+  \#PF，给系统不必要的负担。还有就是虽然 swap 的任务是断开 m 个 PTE
+  映射，但是实际上它对每个虚存空间都一次至多提出断开 32
+  个映射的需求，并循环遍历所有的虚存空间直到 m
+  得到满足。这样做的目的也是为了保证公平，使得每个虚存空间被交换出去的页的几率是近似相等的。Linux
+  实际上应该有更好的实现，它根据虚存空间所实际使用的物理页的个数来决定断开的映射的个数。）。这些断开的
+  PTE 映射所指向的物理页如果没有 PG\_active 标记，则需要给他分配一个新的
+  swap entry，并做好标记，将 page 插入到 active\_list 中去（同时也插入到
+  swap 的哈希表中），然后设置好相应的 page\_ref 和 mem\_map{[}offset{]}
+  的值，当然，如果找不到空闲的 swap entry 可以分配（比如 swap
+  分区已经用光了），我们只能跳过这样的 PTE
+  映射，从下一个地址继续寻找出路；对于原来就已经标记了 PG\_swap
+  的物理页，则只需要完成后面的工作，即调整引用计数就足够了。断开的 PTE
+  被 swap\_entry 取代，并取消 PTE\_P
+  标记，，这样当出现\#PF的时候，我们能够直接根据 PTE
+  上的值得到该页的数据实际是在swap 分区上的哪个位置上。
+
+  现在不必要计较一个 page 究竟是放在 active\_list 还是放在
+  inactive\_list 中，更不必要考虑换出这样的操作，这一阶段的工作只是断开
+  PTE 映射，余下的工作后面会一步步完成。
+
+  当 kswapd 断开足够数量的 PTE
+  映射以后，这一部分的工作也就完成了。虚存管理中维护了一个 swap\_address
+  的地址，表示上一次 swap 操作结束时的地址，维护这个数据是避免每次 swap
+  操作都从虚存空间的起始地址开始，从而导致过多数量的重复的无效的遍历。
+
+  当 kswapd 发现自己竭尽所能的遍历都无法满足断开 m
+  个链接的需求时，该怎么办？我们需要明确的是swap
+  操作的主要目的是释放物理页，而断开 PTE
+  映射是一个必要的步骤，作用是尽可能的扩大 inactive\_list 中 page
+  的个数，为物理页的换出提供更大的基数（操作空间），但并不是主要过程。所以为了防止在这一步陷入死循环，kswapd\_main
+  最多会对全部虚存空间的链表尝试 rounds=16 次遍。
+\item
+  通过 page\_launder 函数，遍历
+  inactive\_list，实现页的换出。这部分和下面 refill\_inactive\_list
+  操作的先后顺序并不那么严格。通俗的解释就是 page\_launder 实现的是把
+  inactive\_list 中的 page 洗净，并完成 page
+  的释放，当然也顺便实现了把实际上活跃的(active) 的 page 从
+  inactive\_list 上取下，放回 active\_list 的过程；而
+  refill\_inactive\_list 从函数名上可以看出，实际上就是遍历
+  active\_list，把实际上不活跃的(inactive) page 从 active\_list
+  上取下，放到 inactive\_list 上，方便下一轮 page\_launder
+  的操作。后者没有什么需要特别强调的，但是 page\_launder
+  是比较复杂的过程，我们需要仔细的分析一下。page\_launder 先检查一个
+  page 的 page\_ref 是否 != 0，如果满足，则表示该 page 实际上是 active
+  的，则把它移动到 active\_list
+  上去；如果不是，则需要对该页进行换出操作，过程如下：注意，下面讨论的是以
+  page\_ref == 0 作为前提的。
+
+  (*) page\_launder 的实现，涉及 ucore
+  内核代码设计的一个重要假设前提，这是第一次涉及，以后的各个模块也会逐步大量涉及。这部分和进程调度又有一定的关联，提前了解一下，有助于理解这部分以后后续其它部分的代码。这个前提就是：ucore
+  的内核代码是不可抢占的，也就是，执行在内核部分的代码，只要不是以下几种情况，通常可以认为是操作不会被抢占（preemption），即CPU控制权被剥夺。1.主动释放
+  cpu 执行权限，比如调用 schedule 让其它程序执行；2.
+  进行同步互斥操作，比如争抢一个信号量、锁；3.进行磁盘等等异步操作，由于
+  kmalloc 有可能会调用 alloc\_pages 来分配页，而 alloc\_pages
+  可能失败进而将cpu 让渡给 kswapd，所以，内核中的 kmalloc
+  操作可以认为不是一个同步的操作。所有这样的非同步的操作一个可能的问题，就是所有执行比如
+  kmalloc 这样的函数之前所做出的各种条件判断，在 kmalloc
+  之后可能都不再成立了。
+
+  你可以理解下面两段程序在运行时的差异，其中list
+  是一个全局变量，并且可能被任何程序在执行内核服务的时候修改掉：
+
+\begin{lstlisting}
+parta:
+if (!list_empty(list)) {
+    ptr = (uintptr_t)kmalloc(sizeof(uint32_t));
+    do_something(list_next(list), buffer);
+    kfree(ptr);
+}
+partb:
+ptr = (uintptr_t)kmalloc(sizeof(uint32_t));
+if (!list_empty(list)) {
+    do_something(list_next(list), buffer);
+}
+kfree(ptr);
+\end{lstlisting}
+
+  除此之外，中断处理的代码也需要进一步考虑进来。当内核尝试修改一部分数据的时候，如果该数据是中断处理流程可能访问的数据，那么内核需要对这次修改屏蔽中断；同理，如果中断处理需可能修改一部分数据，并且内核打算尝试读取该数据，那么内核需要对读操作屏蔽中断，等等。
+\end{enumerate}
+
+\begin{itemize}
+\item
+  如果一个页的 mem\_map 项也为0：前面已经讨论过 mem\_map 和 page\_ref
+  之间的关系。如果此时，这个页的 mem\_map 项也为0，说明这个时候已经没有
+  PTE 映射指向它们了，无论是物理页还是 swap
+  备份页。那么这个页也就没有必要洗净了。可以直接释放物理页以及相应的
+  swap entry 了。（同时记得处理 swap 有关的链表，以下不再赘述）
+\item
+  如果一个页的 mem\_map 项不为0，但是没有 PG\_dirty 标记：page
+  数据结构里面有 PG\_dirty 标记，swap
+  部分的代码根据这个标记来判断一个页是否需要被洗净（写到 swap
+  分区上）。这个 PG\_dirty
+  标记在什么情况下设置，我们稍后会讨论。这种情况可以等价为物理页上的数据和
+  swap
+  分区上的数据是一致的，所以不需要洗净该页，因为该物理页本身就已经足够干净了。所以可以安全的和(1)
+  中的操作一样对该物理页进行释放。
+\item
+  如果一个页的确有 PG\_dirty 标记：表示该页需要被洗净。ucore
+  这里的实现存在一个
+  bug，最新的代码已经修复了这个bug，不过bug对于理解这段代码没有影响 。
+
+  先清楚，洗净一个页，需要调用 swapfs\_write
+  函数，完成将物理页写到磁盘上的操作。前面已经强调过，我们假设所有磁盘操作是异步IO。
+  先明确一下，当前的状态，page\_ref=0 \&\&mem\_map!=0 \&\&
+  PG\_dirty，那么写出的过程中就可能发生下面许多种可能的场景：
+
+  \begin{itemize}
+  \item
+    swapfs\_write
+    操作失败了。磁盘操作不像内存操作，它应该允许发生更多的错误。
+  \item
+    其它进程又访问到相应的数据页，前面提到过，因为 PTE
+    已经被修了，所以会产生\#PF，内核会根据 PTE 的内容在 swap hash
+    里面查找到相应的物理页，并将它重新插入到相应的页表中，并更新该 page
+    的 page\_ref 和 mem\_map 的值。整个过程发生时，swapfs\_write
+    还没有结束。那么当完成洗净一个页的操作时（写到swap 分区），swap
+    部分的代码应该有能力检测出这种变化。也就是在 swapfs\_write
+    之后，需要再判断 page\_ref 是否依然满足 inactive 的。
+  \item
+    和b类似，不过不同的是，这次对物理页进行的是一个写操作。操作完成之后，进程又将该
+    PTE 指向的页释放掉了。那么当 swapfs\_write
+    返回的时候，它面对的条件，可能就变成了 page\_ref=0 \&\&mem\_map=0
+    \&\&PG\_dirty。它应该能够处理这个变化。
+  \item
+    和c类似，不同的是，该page有两个不同的 PTE 映射。那么在swapfs\_write
+    操作之前，状态可能是 page\_ref
+    =0\&\&mem\_map=2\&!PG\_dirty，那么当c中的情况发生以后，该物理页的状态就可能变成了
+    page\_ref=0\&mem\_map=1\&PG\_dirty了。swap 应该能够处理这种变化。
+  \end{itemize}
+\end{itemize}
+
+综上所述，page\_launder
+部分的代码变得相对复杂很多。大家可以参照程序了解ucore
+是怎么解决这种冲突的。 最后，提及一下那个 bug。因为 swapfs\_write
+是异步操作，并且是对该 page 的操作，ucore
+为了保证在操作的过程中，该页不被释放（比如一个进程通过\#PF，增加
+page\_ref到1，然后又通过释放该page减少page\_ref到0，进而触发内核执行
+page\_free 的操作），分别在 swapfs\_write 前后获得和释放该 page
+的引用（page\_ref\_inc/page\_ref\_dec）。但事实证明，这种担心是多余的。理由很简单，当page\_launder
+操作一个页的时候，该页是被标记 PG\_swap 的，这个标记一方面表示 page
+结构中的 index有意义，另一方面也代表了，这样的 page 的释放，只能够由
+swap 部分的代码来完成（参见 pmm.c 以及后面 shmem.c 的处理）。所以，swap
+在操作该 page 的时候，不可能有程序能够调用free\_page释放该 page。
+
+而相反的，mem\_map 是一个需要保护的数据。这个是产生 bug
+的地方，有兴趣的同学可以去自己理解一下。
+
+此外，可以翻阅一下涉及到 page\_ref 修改的 pmm
+部分的代码，不难发现，当一个 page 从 PTE 断开的时候，也就是 page\_ref
+下降的时候，内核会根据 PTE 上的硬件设置的 PTE\_D 来设置
+PG\_dirty。其实这就足够了。因为 PG\_dirty
+并不需要时时刻刻都十分的准确，只要在 swap 尝试判断该 page
+是否需要洗净的时候，PG\_dirty 是正确的，就足够了。所以只需要保证每次
+page\_ref 下降的时候，PG\_dirty 是正确的即可。除此之外，在对每个页分配
+swap\_entry 的时候，需要保证标记
+PG\_dirty，因为毕竟是刚刚分配的，物理页的数据还从来没有写出去过。
+
+总结一下，页换入换出的实现很复杂，但是相对独立。并且正是由于 ucore
+的内核代码不可抢占使得实现变得相对容易一些。只要是不涉及 IO
+操作，大部分过程都可以认为处于不可抢占的内核执行过程。
