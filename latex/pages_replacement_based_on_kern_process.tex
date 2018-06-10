@@ -41,7 +41,6 @@ proj11
 相对于proj10.4，proj11在内核方面主要增加了有关kswapd内核线程和相关函数以及等待队列实现，在用户程序方面，增加测试ucore的COW实现的用户程序cowtest.c和测试内存页置换实现的swaptest.c。主要修改和增加的文件如下：
 
 \begin{itemize}
-\tightlist
 \item
   kern/mm/pmm.c：扩展了alloc\_pages函数，使得它能够在没有获得所需空闲内存页后，进一步调用tre\_free\_pages来要求ucore释放足够的空闲页，从而再次要求所需空闲页，直到要求得到满足为止。
 \item

@@ -8,7 +8,6 @@
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   如果current-\textgreater{}mm !=
   NULL，表示是用户进程，则开始回收此用户进程所占用的用户态虚拟内存空间；
@@ -23,7 +22,6 @@
 \end{enumerate}
 
 \begin{itemize}
-\tightlist
 \item
   调用exit\_mmap函数释放current-\textgreater{}mm-\textgreater{}vma链表中每个vma描述的进程合法空间中实际分配的内存，然后把对应的页表项内容清空，最后还把页表所占用的空间释放并把对应的页目录表项清空；
 \item
@@ -35,7 +33,6 @@
 \begin{enumerate}
 \def\labelenumi{\alph{enumi}.}
 \setcounter{enumi}{2}
-\tightlist
 \item
   此时设置current-\textgreater{}mm为NULL，表示与当前进程相关的用户虚拟内存空间和对应的内存管理成员变量所占的内核虚拟内存空间已经回收完毕；
 \end{enumerate}
@@ -57,7 +54,6 @@
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   如果pid!=0，表示只找一个进程id号为pid的退出状态的子进程，否则找任意一个处于退出状态的子进程；
 \item

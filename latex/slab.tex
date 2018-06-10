@@ -8,7 +8,6 @@ slab\_cache，这是一个不同大小slab
 结构链表，这样每个slab设定一个要管理的给定大小的对象池，占用物理空间连续的1个或多个物理页。slab\_cache的每个数组元素管理两种slab列表：
 
 \begin{itemize}
-\tightlist
 \item
   slabs\_full：完全分配的 slab
 \item
@@ -45,7 +44,6 @@ slab
 kmalloc 和 kfree 函数。这两个函数的原型如下：
 
 \begin{itemize}
-\tightlist
 \item
   void *kmalloc( size\_t size );
 \item

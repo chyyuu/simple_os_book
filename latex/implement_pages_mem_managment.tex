@@ -192,7 +192,6 @@ Virtual Address=Physical Address+0xC0000000
     = pa \textbar{} PTE\_P \textbar{} PTE\_W 其中：
 
     \begin{itemize}
-    \tightlist
     \item
       PTE\_U：位3，表示用户态的软件可以读取对应地址的物理内存页内容
     \item
@@ -206,7 +205,6 @@ Virtual Address=Physical Address+0xC0000000
 建立好一一映射的二级页表结构后，接下来就要使能分页机制了，这主要是通过enable\_paging函数实现的，这个函数主要做了两件事：
 
 \begin{itemize}
-\tightlist
 \item
   通过lcr3指令把页目录表的起始地址存入CR3寄存器中；
 \item

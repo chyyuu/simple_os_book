@@ -27,7 +27,6 @@
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   把接受到的IRQ信号转换成一个对应的中断编号；
 \item
@@ -119,7 +118,6 @@ Descriptor），
 ``门''的含义是指当中断发生时必须先访问这些``门''，能够``开门''（即将要进行的处理需通过特权检查，符合设定的权限等约束）后，然后才能进入相应的处理程序。而门描述符则描述了``门''的属性（如特权级、段内偏移量等）。在IDT中，可以包含如下3种类型的系统段描述符：
 
 \begin{itemize}
-\tightlist
 \item
   中断门描述符（Interrupt-gate descriptor）：
   用于中断处理，其类型码为110，中断门包含了一个外设中断或故障中断的处理程序所在段的选择子和段内偏移量。当控制权通过中断门进入中断处理程序时，处理器清IF标志，即关中断，以避免嵌套中断的发生。中断门中的DPL（Descriptor
@@ -163,7 +161,6 @@ Descriptor），
 
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
-  \tightlist
   \item
     程序执行这条iret指令时，首先会从内核栈里弹出先前保存的被打断的程序的现场信息，即eflags，cs，eip重新开始执行；
   \item

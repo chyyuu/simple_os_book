@@ -62,7 +62,6 @@ thread(int (*fn)(void *), void *arg, thread_t *tidp) {
 Paging（按需分页）技术来减少分配栈空间的时间和空间开销。另外，还调用了clone函数来完成用户线程的创建，clone进一步调用了sys\_clone系统调用接口来要求ucore完成创建线程的服务。sys\_clone与创建进程的sys\_fork系统调用接口有何区别？它们的区别是创建标志位clone\_flags：
 
 \begin{itemize}
-\tightlist
 \item
   调用clone创建线程的创建标志位：CLONE\_VM~\textbar{}~CLONE\_THREAD
 \item

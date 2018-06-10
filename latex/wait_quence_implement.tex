@@ -69,7 +69,6 @@ wakeup_queue(&kswapd_done, WT_KSWAPD, 1);
 上面是使用等待队列的基本流程。为了能够更好地完善整个基于等待队列的等待唤醒机制，在wait.{[}ch{]}中提供了一系列函数：
 
 \begin{itemize}
-\tightlist
 \item
   void wait\_init：初始化等待项
 \item

@@ -38,7 +38,6 @@ ld -m    elf_i386 -nostdlib -T tools/kernel.ld -o bin/kernel  obj/kern/init/entr
 从中可以看出，hello应用程序不仅仅是hello.c，还包含了支持hello应用程序的用户态库：
 
 \begin{itemize}
-\tightlist
 \item
   user/libs/initcode.S：所有应用程序的起始用户态执行地址``\_start''，调整了EBP和ESP后，调用umain函数。
 \item
@@ -137,7 +136,6 @@ init_main(void *arg) {
 对于上述代码，我们需要从后向前按照函数/宏的实现一个一个来分析。Initproc的执行主体是init\_main函数，这个函数在缺省情况下是执行宏KERNEL\_EXECVE(hello)，而这个宏最终是调用kernel\_execve函数来调用SYS\_exec系统调用，由于ld在链接hello应用程序执行码时定义了两全局变量：
 
 \begin{itemize}
-\tightlist
 \item
   \_binary\_obj\_\_\_user\_hello\_out\_start：hello执行码的起始位置
 \item
@@ -154,7 +152,6 @@ vector128(vectors.S)--> __alltraps(trapentry.S)-->trap(trap.c)-->trap_dispatch(t
 最终通过do\_execve函数来完成用户进程的创建工作。此函数的主要工作流程如下：
 
 \begin{itemize}
-\tightlist
 \item
   首先为加载新的执行码做好用户态内存空间清空准备。如果mm不为NULL，则设置页表为内核空间页表，且进一步判断mm的引用计数减1后是否为0，如果为0，则表明没有进程再需要此进程所占用的内存空间，为此将根据mm中的记录，释放进程所占用户空间内存和进程页表本身所占空间。最后把当前进程的mm内存管理指针为空。由于此处的initproc是内核线程，所以mm为NULL，整个处理都不会做。
 \item

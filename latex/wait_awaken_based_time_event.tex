@@ -25,7 +25,6 @@ typedef struct {
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   某进程创建和初始化timer\_t结构的一个timer，并把timer被加入系统timer管理列表timer\_list中，进程设置为基于timer事件的阻塞态（即睡眠了），这样这个timer就诞生了，；
 \item
@@ -38,7 +37,6 @@ typedef struct {
 基于上述timer生存周期的流程，与timer相关的函数如下：
 
 \begin{itemize}
-\tightlist
 \item
   timer
   init：对timer的成员变量进行初始化，设定了在expires时间之后唤醒proc进程

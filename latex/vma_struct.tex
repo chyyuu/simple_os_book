@@ -49,7 +49,6 @@ mmap\_list 里面链接的 vma\_struct 的个数。
 涉及mm\_struct的操作函数比较简单，只有mm\_create和mm\_destroy两个函数，从字面意思就可以看出是是完成mm\_struct结构的变量创建和删除。在mm\_create中用kmalloc分配了一块空间，所以在mm\_destroy中也要对应进行释放。在ucore运行过程中，会产生描述虚拟内存空间的vma\_struct结构，所以在mm\_destroy中也要进对这些mmap\_list中的vma进行释放。涉及vma\_struct的操作函数也比较简单，主要包括三个：
 
 \begin{itemize}
-\tightlist
 \item
   vma\_create--创建vma
 \item

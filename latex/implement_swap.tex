@@ -5,7 +5,6 @@
 如果要实现页面置换机制，只考虑页面置换算法的设计与实现是远远不够的，还需考虑其他问题：
 
 \begin{itemize}
-\tightlist
 \item
   哪些页可以被换出？
 \item
@@ -187,7 +186,6 @@ entry）；反过来，inactive\_list 链表所链接的 page 通常是指没有
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   一个 page 是在 active\_list 还是在 inactive\_list 的条件不是绝对的；
 \item
@@ -212,7 +210,6 @@ entry）；反过来，inactive\_list 链表所链接的 page 通常是指没有
   页面换入换出有关的操作需要做的就是尽可能的完成如下三件事情：
 
   \begin{itemize}
-  \tightlist
   \item
     将 PG\_swap 为 0 的页转变成 PG\_swap 为1
     的页。即尽可能的给每个物理页分配一个 swap

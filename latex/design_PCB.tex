@@ -33,7 +33,6 @@ struct proc_struct {
 下面重点解释一下几个比较重要的域：
 
 \begin{itemize}
-\tightlist
 \item
   mm
   ：内存管理的信息，包括内存映射列表、页表指针等。mm里有个很重要的项pgdir，记录的是该进程使用的一级页表的物理地址。
@@ -77,7 +76,6 @@ struct proc_struct {
 为了管理系统中所有的进程控制块，ucore维护了如下全局变量（位于kern/process/proc.c）：
 
 \begin{itemize}
-\tightlist
 \item
   static struct proc *current;
   //当前占用CPU，处于``运行''状态进程控制块指针。通常这个变量是只读的，只有在进程切换的时候才进行修改，并且整个切换和修改过程需要保证操作的原子性，目前至少需要屏蔽中断，可以参考

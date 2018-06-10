@@ -18,11 +18,11 @@ Loader（在ucore中的bootasm.S和bootmain.c）一起组成。BIOS实际上是�
 以基于Intel
 80386的计算机为例，计算机加电后，整个物理地址空间如下图所示：
 
-\begin{figure}[htbp]
-\centering
-\includegraphics{figures/3.13.1.png}
-\caption{3.13.1.png}
-\end{figure}
+%\begin{figure}[htbp]
+%\centering
+%\includegraphics{figures/3.13.1.png}
+%\caption{3.13.1.png}
+%\end{figure}
 
 图2-1 基于Intel 80386的计算机物理地址空间
 
@@ -35,56 +35,53 @@ OVERVIEW''。另外，我们可以通过硬件模拟器qemu来进一步认识上
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   启动qemu并让其停到执行第一条指令前，这需要增加一个参数''-S'' qemu --S
 \item
   这是qemu会弹出一个没有任何显示内容的图形窗口，显示如下：
 \end{enumerate}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics{figures/3.13.2.png}
-\caption{3.13.2.png}
-\end{figure}
+%\begin{figure}[htbp]
+%\centering
+%\includegraphics{figures/3.13.2.png}
+%\caption{3.13.2.png}
+%\end{figure}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{2}
-\tightlist
 \item
   然后通过按''Ctrl+Alt+2''进入qemu的monitor界面，为了了解80386此时的寄存器内容，在monitor界面下输入命令
   ``info registers''
 \end{enumerate}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics{figures/3.13.3.png}
-\caption{3.13.3.png}
-\end{figure}
+%\begin{figure}[htbp]
+%\centering
+%\includegraphics{figures/3.13.3.png}
+%\caption{3.13.3.png}
+%\end{figure}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{3}
-\tightlist
 \item
   可获得intel 80386启动后执行第一条指令前的寄存器内容，如下图所示
 \end{enumerate}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics{figures/3.13.4.png}
-\caption{3.13.4.png}
-\end{figure}
+%\begin{figure}[htbp]
+%\centering
+%\includegraphics{figures/3.13.4.png}
+%\caption{3.13.4.png}
+%\end{figure}
 
 从上图中，我们可以看到EIP=0xfff0，CS的selector=0xf000，CS的base=0xfff0000。
 
 BIOS做完计算机硬件自检和初始化后，会选择一个启动设备（例如软盘、硬盘、光盘等），并且读取该设备的第一扇区(即主引导扇区或启动扇区)到内存一个特定的地址0x7c00处，然后CPU控制权会转移到那个地址继续执行。至此BIOS的初始化工作做完了，进一步的工作交给了ucore的bootloader；ucore的bootloader会完成处理器从实模式到保护模式的转换，并从硬盘上读取并加载ucore。其大致流程如下图所示：
 
-\begin{figure}[htbp]
-\centering
-\includegraphics{figures/3.13.5.png}
-\caption{3.13.5.png}
-\end{figure}
+%\begin{figure}[htbp]
+%\centering
+%\includegraphics{figures/3.13.5.png}
+%\caption{3.13.5.png}
+%\end{figure}
 
 图2-2 Intel80386启动过程

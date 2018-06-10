@@ -134,7 +134,6 @@ entry）；反过来，inactive\_list 链表所链接的 page 通常是指没有
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   一个 page 是在 active\_list 还是在 inactive\_list 的条件不是绝对的；
 \item
@@ -145,7 +144,6 @@ entry）；反过来，inactive\_list 链表所链接的 page 通常是指没有
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
-\tightlist
 \item
   我们知道一个 page
   换出的代价是很大的（磁盘操作），并且我们假设所有的磁盘操作都是异步的，那么换出一个
@@ -161,7 +159,6 @@ entry）；反过来，inactive\_list 链表所链接的 page 通常是指没有
 \end{enumerate}
 
 \begin{itemize}
-\tightlist
 \item
   将 PG\_swap 为 0 的页转变成 PG\_swap 为1
   的页。即尽可能的给每个物理页分配一个 swap entry（当然前提是有足够大的
@@ -184,7 +181,6 @@ entry）；反过来，inactive\_list 链表所链接的 page 通常是指没有
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{3}
-\tightlist
 \item
   值得注意的是，内存页换出操作只有特定时候才被调用，即通过
   执行try\_free\_pages函数或者定时器机制（在lab3/proj10.4才引入）定期唤醒kswapd内核线程。这样会导致内存页换出操作对两个链表上的数据都不够敏感。比如处于
@@ -330,7 +326,6 @@ active 的，则把它移动到 active\_list
 page\_ref == 0 作为前提）
 
 \begin{itemize}
-\tightlist
 \item
   如果一个页的 mem\_map 项为0，说明这个时候已经没有 PTE
   映射指向它了，无论是物理页还是 swap
