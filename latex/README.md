@@ -13,6 +13,9 @@ unzip -x msfonts-master.zip
 sudo mv fonts-master /usr/share/fonts/
 sudo mv msfonts-master /usr/share/fonts/
 sudo apt install fonts-wqy-microhei fonts-wqy-zenhei ttf-wqy-microhei ttf-wqy-zenhei xfonts-wqy
+sudo mkfontscale
+sudo mkfontdir
+sudo fc-cache -fv
 ```
 
 ## build doc
