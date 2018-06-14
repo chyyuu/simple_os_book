@@ -1,0 +1,72 @@
+\subsection{hello world漫游}
+
+\subsubsection{Linux下的hello world}
+让我们通过智人时代的操作系统Linux来感受一下显示一个字符串的过程。假定读者建立了Linux实验环境(参见\ref{setuplinux})，对Ｃ语言有一定的了解，所以可以写出如下的代码 helloworld.c：
+\begin{lstlisting}[language={C}]
+void main(void)
+{
+  puts("hello world!\n");
+}
+\end{lstlisting}
+
+并在Linux环境中，执行gcc编译命令，把helloworld.c转换成执行程序helloworld，并执行生成的执行程序helloworld：
+
+%\verb|$　gcc -o helloworld helloworld.c|
+%\verb|$　helloworld|
+%\verb|hello world|
+
+%\begin{lstlisting}[language={bash},numbers=none]
+
+\begin{lstlisting}[language={bash}]
+	  $　gcc -o helloworld helloworld.c
+	  $　helloworld
+	  hello world!
+\end{lstlisting}
+
+只要读者会基本编程，对于上面两行命令和一行输出结果，应该不会感到陌生。但读者对具体的执行过程了解吗？Linux操作系统和它用的x86计算机硬件太复杂，如果要详细分析和解释上面示例的三行显示背后的具体执行过程的细节，我们可以写出一本1000页的大部头。考虑到读者时间有限，下面我们将站在操作系统的角度来简单理解一下这个helloworld程序的执行过程。
+
+首先，你看到的是\$符号，这是一个正在运行的程序shell的人机交互界面。在你没敲字符的时候，\textbf{shell处于睡觉状态}。当你通过键盘敲入“g”和后续的多个字符的时候，首先是\textbf{操作系统}收到键盘发出的字符，然后通知shell，有字符来了！shell本来在睡觉，被操作系统唤醒后，接收字符，并发出显示字符的请求给操作系统。\textbf{操作系统}收到shell的请求后，把字符显示到显示器上，然后通知shell完成显示字符任务了。当shell程序收到回车字符的时候，就开始把整个字符串看成是一个命令，解析完此命令后，并告知操作系统，继续请操作系统帮忙执行另外一个程序gcc来完成整个编译过程。\textbf{操作系统}为此需要创建一个让gcc可以正常工作的执行空间，并启动gcc程序，让它能够完成整个编译过程。gcc于是开始干活，首先请\textbf{操作系统}把helloworl操作系统d.c这个文件从磁盘上读到内存中，gcc对内存中的helloworld.c的内容进行编译，生成helloworld执行程序，但此时这个程序还在内存中。于是gcc继续请\textbf{操作系统}帮忙，把这个helloworld执行程序写到磁盘上。当你看到第二个\$符号出现的时候，表示gcc的工作完成了。
+
+然后，你可以在第二个\$上继续敲如字符串"helloworld"，并回车。类似上面的描述，这次shell程序会请求操作系统来执行helloworld这个程序。\textbf{操作系统}为此需要创建一个让helloworld程序可以正常工作的执行空间，并启动helloworld程序。helloworld的执行工作就是显示字符串“hello world!”。为此，它像shell一样，给操作系统发出显示字符串的请求。\textbf{操作系统}收到显示字符串的请求后，把字符串显示到屏幕上。至此，上面示例中三行显示的背后执行过程就简单描述完毕。
+
+仔细看看上面两段话，你会发现操作系统做了好多工作，但这些工作敲字符的用户都看不到，用户看到的是应用程序shell完成了用户的请求，而幕后英雄--操作系统只是默默的完成应用程序的各种请求。智人时代的操作系统的特点是麻烦自己，方便用户。把自己搞得特别复杂，像Linux kernel这样大家能看到源码的操作系统，其当前最新的4.17版本已经有２千万行代码了。即使是应用程序显示字符串这样一个简单过程，在Linux中执行了的代码行数也都过万行。但这不会影响我们了解其基本原理。
+
+\subsubsection{trilobite-os下hello world}
+能否把OS的各种先进复杂的功能先丢到一遍，看看一个OS要在一台计算机上显示一个字符串，到底需要做哪些基本的事情呢？既然Linux太复杂，我们就构造一个简单的操作系统。这里没有用ucore-os的原因是，ucore-os是处于爬行动物年代与乳动物年代过渡时期的操作系统，完成一个显示字符串也许要一百行左右的代码，用在这里讲解还是复杂了一些。
+
+回到三叶虫时代，可以让我们看到操作系统最开始的原始面目。trilobite-os是一个假想的OS，存在于操作系统的三叶虫时代，当然还需要一个配合trilobite-os运行的计算机系统，我们也可以假设存在一个简陋的v9计算机系统。通过trilobite-os来分析hello world的执行过程，就会简单很多。其实在操作系统的三叶虫时代，应用程序就是操作系统，它需要完成控制计算机的所有事情。我们来看看trilobite-os这个应用程序操作系统在v9计算机系统上是如何完成显示字符串的。先看os\_helloworld.c：
+ 
+ \begin{lstlisting}[language={C}]
+ /* output a char to screen*/
+ out(port, ch) { 
+   asm(mov a0, ch;)
+   asm(store a0, port;) 
+ }
+ /* halt cpu */
+ halt() { 
+   asm(halt);
+ }
+ 
+ main()
+ {
+    /* show string */
+ 	out(1, 'H');out(1, 'e');out(1, 'l');
+ 	out(1, 'l');out(1, 'o');out(1, ' ');
+ 	out(1, 'W');out(1, 'o');out(1, 'r');
+ 	out(1, 'l');out(1, 'd');out(1, '!');
+ 	/* halt system */
+ 	halt();
+ }
+ \end{lstlisting}
+ 
+首先，我们通过智人时代的操作系统Linux环境把trilobite-os实验环境(参见\ref{setupv9})建立好。并在Linux环境中，执行特定编译命令，把os\_helloworld.c转换成执行程序os\_helloworld，并在v9模拟环境中执行生成的os\_helloworld操作系统：
+\begin{lstlisting}[language={bash}]
+	$ make run
+	gcc -O3 -m32 -o ../tools/xc ../tools/c.c -lm
+	gcc -O3 -m32 -o ../tools/xem ../tools/em.c -lm
+	../tools/xc -o os_helloworld os_helloworld.c
+	../tools/xem os_helloworld
+	Hello World!
+\end{lstlisting}
+
+在v9 computer的模拟器xem下，加载并执行三叶虫操作系统os\_helloworld，也顺利地输出了字符串“Hello World!”。

@@ -227,3 +227,7 @@ dtx-style.sty
 zhbook.cfg
 zhbook.cls
 figures/*
+*.c
+*.h
+*.s
+a.out
