@@ -1,11 +1,13 @@
 \subsection{hello world漫游}
 
-\subsubsection{Linux下的hello world}
+\subsubsection{Linux下的"hello　world!"}
+
+\paragraph{显示"hello　world!"}
 让我们通过智人时代的操作系统Linux来感受一下显示一个字符串的过程。假定读者建立了Linux实验环境(参见\ref{setuplinux})，对Ｃ语言有一定的了解，所以可以写出如下的代码 helloworld.c：
 \begin{lstlisting}[language={C}]
 void main(void)
 {
-  puts("hello world!\n");
+  puts("hello world!");
 }
 \end{lstlisting}
 
@@ -18,20 +20,69 @@ void main(void)
 %\begin{lstlisting}[language={bash},numbers=none]
 
 \begin{lstlisting}[language={bash}]
-	  $　gcc -o helloworld helloworld.c
-	  $　helloworld
+	  $ gcc -o helloworld helloworld.c
+	  $ helloworld
 	  hello world!
 \end{lstlisting}
 
-只要读者会基本编程，对于上面两行命令和一行输出结果，应该不会感到陌生。但读者对具体的执行过程了解吗？Linux操作系统和它用的x86计算机硬件太复杂，如果要详细分析和解释上面示例的三行显示背后的具体执行过程的细节，我们可以写出一本1000页的大部头。考虑到读者时间有限，下面我们将站在操作系统的角度来简单理解一下这个helloworld程序的执行过程。
+只要读者会基本编程，对于上面两行命令和一行输出结果，应该不会感到陌生。但读者对具体的执行过程了解吗？Linux操作系统和它用的x86计算机硬件太复杂，如果要详细分析和解释上面示例的三行显示背后的具体执行过程的细节，我们可以写出一本超过1000页的大部头。考虑到读者时间有限，下面我们将站在操作系统的角度来简单理解一下这个helloworld程序的执行过程。
 
-首先，你看到的是\$符号，这是一个正在运行的程序shell的人机交互界面。在你没敲字符的时候，\textbf{shell处于睡觉状态}。当你通过键盘敲入“g”和后续的多个字符的时候，首先是\textbf{操作系统}收到键盘发出的字符，然后通知shell，有字符来了！shell本来在睡觉，被操作系统唤醒后，接收字符，并发出显示字符的请求给操作系统。\textbf{操作系统}收到shell的请求后，把字符显示到显示器上，然后通知shell完成显示字符任务了。当shell程序收到回车字符的时候，就开始把整个字符串看成是一个命令，解析完此命令后，并告知操作系统，继续请操作系统帮忙执行另外一个程序gcc来完成整个编译过程。\textbf{操作系统}为此需要创建一个让gcc可以正常工作的执行空间，并启动gcc程序，让它能够完成整个编译过程。gcc于是开始干活，首先请\textbf{操作系统}把helloworl操作系统d.c这个文件从磁盘上读到内存中，gcc对内存中的helloworld.c的内容进行编译，生成helloworld执行程序，但此时这个程序还在内存中。于是gcc继续请\textbf{操作系统}帮忙，把这个helloworld执行程序写到磁盘上。当你看到第二个\$符号出现的时候，表示gcc的工作完成了。
+上面的操作过程，需要与人交互的有两个外设，一个是键盘，一个是显示器。首先，你看到的是\$符号，这是一个正在运行的程序shell的人机交互界面。在你没敲字符的时候，\textbf{shell处于睡觉状态}。当你通过键盘敲入“g”和后续的多个字符的时候，首先是\textbf{操作系统}收到键盘发出的字符，然后通知shell，有字符来了！shell本来在睡觉，被操作系统唤醒后，接收字符，并发出显示字符的请求给操作系统。\textbf{操作系统}收到shell的请求后，把字符显示到显示器上，然后通知shell完成显示字符任务了。当shell程序收到回车字符的时候，就开始把整个字符串看成是一个命令，解析完此命令后，并告知操作系统，继续请操作系统帮忙执行另外一个程序gcc来完成整个编译过程。\textbf{操作系统}为此需要创建一个让gcc可以正常工作的执行空间，并启动gcc程序，让它能够完成整个编译过程。gcc于是开始干活，首先请\textbf{操作系统}把helloworl操作系统d.c这个文件从磁盘上读到内存中，gcc对内存中的helloworld.c的内容进行编译，生成helloworld执行程序，但此时这个程序还在内存中。于是gcc继续请\textbf{操作系统}帮忙，把这个helloworld执行程序写到磁盘上。当你看到第二个\$符号出现的时候，表示gcc的工作完成了。
 
-然后，你可以在第二个\$上继续敲如字符串"helloworld"，并回车。类似上面的描述，这次shell程序会请求操作系统来执行helloworld这个程序。\textbf{操作系统}为此需要创建一个让helloworld程序可以正常工作的执行空间，并启动helloworld程序。helloworld的执行工作就是显示字符串“hello world!”。为此，它像shell一样，给操作系统发出显示字符串的请求。\textbf{操作系统}收到显示字符串的请求后，把字符串显示到屏幕上。至此，上面示例中三行显示的背后执行过程就简单描述完毕。
+然后，你可以在第二个\$上继续敲如字符串"hello　world!"，并回车。类似上面的描述，这次shell程序会请求操作系统来执行helloworld这个程序。\textbf{操作系统}为此需要创建一个让helloworld程序可以正常工作的执行空间，并启动helloworld程序。helloworld的执行工作就是显示字符串“hello world!”。为此，它像shell一样，给操作系统发出显示字符串的请求。\textbf{操作系统}收到显示字符串的请求后，把字符串显示到屏幕上。至此，上面示例中三行显示的背后执行过程就简单描述完毕。
 
-仔细看看上面两段话，你会发现操作系统做了好多工作，但这些工作敲字符的用户都看不到，用户看到的是应用程序shell完成了用户的请求，而幕后英雄--操作系统只是默默的完成应用程序的各种请求。智人时代的操作系统的特点是麻烦自己，方便用户。把自己搞得特别复杂，像Linux kernel这样大家能看到源码的操作系统，其当前最新的4.17版本已经有２千万行代码了。即使是应用程序显示字符串这样一个简单过程，在Linux中执行了的代码行数也都过万行。但这不会影响我们了解其基本原理。
+\paragraph{每秒定时显示"hello　world!"}
+如果要每秒定时显示字符串，很显然需要时钟外设来帮助实现定时。添加一点代码形成timing-helloworld.c，就可以实现定时显示helloworld了。
+\begin{lstlisting}[language={C}]
+void main(void)
+{
+　　while(1) {
+　　　　sleep(1);
+　　　　puts("hello world!");
+　　}
+}
+\end{lstlisting}
 
-\subsubsection{trilobite-os下hello world}
+在Linux环境中，执行gcc编译命令，把timing-helloworld.c转换成执行程序timing-helloworld，并执行生成的执行程序timing-helloworld：
+\begin{lstlisting}[language={bash}]
+	$ gcc -o timing-helloworld timing-helloworld.c
+	$ timing-helloworld
+	hello world!
+	hello world!
+	......
+\end{lstlisting}
+
+可以看到，当执行timing-helloworld程序时，屏幕上会每隔一秒重复显示“helloworld”。新增加的sleep函数完成了等待一秒并恢复执行的功能。其实这个功能也是靠藏在后面的操作系统帮忙完成的。当timing-hellworld执行sleep(1)函数时，它向操作系统发出了一个请求，要求操作系统先让它睡觉，且让操作系统帮它设个1秒到期的闹钟(更正式的说法是定时器)。于是操作系统先把timing-helloworld设置为睡眠状态，且对时钟外设做好配置，让它1秒中后产生一个中断，通知操作系统到点了。操作系统做完这两件事后，就忙自己的其他事情并安排调度其他程序运行。过了1秒后，时钟外设产生了一个中断，通知操作系统到点了，操作系统响应这个中断，并记得timing-hellworld需要被唤醒并继续运行，于是就把timing-hellworld唤醒，并让它继续运行。这样，timing-hellworld就开始每隔1秒显示字符串了。
+
+
+
+\paragraph{把"hello　world!"字符串存到磁盘上}
+
+如果要把显示字符串长久保存下来，很显然需要磁盘外设来帮助实现长期存储的功能。添加一点代码形成file-helloworld.c，就可以实现把字符串保存到磁盘上了。
+
+\begin{lstlisting}[language={C}]
+#include <stdio.h>
+void main(void){
+  FILE *fp;
+  fp = fopen("file-helloworld.txt", "w");
+  fputs("hello world!",fp);
+  fclose(fp);
+}
+\end{lstlisting}
+
+在Linux环境中，执行gcc编译命令，把file-helloworld.c转换成执行程序file-helloworld，并执行生成的执行程序file-helloworld：
+\begin{lstlisting}[language={bash}]
+	$ gcc -o file-helloworld file-helloworld.c
+	$ file-helloworld
+	$ more file-helloworld.txt
+	hello world!	
+\end{lstlisting}
+
+可以看到，当执行file-helloworld程序时，当前目录下多了一个文件file-helloworld.txt，通过more命令，可以看到file-helloworld.txt文件的内容就是我们需要保存的字符串"hello　world!"。这里我们可以看到通过操作系统，应用程序可用文件的形式方便地把字符串存储到磁盘上，而没有关注磁盘磁盘的细节。当执行程序file-helloworld的时候，操作系统做了啥呢？首先，当file-helloworld执行fopen函数时，会请求操作系统在当前目录下创建一个可写的文件file-helloworld.txt。于是操作系统会定位到当前目录在磁盘上的位置，并在此目录下添加一个文件，此时的文件内容为空。然后当file-helloworld执行fput函数时，会请求操作系统把"hello　world!"这个内容写到file-helloworld.txt文件中。于是操作系统定位到file-helloworld.txt文件在磁盘中的位置，给这个文件分配空闲磁盘扇区空间用于存放文件内容，再把位于内存中的字符串"hello　world!"以磁盘块为单位，写入到文件内容对应的磁盘扇区中。
+
+通过上面的三个实验，你会发现程序代码很简单，但默默付出的操作系统做了好多的幕后工作，但这些工作对于执行程序的用户而言都是看不到的，用户看到的是应用程序shell完成了用户的请求，而幕后英雄--操作系统只是默默的完成应用程序的各种请求。智人时代的操作系统的特点是麻烦自己，方便用户。把自己搞得特别复杂，像Linux kernel这样大家能看到源码的操作系统，其当前最新的4.17版本已经有２千万行代码了。即使是应用程序显示字符串这样一个简单过程，在Linux中执行了的代码行数也都过万行。但这不会影响我们了解其基本原理。
+
+\subsubsection{trilobite-os下"hello　world!"}
 能否把OS的各种先进复杂的功能先丢到一遍，看看一个OS要在一台计算机上显示一个字符串，到底需要做哪些基本的事情呢？既然Linux太复杂，我们就构造一个简单的操作系统。这里没有用ucore-os的原因是，ucore-os是处于爬行动物年代与乳动物年代过渡时期的操作系统，完成一个显示字符串也许要一百行左右的代码，用在这里讲解还是复杂了一些。
 
 回到三叶虫时代，可以让我们看到操作系统最开始的原始面目。trilobite-os是一个假想的OS，存在于操作系统的三叶虫时代，当然还需要一个配合trilobite-os运行的计算机系统，我们也可以假设存在一个简陋的v9计算机系统。通过trilobite-os来分析hello world的执行过程，就会简单很多。其实在操作系统的三叶虫时代，应用程序就是操作系统，它需要完成控制计算机的所有事情。我们来看看trilobite-os这个应用程序操作系统在v9计算机系统上是如何完成显示字符串的。先看os\_helloworld.c：
@@ -50,9 +101,9 @@ void main(void)
  main()
  {
     /* show string */
- 	out(1, 'H');out(1, 'e');out(1, 'l');
+ 	out(1, 'h');out(1, 'e');out(1, 'l');
  	out(1, 'l');out(1, 'o');out(1, ' ');
- 	out(1, 'W');out(1, 'o');out(1, 'r');
+ 	out(1, 'w');out(1, 'o');out(1, 'r');
  	out(1, 'l');out(1, 'd');out(1, '!');
  	/* halt system */
  	halt();
@@ -66,7 +117,7 @@ void main(void)
 	gcc -O3 -m32 -o ../tools/xem ../tools/em.c -lm
 	../tools/xc -o os_helloworld os_helloworld.c
 	../tools/xem os_helloworld
-	Hello World!
+	hello world!
 \end{lstlisting}
 
 在v9 computer的模拟器xem下，加载并执行三叶虫操作系统os\_helloworld，也顺利地输出了字符串“Hello World!”。
