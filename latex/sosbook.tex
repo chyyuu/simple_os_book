@@ -29,6 +29,15 @@
    showstringspaces=false
  }
  
+ % \dangericon 表示警告的图标
+ \font\manfnt=manfnt
+ \newcommand*{\dangericon}{\manfnt\char127}
+ 
+ % note 环境表示需特别注意的内容
+ \newenvironment{note}
+ {\vskip1.5ex\par\noindent\llap{\dangericon\hskip2mm}\textbf{注意：}}
+ {\vskip1.5ex}
+ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 设置论文的中文封面
 

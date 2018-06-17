@@ -1,6 +1,25 @@
 \subsection{hello world漫游}
 
-\subsubsection{Linux下的"hello　world!"}
+\subsubsection{智人时代下的"hello　world!"}
+
+本节希望通过显示“hello world!”的应用程序来感受操作系统的功能和特征。一般应用程序都希望能够完成接受输入、显示输出、保存结果、定时处理等基本功能，而这些功能在当前操作系统的帮助下很容易完成。
+
+智人时代的典型操作系统是Linux和Windows。Linux和Windows都非常强大，在这两个操作系统上编写和执行“显示“hello world!”的各种应用程序很容易，容易到你都感觉不到操作系统的存在。相对而言，Linux可以看到它的源代码，用到的各种工具和操作相对也原始一些，可以让读者与操作系统的距离感更近一些，对于理解操作系统的实现会有很大帮助，所以我们以Linux作为我们的实验环境。
+接下来的五个小实验，分别基于不同的需求完成对“hello world!”的显示：
+\begin{itemize}
+	\item 在显示器上直接显示字符串；
+	\item 通过定时器在显示器上定时显示字符串；
+	\item 把字符串“显示”到磁盘上永久保存；
+	\item 可根据键盘输入改变字符串的显示内容；
+	\item 定时显示程序和交互显示程序一起执行。
+\end{itemize}
+
+通过这些实验，我们可以看到操作系统的一个重要功能是给应用程序提供了便捷的访问服务，应用程序只需发出要求，比如显示字符串、保存文件、定时唤醒、接收输入等，操作系统就可以帮助它完成；另外还有一些很重要的看不见的管理服务，比如给应用程序提供执行环境，切换应用程序，回收应用程序占用的资源等，这些就不能直接地感受到了。而对于硬件，比如显示器、定时器、磁盘、键盘等各种外设，操作系统都把它们很好地管理起来，提供了外设管理服务，使得我们的应用程序很方便地通过一些简单的AP就可以访问这些外设，而不需要关注外设的复杂控制细节。
+
+
+\begin{note} 
+下面的实验环境是基于ubuntu-16.04 x86-64环境，虽然CPU是x86-64，当下面的实验完全没有涉及到x86-64的细节，所以在这里就直接忽视让操作系统和应用正常运行的这个不可或缺的一个或多个CPU和其他不相关的硬件细节。
+\end{note}
 
 \paragraph{显示"hello　world!"}
 让我们通过智人时代的操作系统Linux来感受一下显示一个字符串的过程。假定读者建立了Linux实验环境(参见\ref{setuplinux})，对Ｃ语言有一定的了解，所以可以写出如下的代码 helloworld.c：
@@ -11,25 +30,33 @@ void main(void)
 }
 \end{lstlisting}
 
-并在Linux环境中，执行gcc编译命令，把helloworld.c转换成执行程序helloworld，并执行生成的执行程序helloworld：
-
-%\verb|$　gcc -o helloworld helloworld.c|
-%\verb|$　helloworld|
-%\verb|hello world|
-
-%\begin{lstlisting}[language={bash},numbers=none]
+并在Linux环境中的shell界面下，执行gcc编译命令，把helloworld.c转换成执行程序helloworld：
 
 \begin{lstlisting}[language={bash}]
-	  $ gcc -o helloworld helloworld.c
+$ gcc -o helloworld helloworld.c
+\end{lstlisting}
+
+在shell界面下，在生成执行程序helloworld的目录下执行此程序，可以看到程序显示出了“hello world!”：
+%\begin{lstlisting}[language={bash},numbers=none]
+\begin{lstlisting}[language={bash}]
 	  $ helloworld
 	  hello world!
 \end{lstlisting}
 
-只要读者会基本编程，对于上面两行命令和一行输出结果，应该不会感到陌生。但读者对具体的执行过程了解吗？Linux操作系统和它用的x86计算机硬件太复杂，如果要详细分析和解释上面示例的三行显示背后的具体执行过程的细节，我们可以写出一本超过1000页的大部头。考虑到读者时间有限，下面我们将站在操作系统的角度来简单理解一下这个helloworld程序的执行过程。
 
-上面的操作过程，需要与人交互的有两个外设，一个是键盘，一个是显示器。首先，你看到的是\$符号，这是一个正在运行的程序shell的人机交互界面。在你没敲字符的时候，\textbf{shell处于睡觉状态}。当你通过键盘敲入“g”和后续的多个字符的时候，首先是\textbf{操作系统}收到键盘发出的字符，然后通知shell，有字符来了！shell本来在睡觉，被操作系统唤醒后，接收字符，并发出显示字符的请求给操作系统。\textbf{操作系统}收到shell的请求后，把字符显示到显示器上，然后通知shell完成显示字符任务了。当shell程序收到回车字符的时候，就开始把整个字符串看成是一个命令，解析完此命令后，并告知操作系统，继续请操作系统帮忙执行另外一个程序gcc来完成整个编译过程。\textbf{操作系统}为此需要创建一个让gcc可以正常工作的执行空间，并启动gcc程序，让它能够完成整个编译过程。gcc于是开始干活，首先请\textbf{操作系统}把helloworl操作系统d.c这个文件从磁盘上读到内存中，gcc对内存中的helloworld.c的内容进行编译，生成helloworld执行程序，但此时这个程序还在内存中。于是gcc继续请\textbf{操作系统}帮忙，把这个helloworld执行程序写到磁盘上。当你看到第二个\$符号出现的时候，表示gcc的工作完成了。
+只要读者会基本编程，对于上面的输出结果，应该不会感到陌生。但读者对具体的执行过程了解吗？Linux操作系统和它用的x86计算机硬件太复杂，如果要详细分析和解释上面示例的两行显示背后的具体执行过程的细节，我们可以写出一本超过1000页的大部头。考虑到读者时间有限，下面我们将站在操作系统的角度来简单理解一下这个helloworld程序的执行过程。
 
-然后，你可以在第二个\$上继续敲如字符串"hello　world!"，并回车。类似上面的描述，这次shell程序会请求操作系统来执行helloworld这个程序。\textbf{操作系统}为此需要创建一个让helloworld程序可以正常工作的执行空间，并启动helloworld程序。helloworld的执行工作就是显示字符串“hello world!”。为此，它像shell一样，给操作系统发出显示字符串的请求。\textbf{操作系统}收到显示字符串的请求后，把字符串显示到屏幕上。至此，上面示例中三行显示的背后执行过程就简单描述完毕。
+%上面的操作过程，需要与人交互的有两个外设，一个是键盘，一个是显示器。首先，你看到的是\$符号，这是一个正在运行的程序shell的人机交互界面。在你没敲字符的时候，\textbf{shell处于睡觉状态}。当你通过键盘敲入“g”和后续的多个字符的时候，首先是操作系统收到键盘发出的字符，然后通知shell，有字符来了！shell本来在睡觉，被操作系统唤醒后，接收字符，并发出显示字符的请求给操作系统。操作系统收到shell的请求后，把字符显示到显示器上，然后通知shell完成显示字符任务了。当shell程序收到回车字符的时候，就开始把整个字符串看成是一个命令，解析完此命令后，并告知操作系统，继续请操作系统帮忙执行另外一个程序gcc来完成整个编译过程。操作系统为此需要创建一个让gcc可以正常工作的执行空间，并启动gcc程序，让它能够完成整个编译过程。gcc于是开始干活，首先请操作系统把helloworl操作系统d.c这个文件从磁盘上读到内存中，gcc对内存中的helloworld.c的内容进行编译，生成helloworld执行程序，但此时这个程序还在内存中。于是gcc继续请操作系统帮忙，把这个helloworld执行程序写到磁盘上。当你看到第二个\$符号出现的时候，表示gcc的工作完成了。
+
+%上面的helloworld执行程序需要用到一个个外设：显示器。dang\$上继续敲如字符串"hello　world!"，并回车。类似上面的描述，这次shell程序会请求操作系统来执行helloworld这个程序。操作系统为此需要创建一个让helloworld程序可以正常工作的执行空间，并启动helloworld程序。helloworld的执行工作就是显示字符串“hello world!”。为此，它像shell一样，给操作系统发出显示字符串的请求。操作系统收到显示字符串的请求后，把字符串显示到屏幕上。至此，上面示例中三行显示的背后执行过程就简单描述完毕。
+
+上面的helloworld执行程序需要用到一个外设：显示器。当你在shell的\$提示符后继续敲如字符串"hello　world!"并回车，shell解析此命令，分析出你是要执行helloworld这个程序，于是会请求操作系统来执行helloworld这个程序。操作系统为此需要创建一个让helloworld程序可以正常工作的执行环境(比如分配内存放代码和数据，提供CPU用于执行等)，并启动helloworld程序。此时shell程序要让位helloworld程序执行，为此操作系统还要完成一个执行环境切换的过程，让helloworld能够占用CPU来执行。完成切换后，helloworld程序才真正开始执行。
+
+helloworld的执行工作就是显示字符串“hello world!”。为此，它像shell一样，给操作系统发出显示字符串的请求。操作系统收到显示字符串的请求后，直接控制显卡这个设备，通过显卡把字符显示到显示器上，然后通知shell完成显示字符任务了。helloworld程序执行完毕后，操作系统还要把之前分配给helloworld的执行环境给收回，用于其他程序的执行。至此，上面示例中两行行显示的背后执行过程就简单描述完毕。
+
+\begin{note} 
+操作系统其实也没有直接控制显示器，而是通过控制显卡，让显卡访问显示器上显示信息的。
+\end{note}
 
 \paragraph{每秒定时显示"hello　world!"}
 如果要每秒定时显示字符串，很显然需要时钟外设来帮助实现定时。添加一点代码形成timing-helloworld.c，就可以实现定时显示helloworld了。
@@ -54,9 +81,7 @@ void main(void)
 
 可以看到，当执行timing-helloworld程序时，屏幕上会每隔一秒重复显示“helloworld”。新增加的sleep函数完成了等待一秒并恢复执行的功能。其实这个功能也是靠藏在后面的操作系统帮忙完成的。当timing-hellworld执行sleep(1)函数时，它向操作系统发出了一个请求，要求操作系统先让它睡觉，且让操作系统帮它设个1秒到期的闹钟(更正式的说法是定时器)。于是操作系统先把timing-helloworld设置为睡眠状态，且对时钟外设做好配置，让它1秒中后产生一个中断，通知操作系统到点了。操作系统做完这两件事后，就忙自己的其他事情并安排调度其他程序运行。过了1秒后，时钟外设产生了一个中断，通知操作系统到点了，操作系统响应这个中断，并记得timing-hellworld需要被唤醒并继续运行，于是就把timing-hellworld唤醒，并让它继续运行。这样，timing-hellworld就开始每隔1秒显示字符串了。
 
-
-
-\paragraph{把"hello　world!"字符串存到磁盘上}
+\paragraph{把"hello world!"字符串存到磁盘上}
 
 如果要把显示字符串长久保存下来，很显然需要磁盘外设来帮助实现长期存储的功能。添加一点代码形成file-helloworld.c，就可以实现把字符串保存到磁盘上了。
 
@@ -80,12 +105,69 @@ void main(void){
 
 可以看到，当执行file-helloworld程序时，当前目录下多了一个文件file-helloworld.txt，通过more命令，可以看到file-helloworld.txt文件的内容就是我们需要保存的字符串"hello　world!"。这里我们可以看到通过操作系统，应用程序可用文件的形式方便地把字符串存储到磁盘上，而没有关注磁盘磁盘的细节。当执行程序file-helloworld的时候，操作系统做了啥呢？首先，当file-helloworld执行fopen函数时，会请求操作系统在当前目录下创建一个可写的文件file-helloworld.txt。于是操作系统会定位到当前目录在磁盘上的位置，并在此目录下添加一个文件，此时的文件内容为空。然后当file-helloworld执行fput函数时，会请求操作系统把"hello　world!"这个内容写到file-helloworld.txt文件中。于是操作系统定位到file-helloworld.txt文件在磁盘中的位置，给这个文件分配空闲磁盘扇区空间用于存放文件内容，再把位于内存中的字符串"hello　world!"以磁盘块为单位，写入到文件内容对应的磁盘扇区中。
 
-通过上面的三个实验，你会发现程序代码很简单，但默默付出的操作系统做了好多的幕后工作，但这些工作对于执行程序的用户而言都是看不到的，用户看到的是应用程序shell完成了用户的请求，而幕后英雄--操作系统只是默默的完成应用程序的各种请求。智人时代的操作系统的特点是麻烦自己，方便用户。把自己搞得特别复杂，像Linux kernel这样大家能看到源码的操作系统，其当前最新的4.17版本已经有２千万行代码了。即使是应用程序显示字符串这样一个简单过程，在Linux中执行了的代码行数也都过万行。但这不会影响我们了解其基本原理。
 
-\subsubsection{trilobite-os下"hello　world!"}
-能否把OS的各种先进复杂的功能先丢到一遍，看看一个OS要在一台计算机上显示一个字符串，到底需要做哪些基本的事情呢？既然Linux太复杂，我们就构造一个简单的操作系统。这里没有用ucore-os的原因是，ucore-os是处于爬行动物年代与乳动物年代过渡时期的操作系统，完成一个显示字符串也许要一百行左右的代码，用在这里讲解还是复杂了一些。
 
-回到三叶虫时代，可以让我们看到操作系统最开始的原始面目。trilobite-os是一个假想的OS，存在于操作系统的三叶虫时代，当然还需要一个配合trilobite-os运行的计算机系统，我们也可以假设存在一个简陋的v9计算机系统。通过trilobite-os来分析hello world的执行过程，就会简单很多。其实在操作系统的三叶虫时代，应用程序就是操作系统，它需要完成控制计算机的所有事情。我们来看看trilobite-os这个应用程序操作系统在v9计算机系统上是如何完成显示字符串的。先看os\_helloworld.c：
+\paragraph{交互式显示"hello world!"}
+
+上面三个小实验缺少了一点与人的交互。比如，如果我敲了一个名字“human”，程序就能显示"human, hello world!"。让程序能接收输入，那还需要一个外设：键盘。通过键盘，程序就可以得到人的输入了。getchar-helloworld.c的代码如下：
+
+\begin{lstlisting}[language={C}]
+void main(void)
+{
+  char name[100];
+  int i=0;
+  while((name[i] = getchar())!='\n' && i<80)
+        i++ ;
+  name[i]=0;
+  strcat(name,", hello world!");
+  puts(name);
+}
+\end{lstlisting}
+
+在Linux环境中，执行gcc编译命令，把getchar-helloworld.c转换成执行程序getchar-helloworld，并执行生成的执行程序getchar-helloworld：
+\begin{lstlisting}[language={bash}]
+	$ gcc -o getchar-helloworld getchar-helloworld.c
+	$ getchar-helloworld
+	human
+	human, hello world!	
+\end{lstlisting}
+
+当执行getchar-helloworld程序时，如果你没敲字符，getchar-helloworld就会默默地等待你的输入\textbf{其实getchar-helloworld处于睡觉状态}。当你通过键盘敲入“h”和后续的多个字符的时候，首先是操作系统收到键盘发出的字符，然后唤醒并通知getchar-helloworld，有字符来了。getchar-helloworld本来在睡觉，被操作系统唤醒后，持续接收字符。在收到'\\n'回车符后，就把用户输入的字符与", hello world!"字符连接在一起，形成一个新字符串，并请求操作系统显示这个新字符串。操作系统接下来的过程与上面的分析解释是一样的，。
+
+\paragraph{定时＋交互式显示"hello world!"}
+上面的小实验都是执行一个程序，如果把两个执行程序放在一起执行会怎样呢？操作系统会如何管理这两个程序的执行呢？下面我们尝试把上述两个执行程序timing-helloworld和getchar-helloworld放在一起执行：
+\begin{lstlisting}[language={bash}]
+$ timing-helloworld & getchar-helloworld
+[1] 24690
+hello world!
+hhello world!
+uman
+human, hello world!
+hello world!
+...
+\end{lstlisting}
+
+上述第一行命令的功能是让timing-helloworld和getchar-helloworld这两个程序都执行。所谓都执行，就是让操作系统来管理这两个程序的执行过程。让输入第一行命令并敲回车键后，shell程序请操作系统帮忙来执行这两个程序。操作系统收到请求后，先创建timing-helloworld程序的执行环境，再创建getchar-helloworld程序的执行环境，然后就开始执行这两个程序了。注意，每次操作系统只能调度一个程序占用CPU执行。在上面小节的分析中，已经描述过了两个程序的单独执行过程，但这里是两个程序一起执行。
+
+当读者进行这个实验时，会碰到类似上面的输出现象，一开始两个程序都会由于等定时器或等用户输入而睡眠，所以操作系统会把两个程序设置为睡眠状态。一秒后，定时器会发出信号，操作系统收到定时器信号后，会唤醒timing-helloworld程序，让它继续显示字符串。在某一时刻，读者开始敲键盘，输入“human”。当输入第一个"h"时，getchar-helloworld程序被操作系统唤醒，并开始接收读者输入的字符。比较奇怪的是第四行的显示“hhello world!”和第五行的“uman”，这其实说明了在getchar-helloworld程序接受用户输入的时候，timing-helloworld程序的下一个一秒到期了，操作系统暂停了getchar-helloworld，切换到timing-helloworld程序继续执行，于是就出现了第四、五行的奇怪输出了。这里总算比较直观地能看到操作系统对多个执行程序执行过程的管理和调度了。
+
+通过上面的五个实验，你会发现程序代码很简单，但默默付出的操作系统做了好多的幕后工作，但这些工作对于执行程序的用户而言都是很难直接看不到的，用户看到的是应用程序shell完成了用户的请求，而幕后英雄--操作系统只是默默的完成应用程序的各种请求。智人时代的操作系统的特点是麻烦自己，方便用户。把自己搞得特别复杂，像Linux kernel这样大家能看到源码的操作系统，其当前最新的4.17版本已经有２千万行代码了。即使是应用程序显示字符串这样一个简单过程，在Linux中执行了的代码行数也都过万行。但这不会影响我们了解其基本原理。
+
+\subsubsection{爬行动物时代下"hello　world!"}
+
+虽然通过上面的五个小实验，我们对操作系统的功能有了一定的初步了解。但由于Linux太复杂，使得初学者很难在有限的时间内深入到其内部，分析和理解其实现。
+能否把操作系统的各种先进复杂的功能先丢到一遍，看看一个操作系统要在计算机上显示字符串，到底需要做哪些基本的事情呢？
+回到三叶虫和恐龙时代，可以让我们看到操作系统最开始的原始面目，但当时的操作系统和硬件都太初级，无法体现我们现在操作系统的基本功能。而爬行动物时代的操作系统代表UNIX是一个跨时代的操作系统，目前Linux、Windows的不少核心设计思想与UNIX有着千丝万缕的联系。
+
+\begin{note} 
+UNIX，是一个用C语言编写的多用户、多任务操作系统，支持多种处理器架构，最早由Ken Thompson、Dennis Ritchie和Douglas McIlroy于1969年在AT\&T的贝尔实验室开发，运行在PDP-7/11计算机上运。1975年UNIX　version 6(简称UNIX-v6)发表，它已经几乎具备了现代（单机）操作系统的所有概念：进程、进程间通信、多用户、虚拟内存、系统的内核模式和用户模式、文件系统、中断管理、I/O设备管理、系统接口调用、用户访问界面（shell）。
+\end{note} 
+	
+既然Linux太复杂，即使是早期的UNIX-v6操作系统，也有一万行左右的代码，且基于古老的PDP计算机，使得分析,理解和运行UNIX-v6比较困难。其实我们可以根据UNIX-v6进行深度简化，只保留阐述了基本原理级的代码，并建立一个简化的计算机系统(当然是用软件来模拟实现)，就可以让初学者比较容易理解且实践操作系统了。
+我们参考UNIX构造了一个简单的操作系统reptile-os和与之配套的简单计算机reptile-cpu，这个计算机只是为了支持reptile-os而存在。
+
+
+reptile-os是一个假想的爬行动物时代的极简OS，存在于操作系统的爬行动物时代，运行在reptile-cpu计算机系统上。基于reptile-os来实现hello world的执行过程，就会简单很多。其实在操作系统的三叶虫时代，应用程序就是操作系统，它需要完成控制计算机的所有事情。我们来看看reptile-os这个应用程序操作系统在v9计算机系统上是如何完成显示字符串的。先看os\_helloworld.c：
  
  \begin{lstlisting}[language={C}]
  /* output a char to screen*/
@@ -110,7 +192,7 @@ void main(void){
  }
  \end{lstlisting}
  
-首先，我们通过智人时代的操作系统Linux环境把trilobite-os实验环境(参见\ref{setupv9})建立好。并在Linux环境中，执行特定编译命令，把os\_helloworld.c转换成执行程序os\_helloworld，并在v9模拟环境中执行生成的os\_helloworld操作系统：
+首先，我们通过智人时代的操作系统Linux环境把reptile-os实验环境(参见\ref{setupv9})建立好。并在Linux环境中，执行特定编译命令，把os\_helloworld.c转换成执行程序os\_helloworld，并在v9模拟环境中执行生成的os\_helloworld操作系统：
 \begin{lstlisting}[language={bash}]
 	$ make run
 	gcc -O3 -m32 -o ../tools/xc ../tools/c.c -lm
@@ -121,3 +203,8 @@ void main(void){
 \end{lstlisting}
 
 在v9 computer的模拟器xem下，加载并执行三叶虫操作系统os\_helloworld，也顺利地输出了字符串“Hello World!”。
+
+
+\begin{note} 
+这里没有用ucore-os的原因是，ucore-os是处于哺乳动物年代过渡时期的操作系统，完成一个显示字符串也许要一百行左右的代码，用在这里讲解还是复杂了一些。后续的讲解中，我们将基于ucore-os和risc-v操作系统来进行分析。
+\end{note} 
