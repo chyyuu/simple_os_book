@@ -50,7 +50,7 @@ $ gcc -o helloworld helloworld.c
 
 %上面的helloworld执行程序需要用到一个个外设：显示器。dang\$上继续敲如字符串"hello　world!"，并回车。类似上面的描述，这次shell程序会请求操作系统来执行helloworld这个程序。操作系统为此需要创建一个让helloworld程序可以正常工作的执行空间，并启动helloworld程序。helloworld的执行工作就是显示字符串“hello world!”。为此，它像shell一样，给操作系统发出显示字符串的请求。操作系统收到显示字符串的请求后，把字符串显示到屏幕上。至此，上面示例中三行显示的背后执行过程就简单描述完毕。
 
-上面的helloworld执行程序需要用到一个外设：显示器。当你在shell的\$提示符后继续敲如字符串"hello　world!"并回车，shell解析此命令，分析出你是要执行helloworld这个程序，于是会请求操作系统来执行helloworld这个程序。操作系统为此需要创建一个让helloworld程序可以正常工作的执行环境(比如分配内存放代码和数据，提供CPU用于执行等)，并启动helloworld程序。此时shell程序要让位helloworld程序执行，为此操作系统还要完成一个执行环境切换的过程，让helloworld能够占用CPU来执行。完成切换后，helloworld程序才真正开始执行。
+上面的helloworld执行程序需要用到一个外设：显示器。当你在shell的\$提示符后继续敲如字符串"hello　world!"并回车，shell解析此命令，分析出你是要执行helloworld这个程序，于是会请求操作系统来执行helloworld这个程序。操作系统为此需要创建一个让helloworld程序可以正常工作的执行环境(比如分配内存放代码和数据，提供CPU用于执行等)，并启动helloworld程序。此时shell程序要让位helloworld程序执行，为此操作系统还要完成一个执行上下文切换的过程，让helloworld能够占用CPU来执行。完成切换后，helloworld程序才真正开始执行。
 
 helloworld的执行工作就是显示字符串“hello world!”。为此，它像shell一样，给操作系统发出显示字符串的请求。操作系统收到显示字符串的请求后，直接控制显卡这个设备，通过显卡把字符显示到显示器上，然后通知shell完成显示字符任务了。helloworld程序执行完毕后，操作系统还要把之前分配给helloworld的执行环境给收回，用于其他程序的执行。至此，上面示例中两行行显示的背后执行过程就简单描述完毕。
 
@@ -135,7 +135,7 @@ void main(void)
 当执行getchar-helloworld程序时，如果你没敲字符，getchar-helloworld就会默默地等待你的输入\textbf{其实getchar-helloworld处于睡觉状态}。当你通过键盘敲入“h”和后续的多个字符的时候，首先是操作系统收到键盘发出的字符，然后唤醒并通知getchar-helloworld，有字符来了。getchar-helloworld本来在睡觉，被操作系统唤醒后，持续接收字符。在收到'\\n'回车符后，就把用户输入的字符与", hello world!"字符连接在一起，形成一个新字符串，并请求操作系统显示这个新字符串。操作系统接下来的过程与上面的分析解释是一样的，。
 
 \paragraph{定时＋交互式显示"hello world!"}
-上面的小实验都是执行一个程序，如果把两个执行程序放在一起执行会怎样呢？操作系统会如何管理这两个程序的执行呢？下面我们尝试把上述两个执行程序timing-helloworld和getchar-helloworld放在一起执行：
+只支持一个应用程序的操作系统谈不上是一个合格的操作系统。上面的小实验都是执行一个程序，体现不出操作系统的强大能力。如果把两个执行程序放在一起执行会怎样呢？操作系统会如何管理这两个程序的执行呢？下面我们尝试把上述两个执行程序timing-helloworld和getchar-helloworld放在一起执行：
 \begin{lstlisting}[language={bash}]
 $ timing-helloworld & getchar-helloworld
 [1] 24690
@@ -153,27 +153,31 @@ hello world!
 
 通过上面的五个实验，你会发现程序代码很简单，但默默付出的操作系统做了好多的幕后工作，但这些工作对于执行程序的用户而言都是很难直接看不到的，用户看到的是应用程序shell完成了用户的请求，而幕后英雄--操作系统只是默默的完成应用程序的各种请求。智人时代的操作系统的特点是麻烦自己，方便用户。把自己搞得特别复杂，像Linux kernel这样大家能看到源码的操作系统，其当前最新的4.17版本已经有２千万行代码了。即使是应用程序显示字符串这样一个简单过程，在Linux中执行了的代码行数也都过万行。但这不会影响我们了解其基本原理。
 
-\subsubsection{爬行动物时代下"hello　world!"}
+\subsubsection{哺乳动物时代下"hello　world!"}
 
-虽然通过上面的五个小实验，我们对操作系统的功能有了一定的初步了解。但由于Linux太复杂，使得初学者很难在有限的时间内深入到其内部，分析和理解其实现。
+虽然通过上面的五个小实验，我们对操作系统的功能有了一定的初步了解。但由于面向实际应用需求的Linux太复杂，使得初学者很难在有限的时间内深入到其内部，分析和理解其实现。
 能否把操作系统的各种先进复杂的功能先丢到一遍，看看一个操作系统要在计算机上显示字符串，到底需要做哪些基本的事情呢？
-回到三叶虫和恐龙时代，可以让我们看到操作系统最开始的原始面目，但当时的操作系统和硬件都太初级，无法体现我们现在操作系统的基本功能。而爬行动物时代的操作系统代表UNIX是一个跨时代的操作系统，目前Linux、Windows的不少核心设计思想与UNIX有着千丝万缕的联系。
+回到三叶虫和恐龙时代，可以让我们看到操作系统最开始的原始面目，但当时的操作系统和硬件都太初级，无法体现我们现在操作系统的基本功能。而哺乳动物时代的操作系统代表UNIX是一个跨时代的操作系统，目前Linux、Windows的不少核心设计思想与UNIX有着千丝万缕的联系。
 
 \begin{note} 
 UNIX，是一个用C语言编写的多用户、多任务操作系统，支持多种处理器架构，最早由Ken Thompson、Dennis Ritchie和Douglas McIlroy于1969年在AT\&T的贝尔实验室开发，运行在PDP-7/11计算机上运。1975年UNIX　version 6(简称UNIX-v6)发表，它已经几乎具备了现代（单机）操作系统的所有概念：进程、进程间通信、多用户、虚拟内存、系统的内核模式和用户模式、文件系统、中断管理、I/O设备管理、系统接口调用、用户访问界面（shell）。
 \end{note} 
 	
-既然Linux太复杂，即使是早期的UNIX-v6操作系统，也有一万行左右的代码，且基于古老的PDP计算机，使得分析,理解和运行UNIX-v6比较困难。其实我们可以根据UNIX-v6进行深度简化，只保留阐述了基本原理级的代码，并建立一个简化的计算机系统(当然是用软件来模拟实现)，就可以让初学者比较容易理解且实践操作系统了。
-我们参考UNIX构造了一个简单的操作系统reptile-os和与之配套的简单计算机reptile-computer，这个计算机只提供了基本的硬件能力，从而能够支持reptile-os的安全、多任务切换、中断处理、系统调用等类似Linux和Windows操作系统功的基本功能。
+如果设计了一个简单的操作系统，但运行在复杂的计算机系统上，比如现在基于x86的计算机上，依然会带来设计实现上的复杂性，这主要是由于硬件的复杂性造成的。有读者问，能否在不了解计算机硬件的情况下学习操作系统？我们觉得这是不太可行的。因为操作系统需要管理各种计算机中的硬件，包括CPU、内存、外设等，还需要通过对硬件的操作来管理应用程序。不涉及硬件操作的操作系统就是一个“空中花园”，看着很漂亮，但没有底子，摸不着，跑不起来。
 
-\paragraph{reptile-computer}
-现在我们需要设计一个计算机系统reptile-computer。reptile-computer是一个简化的计算机系统，包含一个简化的32-bit RISC　CPU--reptile-cpu，一块ram内存，时钟/屏幕两种外设。别担心，目前这个只支持reptile-os的CPU很简单。下面就其主要部分做简要介绍。
+即使是早期的UNIX-v6操作系统，也有一万行左右的代码，且基于古老的PDP计算机，使得分析,理解和运行UNIX-v6比较困难。其实我们可以对操作系统和计算机硬件系统进行深度简化，只保留阐述了基本原理级的操作系统代码，并建立一个的简化计算机系统(当然是用软件来模拟实现)，就可以让初学者比较容易理解且实践操作系统了。
+
+
+我们构造了一个出入哺乳动物时代的简单操作系统mammal-os和与之配套的简单计算机mammal-computer，这个计算机只提供了基本的硬件能力，从而能够支持mammal-os的安全、多任务切换、中断处理、系统调用等类似Linux和Windows操作系统功的基本功能。
+
+\paragraph{mammal-computer}
+现在我们需要设计一个计算机系统mammal-computer。mammal-computer是一个简化的计算机系统，包含一个简化的32-bit RISC　CPU--mammal-cpu，一块ram内存，时钟/屏幕两种外设。别担心，目前这个只支持mammal-os的CPU很简单。下面就其主要部分做简要介绍。
 
 \subparagraph{寄存器}
 
 \begin{itemize}
 	\item reg\_a, reg\_b, reg\_c : 三个32-bit通用寄存器
-	\item reg\_sp 为当前栈底指针寄存器，按64-bit(8字节)对齐
+	\item reg\_sp 为栈指针寄存器，按64-bit(8字节)对齐
 	\item reg\_pc 为32-bit程序计数器（指向下一条指令），按32-bit(4字节)对齐
 	\item reg\_flags - 内部状态寄存器(包括当前的运行模式,是否中断使能等)，可通过特定指令访问相关bit(如下所示)	
 	\begin{itemize}
@@ -182,10 +186,10 @@ UNIX，是一个用C语言编写的多用户、多任务操作系统，支持多
 	\end{itemize}
 \end{itemize}
 
-reptile-cpu具有用户态(user mode)和内核态(kernel mode)两种特权级的运行模式。内核态的特权级别最高，用户态的特权级别最低。其中内核态运行模式是预留给操作系统使用的，可确保操作系统不受任何的限制地自由访问任何有效内存地址，执行特权（系统）指令，能直接访问外设。而用户态运行模式是预留给给普通的应用程序使用的，运行于用户态的代码执行会被CPU安全保护机制的检查，不能执行特权（系统）指令，不能直接访问外设和其他一些特权指令。
+mammal-cpu具有用户态(user mode)和内核态(kernel mode)两种特权级的运行模式。内核态的特权级别最高，用户态的特权级别最低。其中内核态运行模式是预留给操作系统使用的，可确保操作系统不受任何的限制地自由访问任何有效内存地址，执行特权（系统）指令，能直接访问外设，使用内核栈。而用户态运行模式是预留给给普通的应用程序使用的，运行于用户态的代码执行会被CPU安全保护机制监管，使用用户栈，不能执行特权（系统）指令，不能直接访问外设和其他一些特权指令。
 
 \subparagraph{指令集}
-reptile-cpu一条指令大小为32bit。整体来看,指令分为如下几类:
+mammal-cpu一条指令大小为32bit。整体来看,指令分为如下几类:
 \begin{itemize}
 \item 运算指令：如ADD, SUB等
 \item 跳转指令：如JMP, JSR，LEV等
@@ -193,14 +197,14 @@ reptile-cpu一条指令大小为32bit。整体来看,指令分为如下几类:
 \item 系统命令:如HALT, RTI, IDLE，SSP, USP,IVEC, PDIR，目的是为了操作系统设计
 \end{itemize}
 
-reptile-os中涉及的reptile-cpu汇编代码都有比较详细的注释。如果读者还需进一步了解reptile-cpu的指令，可参见\ref{setupreptilecomp}中对指令集的描述。
+mammal-os中涉及的mammal-cpu汇编代码都有比较详细的注释。如果读者还需进一步了解mammal-cpu的指令，可参见\ref{setupmammalcomp}中对指令集的描述。
 
 \subparagraph{内存}
-reptile-computer中包括一块连续的物理内存（RAM），与reptile-cpu直接相连，缺省内存大小为128MB，其物理内存地址是连续的，从0--128MB。
+mammal-computer中包括一块连续的物理内存（RAM），与mammal-cpu直接相连，缺省内存大小为128MB，其物理内存地址是连续的，从0--128MB。
 
 \subparagraph{外设}
 
-reptile-computer只包含最基本的外设：timer(时钟)、 screen(屏幕)，支持中断响应和相关的IO操作。关于向屏幕输出字符的操作如下所示：
+mammal-computer只包含最基本的外设：timer(时钟)、 screen(屏幕)，支持中断响应和相关的IO操作。关于向屏幕输出字符的操作如下所示：
 \begin{enumerate}
 \item len --> reg\_a ：把输出的字符个数len给寄存器reg\_a
 \item chr --> reg\_b   ：把字符内容chr给寄存器reg\_b
@@ -223,142 +227,167 @@ reptile-computer只包含最基本的外设：timer(时钟)、 screen(屏幕)，
 \item 通过‘STI’指令使能中断
 \end{enumerate}
 
-这样就建立好了时钟中断。当时钟的tick增量超过了timeout阈值后，时钟外设就产生中断，使得reptile-cpu先把当前被打断执行的reg\_pc寄存器内容保存到内核栈中，然后再把中断号也保存到内核栈中，最后跳转到中断处理例程的起始地址处执行。注意，如果在用户态的应用程序执行TRAP指令，相当于通过软件产生了一个有特定编号的中断，reptile-cpu也要进行相应的压栈和跳转操作，这样中断和系统调用就可以统一处理了。
+这样就建立好了时钟中断。当时钟的tick增量超过了timeout阈值后，时钟外设就产生中断，使得mammal-cpu先把当前被打断执行的reg\_pc寄存器内容保存到内核栈中，然后再把中断号也保存到内核栈中，最后跳转到中断处理例程的起始地址处执行。注意，如果在用户态的应用程序执行TRAP指令，相当于通过软件产生了一个有特定编号的中断，mammal-cpu也要进行相应的压栈和跳转操作，这样中断和系统调用就可以统一处理了。
 
-有了上面的介绍，大家就能进行理解和尝试下面将介绍的reptile-os操作系统了。
+有了上面的介绍，大家就能进行理解和尝试下面将介绍的mammal-os操作系统了。
 
-\paragraph{reptile-os}
-reptile-os是一个假想的爬行动物时代的极简OS，存在于操作系统的爬行动物时代，运行在reptile-computer计算机系统上。基于reptile-computer计算机系统，reptile-os实现类似显示"hello　world!"、进行程序执行切换、响应中断、执行系统调用等的基本功能就会简单很多。虽然简单，其设计实现的基本思路与Linux、Windows这样的通用操作系统在本质上并无二致。接下来，我们来看看reptile-os这个操作系统在reptile-computer计算机系统上是如何完成这些工作的。
+\paragraph{mammal-os}
+mammal-os是一个假想的哺乳动物时代的极简OS，存在于操作系统的哺乳动物时代，运行在mammal-computer计算机系统上。基于mammal-computer计算机系统，mammal-os实现类似显示"hello　world!"、进行程序执行切换、响应中断、执行系统调用等的基本功能就会简单很多。虽然简单，其设计实现的基本思路与Linux、Windows这样的通用操作系统在本质上并无二致。接下来，我们来看看mammal-os这个操作系统在mammal-computer计算机系统上是如何完成这些工作的。
 
 \subparagraph{应用程序}
 首先是应用程序，这里列出了两个程序progA和progB，分别显示" hello "字符串和" world! "字符串：
- 
- \begin{lstlisting}[language={C}]
-//程序A的用户栈，内核栈和栈当前位置指针
-char progA_stack[1000], progA_kstack[1000];
-int *progA_sp;
-//程序B的用户栈，内核栈和栈当前位置指针
-char progB_stack[1000], progB_kstack[1000];
-int *progB_sp;
-//全局变量
-int current;
+\begin{lstlisting}[language={C}]
 //应用程序发出write系统调用（系统调用号是S_write），
 //请求操作系统完成write系统服务
 write() { 
-//把端口port, char类型的字节序列和序列长度给寄存器A,B,C; 
-//执行write系统调用; 
-asm(LL,8); asm(LBL,16); asm(LCL,24); asm(TRAP,S_write);
-}
+　　//把外设端口port, char类型的字节序列和序列长度给寄存器; 
+　　//执行write系统调用; 
+　　asm(LL,8);asm(LBL,16);asm(LCL,24);asm(TRAP,S_write);}
 //程序Ａ重复显示" hello "字符串
-progA()　{ while(current < 10)  write(1," hello ",8);}
+progA()　{while(current < 10) write(1," hello ",8);}
 //程序B重复显示" world! "字符串
-progB()　{ while(current < 10)  write(1," world! ",9);}
+progB()　{while(current < 10) write(1," world! ",9);}
+\end{lstlisting}
+
+虽然都是显示字符串，但这里的程序相对与在Linux操作系统下的应用程序有一些不同。其中的显示字符串的write函数是用汇编语言实现的，前三句汇编代码大致内容是从栈中读出外设端口port, char类型的字节序列和序列长度，并分别赋值给寄存器reg\_a、reg\_b、reg\_c。最后一句汇编代码\textit{asm(TRAP,S\_write)}就是mammal-os实现的显示字符串内核函数的系统调用接口(system call　interface)，即把系统调用号S\_write压栈并执行\textit{TRAP}指令，这样应用程序就可以向操作系统发出显示字符串的系统调用请求了。
+
+为什么应用程序不直接通过函数调用来访问操作系统提供的函数呢？因为操作系统内核不信任应用程序，它的一个前提假设是“应用程序不可信，bug太多，有安全隐患”。所以虽然操作系统内核提供了一系列特定功能的内核函数，但应用程序不能直接通过函数调用来访问，而不得不用开销大一些，但有比较全面的安全措施的系统调用接口来访问。
+
+\begin{note} 
+操作系统内核通过一组特殊的函数访问接口把内核函数呈现给应用程序，使得能够让应用程序基于此接口发出的请求并让操作系统执行，执行完毕后可返回应用程序，这个接口就是\emph{系统调用(system call)}接口\label{syscall}，这可以看成是一种涉及特权级改变的特殊的函数调用接口。系统调用指令本身的性能开销就比一般的函数调用要多一些，是因为在硬件和软件层面要进行一些额外执行上下文的保存、安全检查等。
+\end{note} 
+
+为什么Linux操作系统下的helloworld应用程序没有这些让人看不懂的汇编代码？那是因为helloworld应用程序调用的puts函数是被glibc封装了起来，在在glibc库中的puts函数实现比较复杂，而puts函数最终也要执行Linux的write系统调用(C代码+汇编代码)来请操作系统完成显示字符的操作。
+
+
+
+mammal-os的系统调用接口提供了哪些安全措施呢？这其实要看mammal-cpu对\textit{TRAP}指令的硬件实现了。比如，当应用程序progA执行\textit{TRAP}指令时，mammal-cpu会从用户特权态切换到内核特权态(在mammal-cpu中reg\_flag的user bit确定为0)，且把reg\_sp指向内核栈progA\_kstack了，接下来在操作系统中执行函数调用就会用内核栈了，避免了使用用户栈可能导致的内核信息泄露等安全隐患。其实，mammal-cpu的安全检查还不够，在实际计算机系统中，比如基于x86,risc-v的Linux等，CPU和操作系统还会有更加严格的安全检查和安全设置。
+
+\subparagraph{初始化应用程序执行环境}
+为了支持应用程序正常执行，mammal-os操作系统需要建立应用程序的运行环境。一个应用程序的基本运行环境包括：用户栈空间；用户态的开始执行位置；内核栈空间；内核态的开始执行位置。为了让应用程序progA和progB能定时切换执行，而且还需要初始化时钟的timeout值，使得可以过一段时间就换一个程序执行；通过建立响应中断和系统调用的入口位置，使得mammal-cpu知道当产生时钟中断或系统调用后，需要跳转到哪里进行处理，并可进一步进行程序执行切换和显示字符串等工作。
+
+\begin{lstlisting}[language={C}]
+//程序progA和progB的用户栈，内核栈和栈当前位置指针
+#define N 1000
+char pa_stack[N], pa_kstack[N],pb_stack[N], pb_kstack[N];
+int *pa_sp,*pb_sp;
+//mammal-os的入口函数
+main() {
+  int *kstack;　 //用于存储当前内核堆栈的位置　　　　　　　　　　　　　　 
+  stmr(5000);　　//设置时钟到期的值为5000tick
+  ivec(alltraps);//设置中断/系统调用的入口函数为alltraps
+  //初始化progA执行程序的内核栈和用户态下执行环境
+  pa_sp = &pa_kstack[N];  //设置progA的内核栈栈底
+  pa_sp -= 2; *pa_sp = &progA;//设置progA在用户态执行的起始地址
+  pa_sp -= 2; *pa_sp = USER;  //设置progA的CPU用户态标志
+  pa_sp -= 2; *pa_sp = 0; 　　//设置progA用户态下的reg_a的值为0
+  pa_sp -= 2; *pa_sp = 0; 　　//设置progA用户态下的reg_b的值为0
+  pa_sp -= 2; *pa_sp = 0; 　　//设置progA用户态下的reg_c的值为0
+  pa_sp -= 2; *pa_sp = &pa_stack[N];//设置progA用户态下的用户栈
+  pa_sp -= 2; *pa_sp = &trapret;//设置progA下一执行地址为trapret  
+  //初始化progB执行程序的内核栈，使得progB能在用户态执行  
+  pb_sp = &pb_kstack[N];   //设置progB的内核栈栈底
+  pb_sp -= 2; *pb_sp = &progB;//设置progB在用户态执行的起始地址
+  pb_sp -= 2; *pb_sp = USER;  //设置progB的CPU用户态标志
+  pb_sp -= 2; *pb_sp = 0;     //设置progB用户态下的reg_a的值为0
+  pb_sp -= 2; *pb_sp = 0;     //设置progB用户态下的reg_b的值为0
+  pb_sp -= 2; *pb_sp = 0;     //设置progB用户态下的reg_c的值为0
+  pb_sp -= 2; *pb_sp = &pb_stack[N];//设置progB用户态下的用户栈
+  pb_sp -= 2; *pb_sp = &trapret;//设置progB下一执行地址为trapret
+  //建立让progA执行的内核执行环境
+  kstack = pa_sp;
+  //reg_a=kstack;reg_sp=reg_a，此时栈指针sp指向progA的内核栈
+  asm(LL,4); asm(SSP);
+  asm(LEV);}//根据sp保存的内容，main函数返回到trapret继续执行 
+//构造回到用户态的执行环境
+trapret(){
+　　asm(POPA);asm(SUSP);　　　　　//从内核栈恢复用户态栈位置
+　　asm(POPC);asm(POPB);asm(POPA);//从内核栈恢复寄存器内容
+　　asm(RTI);}　　　　　　　　　　//中断/系统调用返回
 \end{lstlisting}
 
 \begin{note} 
 栈（stack）— 栈是一块内存空间，是实现函数调用的重要机制。由编译器自动分配释放栈空间，在栈空间中存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。用户栈和内核栈分别是应用程序在执行过程中在用户态和内核态时用的栈(靠堆栈指针寄存器切换)。
 \end{note} 
 
-虽然都是显示字符串，但这里的程序相对与在Linux操作系统下的应用程序有一些不同。首先，我们明确定义了程序progA和progB用到的栈空间。这里还分别定义了用户栈progA\_stack、progB\_stack，以及内核栈progA\_kstack、progB\_kstack。为什么执行一个应用程序需要两个栈？简单的回答是为了安全。其主要原因是应用程序被操作系统认为是一个不可靠的程序，通过把应用程序限制在用户态(在reptile-cpu中reg\_flag的user bit确定为1)下运行，使得应用程序不能直接调用操作系统实现的函数，不能直接访问硬件和执行部分特权指令。为什么Linux操作系统下的应用程序看不到关于这两个栈的定义？简单的回答是因为你没看Linux kernel的源代码，在Linux kernel中有关创建程序执行环境的源代码中，建立了用户栈和内核栈。
+首先（Line3-4），我们明确定义了程序progA和progB用到的栈空间。这里还分别定义了用户栈progA\_stack、progB\_stack，以及内核栈progA\_kstack、progB\_kstack。为什么执行一个应用程序需要两个栈？简单的回答是为了安全。其主要原因是应用程序被操作系统认为是不可靠的，通过把应用程序限制在用户态(在mammal-cpu中reg\_flag的user bit确定为1)下运行，使得应用程序不能直接调用操作系统实现的函数，不能直接访问硬件和执行特权指令，从而不能破坏操作系统。为什么Linux操作系统下的应用程序看不到关于这两个栈的定义？简单的回答是因为你没看Linux kernel的源代码，在Linux kernel中有关创建程序执行环境的源代码中，建立了用户栈和内核栈。
 
-为了能够获得操作系统的服务，需要通过一种机制，能够让操作系统获得应用程序发出的请求并完成具体的函数实现，这就是系统调用，这是一种涉及特权级改变的特殊的函数调用。在上面程序列表的第14行中，可以看到汇编指令\textit{asm(TRAP,S\_write)}。当应用程序progA执行\textit{TRAP}指令时，reptile-cpu会从用户态切换到内核态(在reptile-cpu中reg\_flag的user bit确定为0)，且把reg\_sp指向内核栈progA\_kstack了，接下来在操作系统中执行函数调用就会用内核栈了。
+接着(Line10)，初始化时钟外设的timeout值为5000　　ticks；并设置中断/系统调用的入口函数为alltraps，这样产生中断或系统调用后，mammal-cpu知道需要跳转到alltraps函数完成相应的处理。
 
-\subparagraph{操作系统初始化}
-\begin{lstlisting}[language={C}]
-//reptile-os的入口函数
-main() {
-  int *kstack;　 //用于存储当前内核堆栈的位置　　　　　　　　　　　　　　 
-  stmr(5000);　　//设置时钟到期的值为5000tick
-  ivec(alltraps);//设置中断/系统调用的入口函数为alltraps
-  //初始化progA执行程序的内核栈和用户态下执行环境
-  progA_sp = &progA_kstack[1000];  //设置progA的内核栈栈底
-  progA_sp -= 2; *progA_sp = &progA;//设置progA在用户态执行的起始地址
-  progA_sp -= 2; *progA_sp = USER;  //设置progA需要回到用户态（RTI指令会判断）
-  progA_sp -= 2; *progA_sp = 0; 　　//设置progA用户态下的reg_a的值为0
-  progA_sp -= 2; *progA_sp = 0; 　　//设置progA用户态下的reg_b的值为0
-  progA_sp -= 2; *progA_sp = 0; 　　//设置progA用户态下的reg_c的值为0
-  progA_sp -= 2; *progA_sp = &progA_stack[1000];//设置progA用户态下的用户栈
-  progA_sp -= 2; *progA_sp = &trapret;//设置progA接下来要执行的地址为trapret  
-  //初始化progB执行程序的内核栈，使得progB能在用户态执行  
-  progB_sp = &progB_kstack[1000];   //设置progB的内核栈栈底
-  progB_sp -= 2; *progB_sp = &progB;//设置progB在用户态执行的起始地址
-  progB_sp -= 2; *progB_sp = USER;  //设置progB需要回到用户态（RTI指令会判断）
-  progB_sp -= 2; *progB_sp = 0;     //设置progB用户态下的reg_a的值为0
-  progB_sp -= 2; *progB_sp = 0;     //设置progB用户态下的reg_b的值为0
-  progB_sp -= 2; *progB_sp = 0;     //设置progB用户态下的reg_c的值为0
-  progB_sp -= 2; *progB_sp = &progB_stack[1000];//设置progB用户态下的用户栈
-  progB_sp -= 2; *progB_sp = &trapret;//设置progB接下来要执行的地址为trapret
-  //建立让progA执行的内核执行环境，当main执行完毕，会返回到progA继续执行
-  //reg_a  = kstack;reg_sp = reg_a，此时栈指针sp指向progA的内核栈
-  kstack = progA_sp; asm(LL, 4); asm(SSP);         
-  asm(LEV);  //根据sp保存的内容，main函数返回到trapret继续执行 
-}
-\end{lstlisting}
+何时需要使用内核栈呢？当应用程序执行系统调用请求或产生中断的时候需要用到内核栈。在mammal-cpu的硬件设计中，当应用程序执行行\textit{TRAP}指令后，mammal-cpu会从用户特权态切换到内核特权态，且返回地址，中断号压入内核栈保存，把reg\_pc寄存器指向中断入口地址，即alltraps函数地址。
 
-\subparagraph{访问外设}
+建立应用程序的基本运行环境需要一些特殊的处理。首先是设置内核栈空间，并在内核栈空间中压入一系列的值，包括:
+\begin{enumerate}
+	\item USER：执行RTI指令时，会弹栈把USER表示的整数赋值给reg\_flag寄存器，使得mammal-cpu处于用户态；
+	\item 三个0：执行trapret函数时，弹栈给寄存器reg\_a、reg\_b、reg\_c；
+	\item 用户栈地址：执行trapret函数时，弹出并赋值给reg\_usp用户栈寄存器；
+	\item trapret函数地址：应用程序在内核态的执行地址入口
+\end{enumerate}
+
+main()函数的最后两行代码也是容易让人迷惑的汇编代码，这里读者只需理解其大致含义即可，即调整栈指针指向刚才设置好的progA的内核栈(注意，此时栈顶指针指向的内存单元的内容是trapret函数地址)，这样当执行\textit{LEV}指令完成函数返回操作时，mammal-cpu弹栈，把reg\_pc寄存器赋值为栈顶指针指向的trapret函数地址，开始进行progA为了能在用户态执行所做的内核特殊准备。
+
+\begin{note} 
+	\textit{RTI}指令的实现步骤:从当前内核栈中弹出中断码、reg\_pc寄存器；如果中断码的USR位(第16位)为1，表示当前是从内核特权态转到用户特权态，则设置reg\_flag寄存器的user位为１(表示CPU处于户特权态)，把reg\_sp寄存器指向用户栈，并跳转到reg\_pc寄存器指向的地址继续执行。
+\end{note} 
+
+为了能在用户态执行progA应用程序的用户函数progA()，mammal-os还需帮助progA应用程序完成最后一个准备步骤，即从内核态转换用户态并跳转执行用户函数progA()，这具体实现在trapret()函数中。读者也许会问，为何不直接函数调用progA()?这当然是可以做到的，但这样进行函数调用后，progA()是运行在内核态的，而我们假定为了安全，应用程序是必须允许在用户态。
+
+对于完全用汇编语言编写的trapret()函数，它到底做了啥？这里简单解释一下，在main函数中，reg\_sp栈寄存器指向了progA的内核栈，且从栈顶向下，依次压入了trapret函数的地址、progA的用户栈地址、三个0、表示用户态的USR整数值、用户函数progA()的地址。当main函数返回时，从当前栈顶弹出了trapret函数的地址给reg\_pc寄存器，使当前cpu跳转到trapret函数开始执行。trapret函数首先弹出了用户栈地址并执行\textit{SUSP}特权指令设置内部的用户态栈指针(应用程序不可见)；然后弹出三个0，分别赋值给reg\_c、reg\_b、reg\_a，这表示progA应用程序开始执行时，所有的通用寄存器都为0；在接着执行\textit{RTI}指令，根据内核栈中的USR整数值和用户函数progA()的地址，转换CPU用户态，设置reg\_sp为内部的用户态栈指针，设置reg\_pc寄存器为用户函数progA()的地址。这样mammal-cpu在接下来的执行中，就是在执行用户态的progA程序了。
+
+\subparagraph{响应中断和系统调用}\label{dointr}
+
+如果没有中断机制，当外设产生了一个事件(比如时钟的定时器到期了)后，如果操作系统不去访问外设，操作系统是无法知道这个外设事件是否发生。所以操作系统不得不以轮询的方式(一般是在一个while循环中查看外设事件是否发生)来查询外设事件是否发生。很明显，如果操作系统一边查询外设事件，同时还要做其他事情，那效率是比较低的。而且通过中断机制，操作系统还可以强制打断应用程序的执行(即使应用程序不想交出CPU使用权)，把CPU控制权交给操作系统设计实现的中断处理例程来进行各种操作，比如切换多个应用程序的执行等，这是操作系统能有效管理应用程序的一种直接体现。
+
+\begin{note} 
+执行上下文(execution-context)是CPU正在执行时的硬件环境，包括各种寄存器信息和CPU状态(比如当前的CPU特权态)。
+\end{note} 
+
+中断是外设通知操作系统的一种事件机制，当然这需要CPU的硬件支持。站在mammal-computer计算机系统的角度看，假设一个应用程序正在用户态执行，这时时钟外设的定时到期(定时值通过\textit{TIME}指令设置)，会产生一个中断信号，通知mammal-cpu有中断事件了。mammal-cpu收到此中断信号后，会打断当前执行，保存被打断应用程序的执行上下文(包括中断号|特权态的整数值、被打断时的reg\_pc寄存器值)到内核栈中，跳到响应中断和系统调用的函数入口(中断处理入口地址通过\textit{IVEC}指令设置)去执行中断服务例程。mammal-os执行中断服务例程后，还需恢复被打断的执行上下文(包括当时的特权态和reg\_pc寄存器值)。最后被打断的应用程序会继续执行，就像啥都没发生一样。上一小节介绍了对时钟定时的设置和中断处理入口地址的设置，这里我们来看看mammal-os是如何响应中断和系统调用的。
 
 \begin{lstlisting}[language={C}]
-//通过向端口port写值val来控制外设
- out(uint port, int val) {asm(LL,8);asm(LBL,16);asm(BOUT);}
-//置时钟经过val个tick后将产生时钟中断
-stmr(int val)   {asm(LL,8);asm(TIME);}
-//执行HALT指令，停止计算机系统
-halt(value)     {asm(HALT);}
-\end{lstlisting}
-
-\subparagraph{响应中断和系统调用}
-
-\begin{lstlisting}[language={C}]
-//操作系统实现的write系统服务，把char类型的字节序列写到端口port处
+int current;//全局变量
+//中断/系统调用的入口函数，此时内核栈中已经保存了被打断的
+//pc寄存器值和中断/系统调用号
+void alltraps(void){
+　asm(PSHA);asm(PSHB);asm(PSHC);//通用寄存器值压到内核栈
+　asm(LUSP);asm(PSHA);          //用户栈地址压到内核栈
+　trap();                       //调用中断处理主体函数
+　asm(POPA);asm(SUSP); 　　　　 //从内核栈弹出恢复用户栈
+　asm(POPC);asm(POPB);asm(POPA);//从内核栈弹出恢复寄存器
+　asm(RTI);}                    //从中断处理返回
+//sys_write系统服务实现，把字节序列写到端口port处
 sys_write(uint port, char *p, n) 
-{ int i; for (i=0; i<n; i++) out(port, p[i]); return i;}
-
-//中断/系统调用处理函数
-trap(int *sp,int c,int b,int a,int intrnum,unsigned *pc)
-{
+{int i;for (i=0;i<n;i++) out(port,p[i]);return i;}
+//中断/系统调用主体处理函数
+trap(int *sp,int c,int b,int a,int intrnum,unsigned *pc){
   switch (intrnum) {
   case FSYS + USER: //来自应用程序的系统调用
     switch (pc[-1] >> 8) {//取出系统调用号
     //如果系统调用号是S_write，则执行系统服务sys_write
     case S_write: a = sys_write(a, b, c); break;
-    default:  asm(HALT); //其他情况下，停止计算机系统
-    }
+    default:  asm(HALT);} //其他情况下，停止计算机系统
     break;   
   case FTIMER:  
   case FTIMER + USER://来自时钟中断
-　　　　　out(1,' '); out(1,'X'); out(1,' ');//显示字符串" X "
-    　if (++current & 1)　　               //如果current是奇数
-     　 task_switch(&progA_sp, progB_sp);//换出progA，换入progB
-    　else　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//如果current是偶数
-     　 task_switch(&progB_sp, progA_sp);//换出progB，换入progA
-    　break;
-  default: asm(HALT);//其他情况下，停止计算机系统
-  }
-}
-//中断/系统调用的入口函数，此时内核栈中已经保存了被打断的
-//pc寄存器值和中断/系统调用号
-void alltraps(void){
-  asm(PSHA);asm(PSHB);asm(PSHC);//保存当前寄存器内容到内核栈中
-  asm(LUSP);asm(PSHA);          //保存用户态栈位置到内核栈中
-  trap();                       //调用中断/系统调用处理函数
-  asm(POPA);asm(SUSP); 　　　　 //从内核栈中恢复用户态的sp值
-  asm(POPC);asm(POPB);asm(POPA);//从内核栈恢复寄存器内容
-  asm(RTI);                     //中断/系统调用返回
-}
-//构造回到用户态的执行环境
-trapret(){
-  asm(POPA);asm(SUSP);　　　　　//从内核栈恢复用户态栈位置
-  asm(POPC);asm(POPB);asm(POPA);//从内核栈恢复寄存器内容
-  asm(RTI);　　　　　　　　　　 //中断/系统调用返回
-}
-
+　　　out(1,' ');out(1,'X');out(1,' ');//显示" X "
+　　　//如果current是奇数，则换出progA，换入progB
+　　　if (++current & 1)　task_switch(&pa_sp, pb_sp);
+   　//如果current是偶数，则换出progB，换入progA
+   　　else　 　　　　　　task_switch(&pb_sp, pa_sp);
+  　　break;
+  default: asm(HALT);}} //其他情况下，停止计算机系统
 \end{lstlisting}
 
-\subparagraph{切换程序的执行环境}
+我们又看到了一个几乎都是汇编代码构成的重要函数alltraps()，因为这个函数是响应中断和系统调用的入口(在mammal-os的main()函数中，通过\textit{IVEC}指令设置中断处理入口为alltraps的地址)。mammal-cpu在收到外设中断信号或执行\textit{TRAP}指令时，就会转换为内核态，采用内核栈，并跳转到alltraps()函数。alltraps()函数的汇编代码主要做的事情就是把被打断的执行上下文保存到内核栈中，并调用trap()函数完成对中断和系统调用的处理后，从内核栈中恢复被打断的执行上下文，；最后通过\textit{RTI}指令回到以前被打断的执行上下文处，能够继续执行。
+
+而第二个函数trap()是中断/系统调用主体处理函数，其执行过程主要分为两部分，第一部分是处理来自应用程序的write系统调用，如果是write系统调用，则调用sys\_write()内核函数，并最终会执行\textit{BOUT}指令，通过给端口写字符来显示字符；如是其他未知系统调用，则停止计算机系统。第二部分是处理来自外设的中断信号，如果发现打断内核态或用户态执行过程的中断是时钟中断(表示时钟定时器到期)，则根据current的奇偶性，进行progA应用程序与progB应用程序的切换(具体切换过程会在下面分析)；如果是其他未知中断，则停止计算机系统。
+
+\subparagraph{切换程序的执行上下文}
+在计算机系统中只有一个应用程序执行的情况只存在于远古的三叶虫时代和恐龙时代。在mammal-computer的支持下，mammal-os能够支持多个应用程序分时使用CPU，定时切换执行，这样能更加充分的使用mammal-computer计算机资源。这里的一个关键是要能够切换不同程序的执行上下文(execution-context)。下面来看看mammal-os是如何实现这个切换功能的。
 
 \begin{lstlisting}[language={C}]
-//切换程序的执行环境
-//1.保存被换出的程序的栈指针到此程序的栈当前位置指针(这里是old)
+//切换程序的执行上下文
+//1.保存被换出的程序的栈指针到此程序的栈当前位置的指针(这里是old)
 //2.把被换入的程序的栈指针恢复为上次保存的栈当前位置指针内容
 //3.函数返回时，根据栈指针保留的返回地址，将执行被换入的程序
 prog_switch(int *old, int new) 
@@ -367,23 +396,51 @@ prog_switch(int *old, int new)
   asm(LBL, 8); //step1: reg_b = old
   asm(SX, 0);  //step1: *reg_b = reg_a
   asm(LL, 16); //step2: reg_a = new
-  asm(SSP);    //step2: reg_sp = reg_a
-}
+  asm(SSP);}   //step2: reg_sp = reg_a
 \end{lstlisting}
  
-首先，我们通过智人时代的操作系统Linux环境把reptile-os实验环境(参见\ref{setupv9})建立好。并在Linux环境中，执行特定编译命令，把os\_helloworld.c转换成执行程序os\_helloworld，并在v9模拟环境中执行生成的os\_helloworld操作系统：
-\begin{lstlisting}[language={bash}]
-	$ make run
-	gcc -O3 -m32 -o ../tools/xc ../tools/c.c -lm
-	gcc -O3 -m32 -o ../tools/xem ../tools/em.c -lm
-	../tools/xc -o os_helloworld os_helloworld.c
-	../tools/xem os_helloworld
-	hello world!
+prog\_switch又是一个全用汇编编写的重要内核函数，主要功能是进行换出程序的内核栈顶地址的保存，以及恢复换入程序的内核栈顶地址，恢复完后，执行函数返回指令，就会从新的栈顶中取出返回地址，开始进行换入程序在内核态中的执行。
+
+这个函数被上面分析过的trap()内核函数调用，如调用task\_switch(&pa\_sp, pb\_sp)，调用参数是progA应用程序的内核栈地址pa\_sp的地址和progB的内核栈地址pb\_sp。这样，prog\_switch第一个形参是要被换出的应用程序内核栈地址的指针，第二个形参是要换入的应用程序的内核栈地址。具体的执行分析如下所示：
+\begin{lstlisting}[language={C}]
+1. reg_a = reg_sp　当前执行程序的当前内核栈顶地址
+2. reg_b = old 用于保存当前执行程序的执行上下文内存地址
+3. *reg_b = reg_a　在执行上下文内存地址中保存当前内核栈顶地址
+4. reg_a = new　从当前内核栈中取出要换入程序的执行上下文内存地址
+5. reg_sp = reg_a　　从换入程序的执行上下文内存地址读出换入程序的内核栈顶并设置为reg\_sp
 \end{lstlisting}
 
-在v9 computer的模拟器xem下，加载并执行三叶虫操作系统os\_helloworld，也顺利地输出了字符串“Hello World!”。
+完成上述准备后，最后是执行函数返回指令，即从换入程序的内核栈顶(即reg\_sp寄存器指向的地址)中读出换入程序的返回地址并赋值给reg\_pc寄存器，从而开始了换入程序的执行。
 
 
-\begin{note} 
-这里没有用ucore-os的原因是，ucore-os是处于哺乳动物年代过渡时期的操作系统，完成一个显示字符串也许要一百行左右的代码，用在这里讲解还是复杂了一些。后续的讲解中，我们将基于ucore-os和risc-v操作系统来进行分析。
-\end{note} 
+\subparagraph{访问外设}
+
+\begin{lstlisting}[language={C}]
+//通过向端口port写值val来控制外设
+out(uint port, int val) {asm(LL,8);asm(LBL,16);asm(BOUT);}
+//置时钟经过val个tick后将产生时钟中断
+stmr(int val)   {asm(LL,8);asm(TIME);}
+//执行HALT指令，停止计算机系统
+halt(value)     {asm(HALT);}
+\end{lstlisting}
+
+
+
+ 
+ 
+% 首先，我们通过智人时代的操作系统Linux环境把mammal-os实验环境(参见\ref{setupv9})建立好。并在Linux环境中，执行特定编译命令，把os\_helloworld.c转换成执行程序os\_helloworld，并在v9模拟环境中执行生成的os\_helloworld操作系统：
+% \begin{lstlisting}[language={bash}]
+% $ make run
+% gcc -O3 -m32 -o ../tools/xc ../tools/c.c -lm
+% gcc -O3 -m32 -o ../tools/xem ../tools/em.c -lm
+% ../tools/xc -o os_helloworld os_helloworld.c
+% ../tools/xem os_helloworld
+% hello world!
+% \end{lstlisting}
+% 
+% 在v9 computer的模拟器xem下，加载并执行三叶虫操作系统os\_helloworld，也顺利地输出了字符串“Hello World!”。
+% 
+% 
+% \begin{note} 
+% 	这里没有用ucore-os的原因是，ucore-os是处于哺乳动物年代过渡时期的操作系统，完成一个显示字符串也许要一百行左右的代码，用在这里讲解还是复杂了一些。后续的讲解中，我们将基于ucore-os和risc-v操作系统来进行分析。
+% \end{note} 
