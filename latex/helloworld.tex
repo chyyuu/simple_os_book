@@ -1,6 +1,6 @@
 \subsection{hello world漫游}
 
-本节希望通过显示“hello world!”的应用程序来感受操作系统的功能和特征。一般应用程序都希望能够完成接受输入、显示输出、保存结果、定时处理等基本功能，而这些功能都是在操作系统的帮助下完成的。
+本节希望通过显示“hello world!”的应用程序来感受操作系统的功能和特征。一般应用程序都希望能够完成接受输入、显示输出、保存结果、定时处理、程序执行切换等基本功能，而这些功能都是在操作系统的帮助下完成的。
 
 \subsubsection{智人时代下的"hello　world!"}
 
@@ -164,9 +164,10 @@ UNIX，是一个用C语言编写的多用户、多任务操作系统，支持多
 \end{note} 
 	
 既然Linux太复杂，即使是早期的UNIX-v6操作系统，也有一万行左右的代码，且基于古老的PDP计算机，使得分析,理解和运行UNIX-v6比较困难。其实我们可以根据UNIX-v6进行深度简化，只保留阐述了基本原理级的代码，并建立一个简化的计算机系统(当然是用软件来模拟实现)，就可以让初学者比较容易理解且实践操作系统了。
-我们参考UNIX构造了一个简单的操作系统reptile-os和与之配套的简单计算机reptile-computer，这个计算机只是为了支持reptile
+我们参考UNIX构造了一个简单的操作系统reptile-os和与之配套的简单计算机reptile-computer，这个计算机只提供了基本的硬件能力，从而能够支持reptile-os的安全、多任务切换、中断处理、系统调用等类似Linux和Windows操作系统功的基本功能。
+
 \paragraph{reptile-computer}
-现在我们需要设计一个计算机系统reptile-computer。reptile-computer是一个简化的计算机系统，包含一个简化的32-bit RISC　CPU--reptile-cpu，一块ram内存，时钟/屏幕两种外设。别担心，目前这个只支持ｒeptile-os的CPU很简单。下面就其主要部分做简要介绍。
+现在我们需要设计一个计算机系统reptile-computer。reptile-computer是一个简化的计算机系统，包含一个简化的32-bit RISC　CPU--reptile-cpu，一块ram内存，时钟/屏幕两种外设。别担心，目前这个只支持reptile-os的CPU很简单。下面就其主要部分做简要介绍。
 
 \subparagraph{寄存器}
 
@@ -181,7 +182,7 @@ UNIX，是一个用C语言编写的多用户、多任务操作系统，支持多
 	\end{itemize}
 \end{itemize}
 
-reptile-cpu具有用户态(user mode)和内核态(kernel mode)两种特权级的运行模式。内核态的特权级别最高，用户态的特权级别最低。其中内核态运行模式是预留给操作系统使用的，可确保操作系统不受任何的限制地自由访问任何有效内存地址，执行特权（系统）指令，能直接访问外设。而用户态运行模式是预留给给普通的应用程序使用的，运行于用户态的代码执行会被CPU安全保护机制的检查，不能执行特权（系统）指令，不能直接访问物理内存空间和外设。
+reptile-cpu具有用户态(user mode)和内核态(kernel mode)两种特权级的运行模式。内核态的特权级别最高，用户态的特权级别最低。其中内核态运行模式是预留给操作系统使用的，可确保操作系统不受任何的限制地自由访问任何有效内存地址，执行特权（系统）指令，能直接访问外设。而用户态运行模式是预留给给普通的应用程序使用的，运行于用户态的代码执行会被CPU安全保护机制的检查，不能执行特权（系统）指令，不能直接访问外设和其他一些特权指令。
 
 \subparagraph{指令集}
 reptile-cpu一条指令大小为32bit。整体来看,指令分为如下几类:
@@ -201,15 +202,15 @@ reptile-computer中包括一块连续的物理内存（RAM），与reptile-cpu�
 
 reptile-computer只包含最基本的外设：timer(时钟)、 screen(屏幕)，支持中断响应和相关的IO操作。关于向屏幕输出字符的操作如下所示：
 \begin{enumerate}
-\item len --> reg\_a ：把输出的字符个数len给寄存器a
-\item chr --> reg\_b   ：把字符内容chr给寄存器b
+\item len --> reg\_a ：把输出的字符个数len给寄存器reg\_a
+\item chr --> reg\_b   ：把字符内容chr给寄存器reg\_b
 \item BOUT指令：如果在内核态，输出一个字符chr；如果在用户态，产生异常
 \end{enumerate}
 
 关于时钟的操作，即设置时钟的超时(imeout)过程，如下所示：
 \begin{enumerate}
-\item val --> a  ：把timerout值给寄存器a
-\item TIME指令 ：如果在内核态，设置时钟的timeout阈值为寄存器a的值；如果在用户态，产生异常
+\item val --> reg\_a  ：把timerout值给寄存器reg\_a
+\item TIME指令 ：如果在内核态，设置时钟的timeout阈值为寄存器reg\_a的值；如果在用户态，产生异常
 \item 当时钟增加了timeout值后会产生时钟中断
 \end{enumerate}
 
@@ -224,10 +225,13 @@ reptile-computer只包含最基本的外设：timer(时钟)、 screen(屏幕)，
 
 这样就建立好了时钟中断。当时钟的tick增量超过了timeout阈值后，时钟外设就产生中断，使得reptile-cpu先把当前被打断执行的reg\_pc寄存器内容保存到内核栈中，然后再把中断号也保存到内核栈中，最后跳转到中断处理例程的起始地址处执行。注意，如果在用户态的应用程序执行TRAP指令，相当于通过软件产生了一个有特定编号的中断，reptile-cpu也要进行相应的压栈和跳转操作，这样中断和系统调用就可以统一处理了。
 
-有了上面的介绍，大家就能进行理解和实验接下来介绍的reptile-os操作系统了。
+有了上面的介绍，大家就能进行理解和尝试下面将介绍的reptile-os操作系统了。
 
 \paragraph{reptile-os}
-reptile-os是一个假想的爬行动物时代的极简OS，存在于操作系统的爬行动物时代，运行在reptile-cpu计算机系统上。基于reptile-os来实现hello world的执行过程，就会简单很多。其实在操作系统的三叶虫时代，应用程序就是操作系统，它需要完成控制计算机的所有事情。我们来看看reptile-os这个应用程序操作系统在v9计算机系统上是如何完成显示字符串的。先看os\_helloworld.c：
+reptile-os是一个假想的爬行动物时代的极简OS，存在于操作系统的爬行动物时代，运行在reptile-computer计算机系统上。基于reptile-computer计算机系统，reptile-os实现类似显示"hello　world!"、进行程序执行切换、响应中断、执行系统调用等的基本功能就会简单很多。虽然简单，其设计实现的基本思路与Linux、Windows这样的通用操作系统在本质上并无二致。接下来，我们来看看reptile-os这个操作系统在reptile-computer计算机系统上是如何完成这些工作的。
+
+\subparagraph{应用程序}
+首先是应用程序，这里列出了两个程序progA和progB，分别显示" hello "字符串和" world! "字符串：
  
  \begin{lstlisting}[language={C}]
 //程序A的用户栈，内核栈和栈当前位置指针
@@ -246,78 +250,27 @@ write() {
 asm(LL,8); asm(LBL,16); asm(LCL,24); asm(TRAP,S_write);
 }
 //程序Ａ重复显示" hello "字符串
-progA()　{ while(current < 10)  write(1, " hello ", 8);}
-//程序B重复显示"" world! "字符串
-progB()　{ while(current < 10)  write(1, " world! ", 9);}
-//通过向端口port写值val来控制外设
-out(uint port, int val) {asm(LL,8);asm(LBL,16);asm(BOUT);}
-//设置中断向量的起始地址为isr
-ivec(void *isr) {asm(LL,8);asm(IVEC);}
-//置时钟经过val个tick后将产生时钟中断
-stmr(int val)   {asm(LL,8);asm(TIME);}
-//执行HALT指令，停止计算机系统
-halt(value)     {asm(HALT);}
-//操作系统实现的write系统服务，把char类型的字节序列写到端口port处
-sys_write(uint port, char *p, n) 
-{ int i; for (i=0; i<n; i++) out(port, p[i]); return i;}
+progA()　{ while(current < 10)  write(1," hello ",8);}
+//程序B重复显示" world! "字符串
+progB()　{ while(current < 10)  write(1," world! ",9);}
+\end{lstlisting}
 
-//切换程序的执行环境
-//1.保存被换出的程序的栈指针到此程序的栈当前位置指针(这里是old)
-//2.把被换入的程序的栈指针恢复为上次保存的栈当前位置指针内容
-//3.函数返回时，根据栈指针保留的返回地址，将执行被换入的程序
-prog_switch(int *old, int new) 
-{
-  asm(LEA, 0); //step1: reg_a = reg_sp　　
-  asm(LBL, 8); //step1: reg_b = old
-  asm(SX, 0);  //step1: *reg_b = reg_a
-  asm(LL, 16); //step2: reg_a = new
-  asm(SSP);    //step2: reg_sp = reg_a
-}
-//中断/系统调用处理函数
-trap(int *sp,int c,int b,int a,int intrnum,unsigned *pc)
-{
-  switch (intrnum) {
-  case FSYS + USER: //是来自应用程序的syscall
-    switch (pc[-1] >> 8) {//取出系统调用号
-    //如果系统调用号是S_write，则执行系统服务sys_write
-    case S_write: a = sys_write(a, b, c); break;
-    default:  asm(HALT); //其他情况下，停止计算机系统
-    }
-    break;
-　　//是来自时钟中断   
-  case FTIMER:  
-  case FTIMER + USER:　
-　　　　　out(1,' '); out(1,'X'); out(1,' ');//通过访问端口1, 显示字符串" X "
-    　if (++current & 1)　　               //如果current是奇数
-     　 task_switch(&progA_sp, progB_sp);//换出progA，换入progB
-    　else　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//如果current是偶数
-     　 task_switch(&progB_sp, progA_sp);//换出progB，换入progA
-    　break;
-  default: asm(HALT);//其他情况下，停止计算机系统
-  }
-}
-//中断/系统调用的入口函数，此时内核栈中已经保存了被打断的
-//pc寄存器值和中断/系统调用号
-void alltraps(void){
-  asm(PSHA);asm(PSHB);asm(PSHC);//保存被打断程序当前的寄存器内容到内核栈中
-  asm(LUSP);asm(PSHA);          //获取用户态的sp值，也保存到内核栈中
-  trap();                       //调用中断/系统调用处理函数
-  asm(POPA);asm(SUSP); 　　　　 //从内核栈中恢复用户态的sp值
-  asm(POPC);asm(POPB);asm(POPA);//从内核栈中恢复被打断程序当前的寄存器内容
-  asm(RTI);                     //中断/系统调用返回
-}
-//构造回到用户态的执行环境
-trapret(){
-  asm(POPA);asm(SUSP);　　　　　//从内核栈中恢复用户态的sp值
-  asm(POPC);asm(POPB);asm(POPA);//从内核栈中恢复系统调用程序当前的寄存器内容
-  asm(RTI);　　　　　　　　　　 //中断/系统调用返回
-}
+\begin{note} 
+栈（stack）— 栈是一块内存空间，是实现函数调用的重要机制。由编译器自动分配释放栈空间，在栈空间中存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。用户栈和内核栈分别是应用程序在执行过程中在用户态和内核态时用的栈(靠堆栈指针寄存器切换)。
+\end{note} 
+
+虽然都是显示字符串，但这里的程序相对与在Linux操作系统下的应用程序有一些不同。首先，我们明确定义了程序progA和progB用到的栈空间。这里还分别定义了用户栈progA\_stack、progB\_stack，以及内核栈progA\_kstack、progB\_kstack。为什么执行一个应用程序需要两个栈？简单的回答是为了安全。其主要原因是应用程序被操作系统认为是一个不可靠的程序，通过把应用程序限制在用户态(在reptile-cpu中reg\_flag的user bit确定为1)下运行，使得应用程序不能直接调用操作系统实现的函数，不能直接访问硬件和执行部分特权指令。为什么Linux操作系统下的应用程序看不到关于这两个栈的定义？简单的回答是因为你没看Linux kernel的源代码，在Linux kernel中有关创建程序执行环境的源代码中，建立了用户栈和内核栈。
+
+为了能够获得操作系统的服务，需要通过一种机制，能够让操作系统获得应用程序发出的请求并完成具体的函数实现，这就是系统调用，这是一种涉及特权级改变的特殊的函数调用。在上面程序列表的第14行中，可以看到汇编指令\textit{asm(TRAP,S\_write)}。当应用程序progA执行\textit{TRAP}指令时，reptile-cpu会从用户态切换到内核态(在reptile-cpu中reg\_flag的user bit确定为0)，且把reg\_sp指向内核栈progA\_kstack了，接下来在操作系统中执行函数调用就会用内核栈了。
+
+\subparagraph{操作系统初始化}
+\begin{lstlisting}[language={C}]
 //reptile-os的入口函数
 main() {
-  int *kstack;　　　　　　　　　　//用于存储当前内核堆栈的位置　　　　　　　　　　　　　　 
-  stmr(5000);　　　　　　　　　　　//设置时钟到期的值为5000tick
-  ivec(alltraps);                  //设置中断/系统调用的入口函数为alltraps
-  //初始化progA执行程序的内核栈，和用户态下执行环境，使得progA能在用户态执行
+  int *kstack;　 //用于存储当前内核堆栈的位置　　　　　　　　　　　　　　 
+  stmr(5000);　　//设置时钟到期的值为5000tick
+  ivec(alltraps);//设置中断/系统调用的入口函数为alltraps
+  //初始化progA执行程序的内核栈和用户态下执行环境
   progA_sp = &progA_kstack[1000];  //设置progA的内核栈栈底
   progA_sp -= 2; *progA_sp = &progA;//设置progA在用户态执行的起始地址
   progA_sp -= 2; *progA_sp = USER;  //设置progA需要回到用户态（RTI指令会判断）
@@ -339,6 +292,82 @@ main() {
   //reg_a  = kstack;reg_sp = reg_a，此时栈指针sp指向progA的内核栈
   kstack = progA_sp; asm(LL, 4); asm(SSP);         
   asm(LEV);  //根据sp保存的内容，main函数返回到trapret继续执行 
+}
+\end{lstlisting}
+
+\subparagraph{访问外设}
+
+\begin{lstlisting}[language={C}]
+//通过向端口port写值val来控制外设
+ out(uint port, int val) {asm(LL,8);asm(LBL,16);asm(BOUT);}
+//置时钟经过val个tick后将产生时钟中断
+stmr(int val)   {asm(LL,8);asm(TIME);}
+//执行HALT指令，停止计算机系统
+halt(value)     {asm(HALT);}
+\end{lstlisting}
+
+\subparagraph{响应中断和系统调用}
+
+\begin{lstlisting}[language={C}]
+//操作系统实现的write系统服务，把char类型的字节序列写到端口port处
+sys_write(uint port, char *p, n) 
+{ int i; for (i=0; i<n; i++) out(port, p[i]); return i;}
+
+//中断/系统调用处理函数
+trap(int *sp,int c,int b,int a,int intrnum,unsigned *pc)
+{
+  switch (intrnum) {
+  case FSYS + USER: //来自应用程序的系统调用
+    switch (pc[-1] >> 8) {//取出系统调用号
+    //如果系统调用号是S_write，则执行系统服务sys_write
+    case S_write: a = sys_write(a, b, c); break;
+    default:  asm(HALT); //其他情况下，停止计算机系统
+    }
+    break;   
+  case FTIMER:  
+  case FTIMER + USER://来自时钟中断
+　　　　　out(1,' '); out(1,'X'); out(1,' ');//显示字符串" X "
+    　if (++current & 1)　　               //如果current是奇数
+     　 task_switch(&progA_sp, progB_sp);//换出progA，换入progB
+    　else　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　//如果current是偶数
+     　 task_switch(&progB_sp, progA_sp);//换出progB，换入progA
+    　break;
+  default: asm(HALT);//其他情况下，停止计算机系统
+  }
+}
+//中断/系统调用的入口函数，此时内核栈中已经保存了被打断的
+//pc寄存器值和中断/系统调用号
+void alltraps(void){
+  asm(PSHA);asm(PSHB);asm(PSHC);//保存当前寄存器内容到内核栈中
+  asm(LUSP);asm(PSHA);          //保存用户态栈位置到内核栈中
+  trap();                       //调用中断/系统调用处理函数
+  asm(POPA);asm(SUSP); 　　　　 //从内核栈中恢复用户态的sp值
+  asm(POPC);asm(POPB);asm(POPA);//从内核栈恢复寄存器内容
+  asm(RTI);                     //中断/系统调用返回
+}
+//构造回到用户态的执行环境
+trapret(){
+  asm(POPA);asm(SUSP);　　　　　//从内核栈恢复用户态栈位置
+  asm(POPC);asm(POPB);asm(POPA);//从内核栈恢复寄存器内容
+  asm(RTI);　　　　　　　　　　 //中断/系统调用返回
+}
+
+\end{lstlisting}
+
+\subparagraph{切换程序的执行环境}
+
+\begin{lstlisting}[language={C}]
+//切换程序的执行环境
+//1.保存被换出的程序的栈指针到此程序的栈当前位置指针(这里是old)
+//2.把被换入的程序的栈指针恢复为上次保存的栈当前位置指针内容
+//3.函数返回时，根据栈指针保留的返回地址，将执行被换入的程序
+prog_switch(int *old, int new) 
+{
+  asm(LEA, 0); //step1: reg_a = reg_sp　　
+  asm(LBL, 8); //step1: reg_b = old
+  asm(SX, 0);  //step1: *reg_b = reg_a
+  asm(LL, 16); //step2: reg_a = new
+  asm(SSP);    //step2: reg_sp = reg_a
 }
 \end{lstlisting}
  
