@@ -170,6 +170,24 @@ UNIX，是一个用C语言编写的多用户、多任务操作系统，支持多
 
 我们构造了一个出入哺乳动物时代的简单操作系统mammal-os和与之配套的简单计算机mammal-computer，这个计算机只提供了基本的硬件能力，从而能够支持mammal-os的安全、多任务切换、中断处理、系统调用等类似Linux和Windows操作系统功的基本功能。
 
+\paragraph{运行mammal-os}
+我们可以先试试如何运行mammal-os。 首先，我们在智人时代的Linux操作系统环境把哺乳动物时代的mammal-os实验环境(参见\ref{setup})建立好。并在Linux环境中，执行特定编译命令，把mammal-os.c转换成执行程序mammal-os，并在mammal-computer模拟环境中执行生成的mammal-os操作系统和它管理下的两个应用程序：
+\begin{lstlisting}[language={bash}]
+$ make run
+gcc -O3 -m32 -o ../tools/compiler ../tools/compiler.c -lm
+gcc -O3 -m32 -o ../tools/mammal-computer \
+../tools/mammal-computer.c -lm
+../tools/compiler -o mammal-os mammal-os.c
+../tools/mammal-computer mammal-os
+hello hello ...  X  world! world! ... X  hello ...
+\end{lstlisting}
+
+在mammal-computer模拟器下，加载并执行mammal-os操作系统，可顺利地看到每次时钟定时中断产生时(可以通过'X'显示观察到)，两个执行程序交替执行，各自显示字符串“ hello “或" world! ”。这体现了mammal-os对外设的直接控制，对外设中断的响应，对应用程序提供的系统服务，对应用程序的管理与执行切换等操作系统的基本功能。接下来，需要分析一下mammal-computer到底是如何设计来支持mammal-os的，而mammal-os又是如何完成操作系统的基本功能的。
+
+\begin{note} 
+	这里没有用ucore-os的原因是，ucore-os是处于哺乳动物年代过渡时期的操作系统，完成一个显示字符串也许要一百行左右的代码，用在这里讲解还是复杂了一些。后续的讲解中，我们将基于ucore-os和risc-v操作系统来进行分析。
+\end{note} 
+
 \paragraph{mammal-computer}
 现在我们需要设计一个计算机系统mammal-computer。mammal-computer是一个简化的计算机系统，包含一个简化的32-bit RISC　CPU--mammal-cpu，一块ram内存，时钟/屏幕两种外设。别担心，目前这个只支持mammal-os的CPU很简单。下面就其主要部分做简要介绍。
 
@@ -202,11 +220,11 @@ mammal-os中涉及的mammal-cpu汇编代码都有比较详细的注释。如果�
 \subparagraph{内存}
 mammal-computer中包括一块连续的物理内存（RAM），与mammal-cpu直接相连，缺省内存大小为128MB，其物理内存地址是连续的，从0--128MB。
 
-\subparagraph{外设}
+\subparagraph{外设}\label{mammaldevice}
 
 mammal-computer只包含最基本的外设：timer(时钟)、 screen(屏幕)，支持中断响应和相关的IO操作。关于向屏幕输出字符的操作如下所示：
 \begin{enumerate}
-\item len --> reg\_a ：把输出的字符个数len给寄存器reg\_a
+\item len --> reg\_a ：把输出的字符个数len给寄存器reg\_a，目前限制个数为1
 \item chr --> reg\_b   ：把字符内容chr给寄存器reg\_b
 \item BOUT指令：如果在内核态，输出一个字符chr；如果在用户态，产生异常
 \end{enumerate}
@@ -232,9 +250,40 @@ mammal-computer只包含最基本的外设：timer(时钟)、 screen(屏幕)，�
 有了上面的介绍，大家就能进行理解和尝试下面将介绍的mammal-os操作系统了。
 
 \paragraph{mammal-os}
-mammal-os是一个假想的哺乳动物时代的极简OS，存在于操作系统的哺乳动物时代，运行在mammal-computer计算机系统上。基于mammal-computer计算机系统，mammal-os实现类似显示"hello　world!"、进行程序执行切换、响应中断、执行系统调用等的基本功能就会简单很多。虽然简单，其设计实现的基本思路与Linux、Windows这样的通用操作系统在本质上并无二致。接下来，我们来看看mammal-os这个操作系统在mammal-computer计算机系统上是如何完成这些工作的。
+mammal-os是一个假想的哺乳动物时代的极简OS，存在于操作系统的哺乳动物时代，运行在mammal-computer计算机系统上。基于mammal-computer计算机系统，mammal-os实现类似显示"hello　world!"、进行程序执行切换、响应中断、执行系统调用等的基本功能就会简单很多。虽然简单，其设计实现的基本思路与Linux、Windows这样的通用操作系统在本质上并无二致。接下来，我们来看看mammal-os这个操作系统在mammal-computer计算机系统上是如何完成这些工作的。mammal-os的大致执行过程包括：
+\subparagraph{系统初始化}	
 
-\subparagraph{应用程序}
+\begin{enumerate}
+  \item 初始化时钟外设	
+  \item 设置中断处理入口地址并使能中断
+  \item 初始化应用程序执行环境
+\end{enumerate}
+
+\subparagraph{启动应用程序并响应中断和系统调用}
+
+\begin{enumerate}
+  \item 跳转到应用程序入口执行
+  \item 当收到显示字符的系统调用请求后，访问显示外设，返回应用程序
+  \item 当收到定时中断后，切换应用程序执行，返回新换入的应用程序
+\end{enumerate}
+
+接下来，将对访问外设、初始化应用程序执行环境、切换程序的执行上下文、应用程序执行系统调用、响应中断和系统调用等进行更细致的分析。
+
+\subparagraph{访问外设}
+mammal-computer计算机系统提供了两种基本的外设：显示输出和时钟。虽然不像基于x86的计算机那样强大，但足以支持mammal-os展现出主要的操作系统功能了。基于合理的“极简”原则，通过几条机器指令就可以完成对外设的管理和控制了(参见\ref*{mammaldevice})。通过下面的内核函数实现，可以很方便地控制显示输出和时钟定时设置。
+
+\begin{lstlisting}[language={C}]
+//通过向端口port写值val来控制外设
+out(uint port, int val) {asm(LL,8);asm(LBL,16);asm(BOUT);}
+//置时钟经过val个tick后将产生时钟中断
+stmr(int val)   {asm(LL,8);asm(TIME);}
+//执行HALT指令，停止计算机系统
+halt(value)     {asm(HALT);}
+\end{lstlisting}
+
+这里需要注意的是，直接控制硬件会对计算机系统的整体安全性带了潜在的风险，基于操作系统对应用程序的不信任原则，需要在CPU硬件层面限制应用程序直接访问外设。所以，在mammal-computer的硬件设计上，把\textit{BOUT}指令和\textit{TIME}指令设置为特权指令，即只允许在CPU处于内核态时才能执行上述指令，如果在CPU处于用户态时执行这两条特权指令，会产生"越权"错误异常(privilege fault exception)。所以，如果应用程序想要访问外设，就需要通过其他方法(比如下面会介绍的系统调用)了。
+
+\subparagraph{应用程序执行系统调用}
 首先是应用程序，这里列出了两个程序progA和progB，分别显示" hello "字符串和" world! "字符串：
 \begin{lstlisting}[language={C}]
 //应用程序发出write系统调用（系统调用号是S_write），
@@ -259,9 +308,8 @@ progB()　{while(current < 10) write(1," world! ",9);}
 
 为什么Linux操作系统下的helloworld应用程序没有这些让人看不懂的汇编代码？那是因为helloworld应用程序调用的puts函数是被glibc封装了起来，在在glibc库中的puts函数实现比较复杂，而puts函数最终也要执行Linux的write系统调用(C代码+汇编代码)来请操作系统完成显示字符的操作。
 
-
-
 mammal-os的系统调用接口提供了哪些安全措施呢？这其实要看mammal-cpu对\textit{TRAP}指令的硬件实现了。比如，当应用程序progA执行\textit{TRAP}指令时，mammal-cpu会从用户特权态切换到内核特权态(在mammal-cpu中reg\_flag的user bit确定为0)，且把reg\_sp指向内核栈progA\_kstack了，接下来在操作系统中执行函数调用就会用内核栈了，避免了使用用户栈可能导致的内核信息泄露等安全隐患。其实，mammal-cpu的安全检查还不够，在实际计算机系统中，比如基于x86,risc-v的Linux等，CPU和操作系统还会有更加严格的安全检查和安全设置。
+
 
 \subparagraph{初始化应用程序执行环境}
 为了支持应用程序正常执行，mammal-os操作系统需要建立应用程序的运行环境。一个应用程序的基本运行环境包括：用户栈空间；用户态的开始执行位置；内核栈空间；内核态的开始执行位置。为了让应用程序progA和progB能定时切换执行，而且还需要初始化时钟的timeout值，使得可以过一段时间就换一个程序执行；通过建立响应中断和系统调用的入口位置，使得mammal-cpu知道当产生时钟中断或系统调用后，需要跳转到哪里进行处理，并可进一步进行程序执行切换和显示字符串等工作。
@@ -401,7 +449,7 @@ prog_switch(int *old, int new)
  
 prog\_switch又是一个全用汇编编写的重要内核函数，主要功能是进行换出程序的内核栈顶地址的保存，以及恢复换入程序的内核栈顶地址，恢复完后，执行函数返回指令，就会从新的栈顶中取出返回地址，开始进行换入程序在内核态中的执行。
 
-这个函数被上面分析过的trap()内核函数调用，如调用task\_switch(&pa\_sp, pb\_sp)，调用参数是progA应用程序的内核栈地址pa\_sp的地址和progB的内核栈地址pb\_sp。这样，prog\_switch第一个形参是要被换出的应用程序内核栈地址的指针，第二个形参是要换入的应用程序的内核栈地址。具体的执行分析如下所示：
+这个函数被上面分析过的trap()内核函数调用，如调用task\_switch(\&pa\_sp, pb\_sp)，调用参数是progA应用程序的内核栈地址pa\_sp的地址和progB的内核栈地址pb\_sp。这样，prog\_switch第一个形参是要被换出的应用程序内核栈地址的指针，第二个形参是要换入的应用程序的内核栈地址。具体的执行分析如下所示：
 \begin{lstlisting}[language={C}]
 1. reg_a = reg_sp　当前执行程序的当前内核栈顶地址
 2. reg_b = old 用于保存当前执行程序的执行上下文内存地址
@@ -410,37 +458,6 @@ prog\_switch又是一个全用汇编编写的重要内核函数，主要功能�
 5. reg_sp = reg_a　　从换入程序的执行上下文内存地址读出换入程序的内核栈顶并设置为reg\_sp
 \end{lstlisting}
 
-完成上述准备后，最后是执行函数返回指令，即从换入程序的内核栈顶(即reg\_sp寄存器指向的地址)中读出换入程序的返回地址并赋值给reg\_pc寄存器，从而开始了换入程序的执行。
+完成上述准备后，最后是执行函数返回指令，即从换入程序的内核栈顶(即reg\_sp寄存器指向的地址)中读出换入程序的返回地址并赋值给reg\_pc寄存器，从而开始了新换入程序的执行。
 
 
-\subparagraph{访问外设}
-
-\begin{lstlisting}[language={C}]
-//通过向端口port写值val来控制外设
-out(uint port, int val) {asm(LL,8);asm(LBL,16);asm(BOUT);}
-//置时钟经过val个tick后将产生时钟中断
-stmr(int val)   {asm(LL,8);asm(TIME);}
-//执行HALT指令，停止计算机系统
-halt(value)     {asm(HALT);}
-\end{lstlisting}
-
-
-
- 
- 
-% 首先，我们通过智人时代的操作系统Linux环境把mammal-os实验环境(参见\ref{setupv9})建立好。并在Linux环境中，执行特定编译命令，把os\_helloworld.c转换成执行程序os\_helloworld，并在v9模拟环境中执行生成的os\_helloworld操作系统：
-% \begin{lstlisting}[language={bash}]
-% $ make run
-% gcc -O3 -m32 -o ../tools/xc ../tools/c.c -lm
-% gcc -O3 -m32 -o ../tools/xem ../tools/em.c -lm
-% ../tools/xc -o os_helloworld os_helloworld.c
-% ../tools/xem os_helloworld
-% hello world!
-% \end{lstlisting}
-% 
-% 在v9 computer的模拟器xem下，加载并执行三叶虫操作系统os\_helloworld，也顺利地输出了字符串“Hello World!”。
-% 
-% 
-% \begin{note} 
-% 	这里没有用ucore-os的原因是，ucore-os是处于哺乳动物年代过渡时期的操作系统，完成一个显示字符串也许要一百行左右的代码，用在这里讲解还是复杂了一些。后续的讲解中，我们将基于ucore-os和risc-v操作系统来进行分析。
-% \end{note} 
